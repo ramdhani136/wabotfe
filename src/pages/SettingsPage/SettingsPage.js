@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Layout from "../../components/organism/layout/Layout";
 import { Helmet } from "react-helmet";
@@ -8,13 +8,30 @@ import ReactLoading from "react-loading";
 
 const SettingsPage = () => {
   const ViewSettings = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const users = [
+      { id: 1, name: "Ilham Ramdhani", username: "ilham", password: "1234" },
+      { id: 2, name: "Ryan PA", username: "ryan", password: "1234" },
+      {
+        id: 3,
+        name: "Faisal PA Ramdhani",
+        username: "faisal",
+        password: "1234",
+      },
+    ];
     return (
       <Wrapper>
         <ContentLeft>
           <BtnAddUser>Add User</BtnAddUser>
           <WrapUser>
             <Title>User Data</Title>
-            <UserList />
+            {isLoading ? (
+              <Loading>
+                <ReactLoading type="spin" color="#e5e7ef" />
+              </Loading>
+            ) : (
+              <UserList data={users} />
+            )}
           </WrapUser>
         </ContentLeft>
         <ContentRight>
@@ -182,6 +199,14 @@ const Button = styled.div`
     transform: scale(1.025);
     opacity: 1;
   }
+`;
+
+const Loading = styled.div`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default SettingsPage;

@@ -1,13 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const UserList = () => {
-  const users = [
-    { id: 1, name: "Ilham Ramdhani", username: "ilham", password: "1234" },
-    { id: 2, name: "Ryan PA", username: "ryan", password: "1234" },
-    { id: 3, name: "Faisal PA Ramdhani", username: "faisal", password: "1234" },
-  ];
-
+const UserList = ({ data }) => {
   return (
     <Wrapper>
       <Head>
@@ -38,7 +32,7 @@ const UserList = () => {
           </tr>
         </thead>
         <tbody style={{ fontSize: "0.86em", color: "gray" }}>
-          {users.map((user, id) => {
+          {data.map((user, id) => {
             return (
               <tr key={id} style={{ cursor: "pointer" }}>
                 <td
