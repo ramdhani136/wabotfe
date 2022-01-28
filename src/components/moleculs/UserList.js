@@ -90,7 +90,7 @@ const Head = styled.div`
 
 const Input = styled.input`
   width: 200px;
-  height: 26px;
+  height: 29px;
   margin-left: 10px;
   border: solid 1px #e5e7ef;
   padding-left: 10px;
@@ -106,8 +106,10 @@ const Button = styled.div`
   color: #fff;
   cursor: pointer;
   background-color: ${(props) => props.bg};
+  opacity: 0.9;
   :hover {
     transform: scale(1.025);
+    opacity: 1;
   }
 `;
 

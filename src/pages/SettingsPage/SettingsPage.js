@@ -177,8 +177,10 @@ const Button = styled.div`
   color: #fff;
   cursor: pointer;
   background-color: ${(props) => props.bg};
+  opacity: 0.9;
   :hover {
     transform: scale(1.025);
+    opacity: 1;
   }
 `;
 
