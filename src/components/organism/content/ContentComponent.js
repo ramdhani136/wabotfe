@@ -52,14 +52,14 @@ const Wrapper = styled.div`
 
 const SideMenu = styled.div`
   border-right: solid 1px #ccc;
-  flex: 0.2;
+  flex: 0.19;
   float: left;
-  background: #101a32;
+  background-color: #101a32;
 `;
 
 const Content = styled.div`
   flex: 0.8;
-  background-color: whitesmoke;
+  background-color: #f9f9f9;
 `;
 
 const ListMenu = styled.div`
@@ -68,10 +68,10 @@ const ListMenu = styled.div`
   color: #b7bac1;
   width: 100%;
   padding: 16px;
-  font-size: 0.89em;
+  font-size: 0.87em;
   cursor: pointer;
   :hover {
-    zoom: 1.05;
+    transform: scale(1.035);
     color: white;
   }
 `;
