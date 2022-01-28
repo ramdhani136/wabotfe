@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import HeaderComponent from "../header/HeaderComponent";
-import FooterComponent from "../footer/FooterComponent";
+// import FooterComponent from "../footer/FooterComponent";
 import ContentComponent from "../content/ContentComponent";
 
 const Layout = ({ Component }) => {

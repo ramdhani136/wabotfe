@@ -1,13 +1,24 @@
 import React from "react";
 import styled from "styled-components";
 import { SeacrhMenu } from "../../moleculs";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const HeaderComponent = () => {
   return (
     <Wrapper>
       <Logo>WAblast</Logo>
       <SeacrhMenu />
-      <div>Admin</div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          cursor: "pointer",
+          color: "gray",
+        }}
+      >
+        <a style={{ fontSize: "0.9em" }}>Administrator</a>
+        <ArrowDropDownIcon style={{ fontSize: "20px", marginTop: "5px" }} />
+      </div>
     </Wrapper>
   );
 };
@@ -20,7 +31,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 2px solid whitesmoke;
   padding-left: 2%;
   padding-right: 2%;
 `;

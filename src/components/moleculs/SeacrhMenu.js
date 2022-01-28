@@ -15,7 +15,7 @@ export default SeacrhMenu;
 
 const Wrapper = styled.div`
   display: flex;
-  border: solid 1px #ccc;
+  border: solid 1px #e5e7ef;
   align-items: center;
   width: 350px;
   height: 37px;

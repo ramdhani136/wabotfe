@@ -73,7 +73,7 @@ const ContentRight = styled.div`
 const BtnAddUser = styled.div`
   text-align: center;
   width: 99%;
-  border: solid 1px #00a884;
+  border: solid 1px #107550;
   padding-top: 9px;
   padding-bottom: 9px;
   margin-top: 15px;
@@ -137,8 +137,13 @@ const QrScanner = styled.div`
 `;
 
 const ViewQr = styled.div`
-  width: 100%;
-  height: 70%;
+  width: 60%;
+  height: 60%;
+  border: solid 1px #ccc;
+  margin-left: 20%;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  background-color: whitesmoke;
   /* border: solid 1px blue; */
 `;
 const Status = styled.div`
@@ -157,7 +162,6 @@ const WrappButton = styled.div`
 
 const Button = styled.div`
   padding: 5px 10px 5px 10px;
-  border: solid 1px red;
   float: left;
   margin-right: 5px;
   border-radius: 3px;
@@ -165,7 +169,10 @@ const Button = styled.div`
   font-size: 0.9em;
   color: #fff;
   cursor: pointer;
-  background-color: #ab372c;
+  background-color: ${(props) => props.bg};
+  :hover {
+    transform: scale(1.025);
+  }
 `;
 
 export default SettingsPage;
