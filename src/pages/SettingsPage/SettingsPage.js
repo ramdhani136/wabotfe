@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Layout from "../../components/organism/layout/Layout";
 import { Helmet } from "react-helmet";
 import Brightness1Icon from "@mui/icons-material/Brightness1";
+import { UserList } from "../../components/moleculs";
+import ReactLoading from "react-loading";
 
 const SettingsPage = () => {
   const ViewSettings = () => {
@@ -10,15 +12,18 @@ const SettingsPage = () => {
       <Wrapper>
         <ContentLeft>
           <BtnAddUser>Add User</BtnAddUser>
-          <UserList>
+          <WrapUser>
             <Title>User Data</Title>
-          </UserList>
+            <UserList />
+          </WrapUser>
         </ContentLeft>
         <ContentRight>
           <Qrcode>
             <Title>Settings</Title>
             <QrScanner>
-              <ViewQr></ViewQr>
+              <ViewQr>
+                <ReactLoading type="spin" color="#e5e7ef" />
+              </ViewQr>
               <Status>
                 <b style={{ color: "gray", fontSize: "0.85em" }}>Status :</b>
                 <div
@@ -88,15 +93,17 @@ const BtnAddUser = styled.div`
   }
 `;
 
-const UserList = styled.div`
+const WrapUser = styled.div`
   width: 99%;
+  height: auto;
   min-height: 200px;
   max-height: 400px;
   border: solid 1px #e5e7ef;
   background-color: #fff;
-  margin-top: 15px;
+  margin-top: 20px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  padding-bottom: 30px;
 `;
 
 const Title = styled.div`
@@ -139,12 +146,12 @@ const QrScanner = styled.div`
 const ViewQr = styled.div`
   width: 60%;
   height: 60%;
-  border: solid 1px #ccc;
   margin-left: 20%;
   margin-top: 30px;
   margin-bottom: 10px;
-  background-color: whitesmoke;
-  /* border: solid 1px blue; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 const Status = styled.div`
   width: 100%;
