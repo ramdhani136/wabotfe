@@ -3,23 +3,22 @@ import styled from "styled-components";
 import Layout from "../../components/organism/layout/Layout";
 import { Helmet } from "react-helmet";
 
-const HomePage = () => {
-  const ViewHome = () => {
-    return <Wrapper>Halaman Home</Wrapper>;
+const SettingsPage = () => {
+  const ViewSettings = () => {
+    return <Wrapper>Halaman Settings</Wrapper>;
   };
 
   return (
     <>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>WAblast - Ekatunggal Tunas Mandiri</title>
+        <title>WAblast - Accountg Settings</title>
       </Helmet>
-
-      <Layout Component={ViewHome} />
+      <Layout Component={ViewSettings} />
     </>
   );
 };
 
 const Wrapper = styled.div``;
 
-export default HomePage;
+export default SettingsPage;
