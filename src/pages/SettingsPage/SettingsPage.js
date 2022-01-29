@@ -5,20 +5,60 @@ import { Helmet } from "react-helmet";
 import Brightness1Icon from "@mui/icons-material/Brightness1";
 import { UserList } from "../../components/moleculs";
 import ReactLoading from "react-loading";
+import { io } from "socket.io-client";
 
 const SettingsPage = () => {
   const ViewSettings = () => {
+    const [status, setStatus] = useState("");
+    const [qr, setQr] = useState("");
+    const socket = io("http://192.168.100.86:5000", {
+      withCredentials: true,
+      extraHeaders: {
+        "react-client": "react-client",
+      },
+    });
+
+    socket.on("message", (data) => {
+      if ((data.name = "primary")) {
+        setStatus(data.text);
+      }
+    });
+
+    socket.on("qr", (data) => {
+      if ((data.name = "primary")) {
+        setQr(data.src);
+      }
+    });
+
+    socket.on("ready", (data) => {
+      setQr("");
+    });
+
+    socket.on("authenticated", (data) => {
+      setQr("");
+    });
+
+    socket.on("init", (data) => {
+      for (var i = 0; i < data.length; i++) {
+        var session = data[i];
+        if (session.ready) {
+          setStatus("Whatsapp is ready ...");
+        }
+      }
+    });
+
     const [isLoading, setIsLoading] = useState(false);
     const users = [
       { id: 1, name: "Ilham Ramdhani", username: "ilham", password: "1234" },
       { id: 2, name: "Ryan PA", username: "ryan", password: "1234" },
       {
         id: 3,
-        name: "Faisal PA Ramdhani",
+        name: "Faisal PA",
         username: "faisal",
         password: "1234",
       },
     ];
+
     return (
       <Wrapper>
         <ContentLeft>
@@ -39,7 +79,11 @@ const SettingsPage = () => {
             <Title>Settings</Title>
             <QrScanner>
               <ViewQr>
-                <ReactLoading type="spin" color="#e5e7ef" />
+                {qr ? (
+                  <img src={qr} alt="QRCODE" id="qrcode" />
+                ) : (
+                  <ReactLoading type="spin" color="#e5e7ef" />
+                )}
               </ViewQr>
               <Status>
                 <b style={{ color: "gray", fontSize: "0.85em" }}>Status :</b>
@@ -52,7 +96,7 @@ const SettingsPage = () => {
                 >
                   <Brightness1Icon style={{ fontSize: "8px" }} />
                   <a style={{ fontSize: "0.9em", marginLeft: "7px" }}>
-                    QR code received, scan please!
+                    {status ? status : "Loading .."}
                   </a>
                 </div>
               </Status>

@@ -10,7 +10,7 @@ const UserList = ({ data }) => {
       </Head>
       <table
         style={{ width: "96%", marginLeft: "2%", marginTop: "20px" }}
-        cellspacing="0"
+        cellSpacing="0"
         cellPadding="5"
       >
         <thead style={{ fontSize: "0.87em", color: "gray" }}>
@@ -52,8 +52,6 @@ const UserList = ({ data }) => {
                 </td>
                 <td
                   style={{
-                    display: "flex",
-                    justifyContent: "center",
                     border: "solid 1px #e5e7ef",
                   }}
                 >
