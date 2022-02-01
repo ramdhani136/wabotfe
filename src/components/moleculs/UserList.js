@@ -45,37 +45,57 @@ const UserList = ({ data, setValue }) => {
           </tr>
         </thead>
         <tbody style={{ fontSize: "0.86em", color: "gray" }}>
-          {data.map((user, id) => {
-            return (
-              <tr key={id} style={{ cursor: "pointer" }}>
-                <td
-                  style={{
-                    textAlign: "center",
-                    border: "solid 1px #e5e7ef",
-                    height: "30px",
-                  }}
-                >
-                  {id + 1}
-                </td>
-                <td style={{ textAlign: "left", border: "solid 1px #e5e7ef" }}>
-                  {user.name}
-                </td>
-                <td style={{ textAlign: "left", border: "solid 1px #e5e7ef" }}>
-                  {user.username}
-                </td>
-                <td
-                  style={{
-                    border: "solid 1px #e5e7ef",
-                  }}
-                >
-                  <Button bg="#AB372C" onClick={() => deleteUser(user.id)}>
-                    Delete
-                  </Button>
-                  <Button bg="#343A40">Edit</Button>
-                </td>
-              </tr>
-            );
-          })}
+          {data.length < 1 ? (
+            <tr>
+              <td
+                colspan="4"
+                style={{
+                  textAlign: "center",
+                  height: "110px",
+                  fontSize: "0.9em",
+                  color: "#ddd",
+                }}
+              >
+                No data result
+              </td>
+            </tr>
+          ) : (
+            data.map((user, id) => {
+              return (
+                <tr key={id} style={{ cursor: "pointer" }}>
+                  <td
+                    style={{
+                      textAlign: "center",
+                      border: "solid 1px #e5e7ef",
+                      height: "30px",
+                    }}
+                  >
+                    {id + 1}
+                  </td>
+                  <td
+                    style={{ textAlign: "left", border: "solid 1px #e5e7ef" }}
+                  >
+                    {user.name}
+                  </td>
+                  <td
+                    style={{ textAlign: "left", border: "solid 1px #e5e7ef" }}
+                  >
+                    {user.username}
+                  </td>
+                  <td
+                    style={{
+                      border: "solid 1px #e5e7ef",
+                    }}
+                  >
+                    <Button bg="#AB372C" onClick={() => deleteUser(user.id)}>
+                      Delete
+                    </Button>
+                    <Button bg="#343A40">Edit</Button>
+                  </td>
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
     </Wrapper>
