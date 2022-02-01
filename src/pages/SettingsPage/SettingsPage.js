@@ -6,6 +6,8 @@ import Brightness1Icon from "@mui/icons-material/Brightness1";
 import { UserList } from "../../components/moleculs";
 import ReactLoading from "react-loading";
 import { io } from "socket.io-client";
+import { SOCKET_URI } from "../../utils";
+import _ from "lodash";
 
 const SettingsPage = () => {
   const ViewSettings = () => {
@@ -13,7 +15,7 @@ const SettingsPage = () => {
     const [status, setStatus] = useState("");
     const [qr, setQr] = useState("");
     const [users, setUsers] = useState([]);
-    const socket = io("http://localhost:5000", {
+    const socket = io(SOCKET_URI, {
       withCredentials: true,
       extraHeaders: {
         "react-client": "react-client",
@@ -53,16 +55,15 @@ const SettingsPage = () => {
       });
     }, []);
 
-    // const users = [
-    //   { id: 1, name: "Ilham Ramdhani", username: "ilham", password: "1234" },
-    //   { id: 2, name: "Ryan PA", username: "ryan", password: "1234" },
-    //   {
-    //     id: 3,
-    //     name: "Faisal PA",
-    //     username: "faisal",
-    //     password: "1234",
-    //   },
-    // ];
+    // const filterUser = (data) => {
+    //   return _.filter(data, function (query) {
+    //     var name = value
+    //       ? query.nama.toLowerCase().includes(value.toLowerCase())
+    //       : true;
+
+    //     return name;
+    //   });
+    // };
 
     return (
       <Wrapper>

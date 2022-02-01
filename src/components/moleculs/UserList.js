@@ -1,7 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import { API_URI } from "../../utils";
+const axios = require("axios");
 
 const UserList = ({ data }) => {
+  const deleteUser = (id) => {
+    axios
+      .delete(`${API_URI}akun/${id}`)
+      .then((res) => {
+        console.log("delete");
+      })
+      .catch((err) => {
+        console.log("err");
+      });
+  };
+
   return (
     <Wrapper>
       <Head>
@@ -55,7 +68,9 @@ const UserList = ({ data }) => {
                     border: "solid 1px #e5e7ef",
                   }}
                 >
-                  <Button bg="#AB372C">Delete</Button>
+                  <Button bg="#AB372C" onClick={() => deleteUser(user.id)}>
+                    Delete
+                  </Button>
                   <Button bg="#343A40">Edit</Button>
                 </td>
               </tr>
