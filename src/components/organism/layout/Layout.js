@@ -3,14 +3,18 @@ import styled from "styled-components";
 import HeaderComponent from "../header/HeaderComponent";
 // import FooterComponent from "../footer/FooterComponent";
 import ContentComponent from "../content/ContentComponent";
+import { Modal } from "../../moleculs";
 
 const Layout = ({ Component }) => {
   return (
-    <Wrapper>
-      <HeaderComponent />
-      <ContentComponent Page={Component} />
-      {/* <FooterComponent /> */}
-    </Wrapper>
+    <>
+      {/* <Modal /> */}
+      <Wrapper>
+        <HeaderComponent />
+        <ContentComponent Page={Component} />
+        {/* <FooterComponent /> */}
+      </Wrapper>
+    </>
   );
 };
 

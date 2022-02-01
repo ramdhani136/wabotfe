@@ -2,17 +2,36 @@ import React from "react";
 import styled from "styled-components";
 import { API_URI } from "../../utils";
 const axios = require("axios");
+const Swal = require("sweetalert2");
 
-const UserList = ({ data, setValue }) => {
+const UserList = ({ data, setValue, setIsLoading }) => {
   const deleteUser = (id) => {
-    axios
-      .delete(`${API_URI}akun/${id}`)
-      .then((res) => {
-        console.log("delete");
-      })
-      .catch((err) => {
-        console.log("err");
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        axios
+          .delete(`${API_URI}akun/${id}`)
+          .then((res) => {
+            console.log("delete");
+
+            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.log("err");
+            Swal.fire("Error!", "Your file cannot to deleted.", "error");
+            setIsLoading(false);
+          });
+      }
+    });
   };
 
   return (

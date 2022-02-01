@@ -11,6 +11,13 @@ import _ from "lodash";
 
 const SettingsPage = () => {
   const ViewSettings = () => {
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => {
+      setOpen(true);
+    };
+    const handleClose = () => {
+      setOpen(false);
+    };
     const [value, setValue] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [status, setStatus] = useState("");
@@ -65,56 +72,62 @@ const SettingsPage = () => {
     };
 
     return (
-      <Wrapper>
-        <ContentLeft>
-          <BtnAddUser>Add User</BtnAddUser>
+      <>
+        <Wrapper>
+          <ContentLeft>
+            <BtnAddUser>Add User</BtnAddUser>
 
-          <WrapUser>
-            <Title>User Data</Title>
-            {isLoading ? (
-              <Loading>
-                <ReactLoading type="spin" color="#e5e7ef" />
-              </Loading>
-            ) : (
-              <UserList setValue={setValue} data={filterUser(users)} />
-            )}
-          </WrapUser>
-        </ContentLeft>
-        <ContentRight>
-          <Qrcode>
-            <Title>Settings</Title>
-            <QrScanner>
-              <ViewQr>
-                {qr ? (
-                  <img src={qr} alt="QRCODE" id="qrcode" />
-                ) : (
+            <WrapUser>
+              <Title>User Data</Title>
+              {isLoading ? (
+                <Loading>
                   <ReactLoading type="spin" color="#e5e7ef" />
-                )}
-              </ViewQr>
-              <Status>
-                <b style={{ color: "gray", fontSize: "0.85em" }}>Status :</b>
-                <div
-                  style={{
-                    color: "gray",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Brightness1Icon style={{ fontSize: "8px" }} />
-                  <a style={{ fontSize: "0.9em", marginLeft: "7px" }}>
-                    {status ? status : "Loading .."}
-                  </a>
-                </div>
-              </Status>
-              <WrappButton>
-                <Button bg="#AB372C">Logout</Button>
-                <Button bg="#3A55A5">Scan QR code</Button>
-                <Button bg="#159365">Check Status</Button>
-              </WrappButton>
-            </QrScanner>
-          </Qrcode>
-        </ContentRight>
-      </Wrapper>
+                </Loading>
+              ) : (
+                <UserList
+                  setIsLoading={setIsLoading}
+                  setValue={setValue}
+                  data={filterUser(users)}
+                />
+              )}
+            </WrapUser>
+          </ContentLeft>
+          <ContentRight>
+            <Qrcode>
+              <Title>Settings</Title>
+              <QrScanner>
+                <ViewQr>
+                  {qr ? (
+                    <img src={qr} alt="QRCODE" id="qrcode" />
+                  ) : (
+                    <ReactLoading type="spin" color="#e5e7ef" />
+                  )}
+                </ViewQr>
+                <Status>
+                  <b style={{ color: "gray", fontSize: "0.85em" }}>Status :</b>
+                  <div
+                    style={{
+                      color: "gray",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Brightness1Icon style={{ fontSize: "8px" }} />
+                    <a style={{ fontSize: "0.9em", marginLeft: "7px" }}>
+                      {status ? status : "Loading .."}
+                    </a>
+                  </div>
+                </Status>
+                <WrappButton>
+                  <Button bg="#AB372C">Logout</Button>
+                  <Button bg="#3A55A5">Scan QR code</Button>
+                  <Button bg="#159365">Check Status</Button>
+                </WrappButton>
+              </QrScanner>
+            </Qrcode>
+          </ContentRight>
+        </Wrapper>
+      </>
     );
   };
 
