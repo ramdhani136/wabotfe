@@ -11,6 +11,7 @@ import _ from "lodash";
 
 const SettingsPage = () => {
   const ViewSettings = () => {
+    const [value, setValue] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [status, setStatus] = useState("");
     const [qr, setQr] = useState("");
@@ -24,13 +25,13 @@ const SettingsPage = () => {
 
     useEffect(() => {
       socket.on("message", (data) => {
-        if ((data.name = "primary")) {
+        if (data.id === 1) {
           setStatus(data.text);
         }
       });
 
       socket.on("qr", (data) => {
-        if ((data.name = "primary")) {
+        if (data.id === 1) {
           setQr(data.src);
         }
       });
@@ -44,26 +45,24 @@ const SettingsPage = () => {
       });
 
       socket.on("init", (data) => {
-        for (var i = 0; i < data.length; i++) {
-          var session = data[i];
-          if (session.ready) {
-            setStatus("Whatsapp is ready ...");
-          }
+        const isUser = data.filter((dt) => dt.id === 1);
+        if (isUser[0].ready) {
+          setStatus("Whatsapp is ready ...");
         }
         setUsers(data);
         setIsLoading(false);
       });
     }, []);
 
-    // const filterUser = (data) => {
-    //   return _.filter(data, function (query) {
-    //     var name = value
-    //       ? query.nama.toLowerCase().includes(value.toLowerCase())
-    //       : true;
+    const filterUser = (data) => {
+      return _.filter(data, function (query) {
+        var name = value
+          ? query.name.toLowerCase().includes(value.toLowerCase())
+          : true;
 
-    //     return name;
-    //   });
-    // };
+        return name;
+      });
+    };
 
     return (
       <Wrapper>
@@ -77,7 +76,7 @@ const SettingsPage = () => {
                 <ReactLoading type="spin" color="#e5e7ef" />
               </Loading>
             ) : (
-              <UserList data={users} />
+              <UserList setValue={setValue} data={filterUser(users)} />
             )}
           </WrapUser>
         </ContentLeft>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { API_URI } from "../../utils";
 const axios = require("axios");
 
-const UserList = ({ data }) => {
+const UserList = ({ data, setValue }) => {
   const deleteUser = (id) => {
     axios
       .delete(`${API_URI}akun/${id}`)
@@ -19,7 +19,7 @@ const UserList = ({ data }) => {
     <Wrapper>
       <Head>
         <a style={{ fontSize: "0.9em", color: "gray" }}>Search :</a>
-        <Input />
+        <Input onChange={(e) => setValue(e.target.value)} />
       </Head>
       <table
         style={{ width: "96%", marginLeft: "2%", marginTop: "20px" }}
