@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Layout from "../../components/organism/layout/Layout";
 import { Helmet } from "react-helmet";
@@ -9,60 +9,66 @@ import { io } from "socket.io-client";
 
 const SettingsPage = () => {
   const ViewSettings = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [status, setStatus] = useState("");
     const [qr, setQr] = useState("");
-    const socket = io("http://192.168.100.86:5000", {
+    const [users, setUsers] = useState([]);
+    const socket = io("http://localhost:5000", {
       withCredentials: true,
       extraHeaders: {
         "react-client": "react-client",
       },
     });
 
-    socket.on("message", (data) => {
-      if ((data.name = "primary")) {
-        setStatus(data.text);
-      }
-    });
-
-    socket.on("qr", (data) => {
-      if ((data.name = "primary")) {
-        setQr(data.src);
-      }
-    });
-
-    socket.on("ready", (data) => {
-      setQr("");
-    });
-
-    socket.on("authenticated", (data) => {
-      setQr("");
-    });
-
-    socket.on("init", (data) => {
-      for (var i = 0; i < data.length; i++) {
-        var session = data[i];
-        if (session.ready) {
-          setStatus("Whatsapp is ready ...");
+    useEffect(() => {
+      socket.on("message", (data) => {
+        if ((data.name = "primary")) {
+          setStatus(data.text);
         }
-      }
-    });
+      });
 
-    const [isLoading, setIsLoading] = useState(false);
-    const users = [
-      { id: 1, name: "Ilham Ramdhani", username: "ilham", password: "1234" },
-      { id: 2, name: "Ryan PA", username: "ryan", password: "1234" },
-      {
-        id: 3,
-        name: "Faisal PA",
-        username: "faisal",
-        password: "1234",
-      },
-    ];
+      socket.on("qr", (data) => {
+        if ((data.name = "primary")) {
+          setQr(data.src);
+        }
+      });
+
+      socket.on("ready", (data) => {
+        setQr("");
+      });
+
+      socket.on("authenticated", (data) => {
+        setQr("");
+      });
+
+      socket.on("init", (data) => {
+        for (var i = 0; i < data.length; i++) {
+          var session = data[i];
+          if (session.ready) {
+            setStatus("Whatsapp is ready ...");
+          }
+        }
+        setUsers(data);
+        setIsLoading(false);
+      });
+    }, []);
+
+    // const users = [
+    //   { id: 1, name: "Ilham Ramdhani", username: "ilham", password: "1234" },
+    //   { id: 2, name: "Ryan PA", username: "ryan", password: "1234" },
+    //   {
+    //     id: 3,
+    //     name: "Faisal PA",
+    //     username: "faisal",
+    //     password: "1234",
+    //   },
+    // ];
 
     return (
       <Wrapper>
         <ContentLeft>
           <BtnAddUser>Add User</BtnAddUser>
+
           <WrapUser>
             <Title>User Data</Title>
             {isLoading ? (
