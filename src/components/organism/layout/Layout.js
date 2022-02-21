@@ -8,7 +8,7 @@ import { Modal } from "../../moleculs";
 const Layout = ({ Component }) => {
   return (
     <>
-      {/* <Modal /> */}
+      <Modal />
       <Wrapper>
         <HeaderComponent />
         <ContentComponent Page={Component} />
