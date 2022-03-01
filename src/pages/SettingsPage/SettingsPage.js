@@ -8,16 +8,12 @@ import ReactLoading from "react-loading";
 import { io } from "socket.io-client";
 import { SOCKET_URI } from "../../utils";
 import _ from "lodash";
+import { useDispatch } from "react-redux";
+import { modalSet } from "../../redux/slices/ModalSlice";
 
 const SettingsPage = () => {
   const ViewSettings = () => {
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => {
-      setOpen(true);
-    };
-    const handleClose = () => {
-      setOpen(false);
-    };
+    const dispatch = useDispatch();
     const [value, setValue] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [status, setStatus] = useState("");
@@ -71,11 +67,15 @@ const SettingsPage = () => {
       });
     };
 
+    const openModal = () => {
+      dispatch(modalSet({ active: true, page: "createUser" }));
+    };
+
     return (
       <>
         <Wrapper>
           <ContentLeft>
-            <BtnAddUser>Add User</BtnAddUser>
+            <BtnAddUser onClick={openModal}>Add User</BtnAddUser>
 
             <WrapUser>
               <Title>User Data</Title>
