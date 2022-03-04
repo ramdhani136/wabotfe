@@ -40,83 +40,95 @@ const UserList = ({ data, setValue, setIsLoading }) => {
         <a style={{ fontSize: "0.9em", color: "gray" }}>Search :</a>
         <Input onChange={(e) => setValue(e.target.value)} />
       </Head>
-      <table
-        style={{ width: "96%", marginLeft: "2%", marginTop: "20px" }}
-        cellSpacing="0"
-        cellPadding="5"
+      <div
+        style={{
+          width: "100%",
+          height: "300px",
+          marginTop: "10px",
+          overflowY: "scroll",
+        }}
       >
-        <thead style={{ fontSize: "0.87em", color: "gray" }}>
-          <tr style={{ border: "solid 1px #e5e7ef" }}>
-            <th style={{ border: "solid 1px #e5e7ef", height: "28px" }}>No</th>
-            <th
-              style={{
-                border: "solid 1px #e5e7ef",
-                textAlign: "left",
-                marginLeft: "10px",
-              }}
-            >
-              Name
-            </th>
-            <th style={{ border: "solid 1px #e5e7ef", textAlign: "left" }}>
-              Username
-            </th>
-            <th style={{ border: "solid 1px #e5e7ef" }}>Action</th>
-          </tr>
-        </thead>
-        <tbody style={{ fontSize: "0.86em", color: "gray" }}>
-          {data.length < 1 ? (
-            <tr>
-              <td
-                colspan="4"
+        {" "}
+        <table
+          style={{ width: "96%", marginLeft: "2%", marginTop: "20px" }}
+          cellSpacing="0"
+          cellPadding="5"
+        >
+          <thead style={{ fontSize: "0.87em", color: "gray" }}>
+            <tr style={{ border: "solid 1px #e5e7ef" }}>
+              <th style={{ border: "solid 1px #e5e7ef", height: "28px" }}>
+                No
+              </th>
+              <th
                 style={{
-                  textAlign: "center",
-                  height: "110px",
-                  fontSize: "0.9em",
-                  color: "#ddd",
+                  border: "solid 1px #e5e7ef",
+                  textAlign: "left",
+                  marginLeft: "10px",
                 }}
               >
-                No data result
-              </td>
+                Name
+              </th>
+              <th style={{ border: "solid 1px #e5e7ef", textAlign: "left" }}>
+                Username
+              </th>
+              <th style={{ border: "solid 1px #e5e7ef" }}>Action</th>
             </tr>
-          ) : (
-            data.map((user, id) => {
-              return (
-                <tr key={id} style={{ cursor: "pointer" }}>
-                  <td
-                    style={{
-                      textAlign: "center",
-                      border: "solid 1px #e5e7ef",
-                      height: "30px",
-                    }}
-                  >
-                    {id + 1}
-                  </td>
-                  <td
-                    style={{ textAlign: "left", border: "solid 1px #e5e7ef" }}
-                  >
-                    {user.name}
-                  </td>
-                  <td
-                    style={{ textAlign: "left", border: "solid 1px #e5e7ef" }}
-                  >
-                    {user.username}
-                  </td>
-                  <td
-                    style={{
-                      border: "solid 1px #e5e7ef",
-                    }}
-                  >
-                    <Button bg="#AB372C" onClick={() => deleteUser(user.id)}>
-                      Delete
-                    </Button>
-                    <Button bg="#343A40">Edit</Button>
-                  </td>
-                </tr>
-              );
-            })
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody style={{ fontSize: "0.86em", color: "gray" }}>
+            {data.length < 1 ? (
+              <tr>
+                <td
+                  colspan="4"
+                  style={{
+                    textAlign: "center",
+                    height: "110px",
+                    fontSize: "0.9em",
+                    color: "#ddd",
+                  }}
+                >
+                  No data result
+                </td>
+              </tr>
+            ) : (
+              data.map((user, id) => {
+                return (
+                  <tr key={id} style={{ cursor: "pointer" }}>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        border: "solid 1px #e5e7ef",
+                        height: "30px",
+                      }}
+                    >
+                      {id + 1}
+                    </td>
+                    <td
+                      style={{ textAlign: "left", border: "solid 1px #e5e7ef" }}
+                    >
+                      {user.name}
+                    </td>
+                    <td
+                      style={{ textAlign: "left", border: "solid 1px #e5e7ef" }}
+                    >
+                      {user.username}
+                    </td>
+                    <td
+                      style={{
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      <Button bg="#AB372C" onClick={() => deleteUser(user.id)}>
+                        Delete
+                      </Button>
+                      <Button bg="#343A40">Edit</Button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
     </Wrapper>
   );
 };

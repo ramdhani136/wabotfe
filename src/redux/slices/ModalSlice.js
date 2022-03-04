@@ -4,8 +4,9 @@ export const modalSlice = createSlice({
   name: "modal",
   initialState: {
     data: {
-      active: true,
-      page: "createUser",
+      active: false,
+      page: "",
+      isLoading: false,
     },
   },
   reducers: {

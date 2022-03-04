@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { modalSet, selectModal } from "../../redux/slices/ModalSlice";
 import { useDispatch } from "react-redux";
 import FormCreateUser from "../../pages/SettingsPage/FormCreateUser";
+import ReactLoading from "react-loading";
 
 const Modal = () => {
   const dataModal = useSelector(selectModal);
@@ -25,7 +26,14 @@ const Modal = () => {
           />
         </HeaderContent>
         <MainContent>
-          {dataModal.page === "createUser" && <FormCreateUser />}
+          {dataModal.isLoading && (
+            <Loading>
+              <ReactLoading type="spin" color="#e5e7ef" />
+            </Loading>
+          )}
+          {dataModal.page === "createUser" && !dataModal.isLoading && (
+            <FormCreateUser />
+          )}
         </MainContent>
       </Content>
     </>
@@ -38,7 +46,7 @@ const Wrapper = styled.div`
   position: fixed;
   background-color: black;
   opacity: 0.5;
-  z-index: 2000;
+  z-index: 1000;
   display: ${(props) => (props.active ? "flex" : "none")};
 `;
 
@@ -47,7 +55,7 @@ const Content = styled.div`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   border: solid 1px gray;
-  z-index: 2001;
+  z-index: 1001;
   background-color: white;
   position: absolute;
   left: ${(props) => props.left};
@@ -79,6 +87,15 @@ const HeaderContent = styled.div`
 
 const MainContent = styled.div`
   flex: 1;
+`;
+
+const Loading = styled.div`
+  width: 99%;
+  height: 99%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -20px;
 `;
 
 export default Modal;
