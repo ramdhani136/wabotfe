@@ -1,7 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-const FormInput = ({ label, placeholder, type, value, getData, valid }) => {
+const FormInput = ({
+  label,
+  placeholder,
+  type,
+  value,
+  getData,
+  valid,
+  multiple,
+}) => {
   return (
     <FormGroup>
       <Label>{label}</Label>
@@ -11,6 +19,7 @@ const FormInput = ({ label, placeholder, type, value, getData, valid }) => {
         value={value}
         type={type}
         placeholder={placeholder}
+        multiple={multiple}
       />
     </FormGroup>
   );

@@ -3,15 +3,22 @@ import { Helmet } from "react-helmet";
 import Layout from "../../components/organism/layout/Layout";
 import styled from "styled-components";
 import ArList from "../../components/organism/ArList";
+import { useDispatch } from "react-redux";
+import { modalSet } from "../../redux/slices/ModalSlice";
 
 const AutoReply = () => {
   const ViewAutoReply = () => {
+    const dispatch = useDispatch();
+    const openModal = () => {
+      dispatch(modalSet({ active: true, page: "createAr" }));
+    };
+
     return (
       <Wrapper>
         <Title>
           <Tleft>Auto reply list</Tleft>
           <Tright>
-            <Button>Create new</Button>
+            <Button onClick={openModal}>Create new</Button>
           </Tright>
         </Title>
         <Content>

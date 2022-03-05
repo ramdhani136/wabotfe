@@ -6,6 +6,7 @@ import { modalSet, selectModal } from "../../redux/slices/ModalSlice";
 import { useDispatch } from "react-redux";
 import FormCreateUser from "../../pages/SettingsPage/FormCreateUser";
 import ReactLoading from "react-loading";
+import FormCreateAr from "../../pages/AutoReply/FormCreateAr";
 
 const Modal = () => {
   const dataModal = useSelector(selectModal);
@@ -33,6 +34,9 @@ const Modal = () => {
           )}
           {dataModal.page === "createUser" && !dataModal.isLoading && (
             <FormCreateUser />
+          )}
+          {dataModal.page === "createAr" && !dataModal.isLoading && (
+            <FormCreateAr />
           )}
         </MainContent>
       </Content>
@@ -62,7 +66,7 @@ const Content = styled.div`
   display: ${(props) => (props.active ? "flex" : "none")};
   flex-direction: column;
   top: 15px;
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
   animation: animatetop 0.2s;
   @keyframes animatetop {
@@ -86,7 +90,7 @@ const HeaderContent = styled.div`
 `;
 
 const MainContent = styled.div`
-  flex: 1;
+  height: 90%;
 `;
 
 const Loading = styled.div`

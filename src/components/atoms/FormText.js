@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-const FormText = ({ label, placeholder, value, getData, valid }) => {
+const FormText = ({ label, placeholder, value, getData, valid, height }) => {
   return (
     <FormGroup>
       <Label>{label}</Label>
       <Textarea
+        height={height}
         valid={valid}
         onChange={(e) => getData(e)}
         value={value}
@@ -35,7 +36,7 @@ const Textarea = styled.textarea`
   margin-top: 8px;
   width: 85%;
   margin-left: 6%;
-  height: 50px;
+  height: ${(props) => (props.height ? props.height : "50px")};
   outline: none;
   padding-left: 10px;
   padding-top: 10px;
