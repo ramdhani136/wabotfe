@@ -3,6 +3,7 @@ import { Route, BrowserRouter, Routes } from "react-router-dom";
 import { AutoReply, HomePage, SettingsPage } from "./pages";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
+import "./App.css";
 
 const App = () => {
   return (
