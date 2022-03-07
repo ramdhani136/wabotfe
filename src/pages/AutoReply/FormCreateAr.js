@@ -7,6 +7,7 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState } from "draft-js";
 import AddIcon from "@mui/icons-material/Add";
+import Swal from "sweetalert2";
 
 const FormCreateAr = () => {
   const [isValid, setIsValid] = useState(false);
@@ -19,18 +20,9 @@ const FormCreateAr = () => {
     { id: 1, name: ".menu", status: 1 },
     { id: 2, name: ".info", status: 1 },
   ]);
+  const [valueUri, setValueUri] = useState("");
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [uriFiles, seturiFiles] = useState([
-    {
-      name: "https://www.ekatunggal.com/wp-content/uploads/2020/11/logoslider02.png",
-    },
-    {
-      name: "https://www.ekatunggal.com/utama.png",
-    },
-    {
-      name: "https://www.pngfree.com/pageview.png",
-    },
-  ]);
+  const [uriFiles, seturiFiles] = useState([]);
   const getFiles = (e) => {
     setFiles(e.target.files);
   };
@@ -70,9 +62,39 @@ const FormCreateAr = () => {
     setEditorState(editorState);
   };
 
+  const getValueUri = (e) => {
+    setValueUri(e.target.value);
+  };
+
+  const addUri = () => {
+    if (valueUri !== "") {
+      // alert(valueUri);
+
+      const duplicate = uriFiles.filter((list) => list.name == valueUri);
+      if (duplicate.length < 1) {
+        seturiFiles([...uriFiles, { id: uriFiles.length + 1, name: valueUri }]);
+        setValueUri("");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "This data has been saved before!",
+        });
+      }
+    }
+  };
+
+  const toLink = (uri) => {
+    window.open(uri, "_blank");
+  };
+
+  const delUriFile = (e) => {
+    const newData = uriFiles.filter((file) => file.id !== e);
+    seturiFiles(newData);
+  };
+
   return (
     <Wrapper>
-      {console.log(editorState)}
       <SelectInput
         label="key"
         value={valueKey}
@@ -111,22 +133,29 @@ const FormCreateAr = () => {
         placeholder="Input your messages"
       /> */}
       <FormInput
+        value={valueUri}
+        getData={getValueUri}
         valid={true}
         label="Uri"
         type="text"
-        placeholder="File Url (exp : https://www.ekatunggal.com/wp-content/uploads/2020/11/logoslider02.png)"
+        placeholder="Add your file url (jpg,png,pdf,office doc)"
       />
-      <BtnUri>
-        <a onClick={() => alert("tes")}>Add Url</a>
+      <BtnUri onClick={addUri}>
+        <a>Add Url</a>
         <AddIcon style={{ fontSize: "14px", color: "gray" }} />
       </BtnUri>
       {uriFiles.length > 0 && (
         <ListUri>
           {uriFiles.map((item, id) => (
             <Uri key={id}>
-              <a>{item.name}</a>
+              <a
+                style={{ color: "white", textDecoration: "none" }}
+                onClick={() => toLink(item.name)}
+              >
+                {item.name.substring(0, 55)}
+              </a>
               <CloseIcon
-                onClick={() => alert(id)}
+                onClick={() => delUriFile(item.id)}
                 style={{ fontSize: "18px", marginLeft: "10px" }}
               />
             </Uri>
@@ -217,7 +246,7 @@ const Label = styled.div`
   margin-bottom: 10px;
 `;
 
-const BtnUri = styled.a`
+const BtnUri = styled.div`
   padding: 5px;
   border: solid 1px #ddd;
   margin-top: 5px;
