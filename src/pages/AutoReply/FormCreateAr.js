@@ -28,14 +28,13 @@ const FormCreateAr = () => {
   };
 
   const imageHandler = (e) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setPreviewImg(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-    // setImage(e.target.files[0]);
+    const selectedFIles = [];
+    const targetFiles = e.target.files;
+    const targetFilesObject = [...targetFiles];
+    targetFilesObject.map((file) => {
+      return selectedFIles.push(URL.createObjectURL(file));
+    });
+    setPreviewImg(selectedFIles);
     setFiles(e.target.files);
   };
 
@@ -171,6 +170,34 @@ const FormCreateAr = () => {
         type="file"
         placeholder="Select your file"
       />
+      <div
+        style={{
+          width: "83%",
+          height: "auto",
+          paddingLeft: "10px",
+          border: "solid 1px #ccc",
+          marginTop: "5px",
+          marginLeft: "6%",
+          float: "left",
+          paddingTop: "15px",
+        }}
+      >
+        {previewImg.length > 0 &&
+          previewImg.map((list, id) => (
+            <img
+              src={list}
+              style={{
+                float: "left",
+                contain: "content",
+                width: "45.5%",
+                height: "190px",
+                border: "solid 1px #eee",
+                marginRight: "4%",
+                marginBottom: "15px",
+              }}
+            />
+          ))}
+      </div>
       <Button svalid={isValid}>Save</Button>
     </Wrapper>
   );
@@ -198,6 +225,7 @@ const Button = styled.div`
   border-radius: 2px;
   opacity: ${(props) => (props.valid ? 1 : 0.8)};
   background-color: #5ab75d;
+  float: left;
   color: white;
   :hover {
     cursor: pointer;
