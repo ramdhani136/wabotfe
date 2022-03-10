@@ -23,9 +23,6 @@ const FormCreateAr = () => {
   const [valueUri, setValueUri] = useState("");
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [uriFiles, seturiFiles] = useState([]);
-  const getFiles = (e) => {
-    setFiles(e.target.files);
-  };
 
   const imageHandler = (e) => {
     const selectedFIles = [];
@@ -170,34 +167,95 @@ const FormCreateAr = () => {
         type="file"
         placeholder="Select your file"
       />
-      <div
-        style={{
-          width: "83%",
-          height: "auto",
-          paddingLeft: "10px",
-          border: "solid 1px #ccc",
-          marginTop: "5px",
-          marginLeft: "6%",
-          float: "left",
-          paddingTop: "15px",
-        }}
-      >
-        {previewImg.length > 0 &&
-          previewImg.map((list, id) => (
-            <img
-              src={list}
-              style={{
-                float: "left",
-                contain: "content",
-                width: "45.5%",
-                height: "190px",
-                border: "solid 1px #eee",
-                marginRight: "4%",
-                marginBottom: "15px",
-              }}
-            />
-          ))}
-      </div>
+      {previewImg.length > 0 && (
+        <div
+          style={{
+            width: "83%",
+            height: "auto",
+            paddingLeft: "10px",
+            border: "solid 1px #ccc",
+            marginTop: "5px",
+            marginLeft: "6%",
+            float: "left",
+            paddingTop: "15px",
+          }}
+        >
+          {previewImg.length > 0 &&
+            previewImg.map((list, id) => (
+              <div key={id}>
+                {files[id].type === "image/jpeg" ? (
+                  <div
+                    style={{
+                      float: "left",
+                      width: "45.5%",
+                      height: "170px",
+                      border: "solid 1px #eee",
+                      marginRight: "4%",
+                      marginBottom: "15px",
+                      position: "relative",
+                    }}
+                  >
+                    <img
+                      src={list}
+                      style={{
+                        contain: "content",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                    <CloseIcon
+                      onClick={() => alert("tes")}
+                      style={{
+                        position: "absolute",
+                        right: "5px",
+                        top: "5px",
+                        fontSize: "16px",
+                        cursor: "pointer",
+                        color: "white",
+                        backgroundColor: "red",
+                        border: "solid 1px red",
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      float: "left",
+                      width: "40.5%",
+                      height: "170px",
+                      border: "solid 1px #fffbd7",
+                      marginRight: "4%",
+                      marginBottom: "15px",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      fontSize: "0.85em",
+                      color: "gray",
+                      backgroundColor: "#fdf9f1",
+                      paddingLeft: "10px",
+                      paddingRight: "10px",
+                      position: "relative",
+                    }}
+                  >
+                    <a style={{ width: "80%" }}> {files[id].name}</a>
+                    <CloseIcon
+                      onClick={() => alert("tes")}
+                      style={{
+                        position: "absolute",
+                        right: "5px",
+                        top: "5px",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+        </div>
+      )}
       <Button svalid={isValid}>Save</Button>
     </Wrapper>
   );
