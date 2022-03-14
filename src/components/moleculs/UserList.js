@@ -18,7 +18,7 @@ const UserList = ({ data, setValue, setIsLoading }) => {
       if (result.isConfirmed) {
         setIsLoading(true);
         axios
-          .delete(`${API_URI}akun/${id}`)
+          .delete(`${API_URI}session/${id}`)
           .then((res) => {
             console.log("delete");
 

@@ -94,7 +94,7 @@ const FormCreateUser = () => {
             modalSet({ active: true, page: "createUser", isLoading: true })
           );
           axios
-            .post(`${API_URI}akun/create`, value)
+            .post(`${API_URI}session/create`, value)
             .then((res) => {
               dispatch(modalSet({ active: false, page: "", isLoading: false }));
               Swal.fire({
