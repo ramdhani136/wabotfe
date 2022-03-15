@@ -23,7 +23,7 @@ const FormCreateAr = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [uriFiles, seturiFiles] = useState([]);
   const [valueCreateKey, setValueCreateKey] = useState("");
-  const [valueData, setValueData] = useState({ deskripsi: "" });
+  const [valueData, setValueData] = useState({ deskripsi: "", status: 1 });
 
   const setAllKeys = () => {
     axios
@@ -195,6 +195,36 @@ const FormCreateAr = () => {
         height="200px"
         placeholder="Input your messages"
       />
+      <div
+        style={{
+          width: "87.5%",
+          height: "auto",
+          marginLeft: "6%",
+          marginTop: "10px",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <label
+          style={{ fontSize: ` 0.9em`, color: "gray", marginBottom: "5px" }}
+        >
+          Status
+        </label>
+        <select
+          onChange={(e) =>
+            setValueData({ ...valueData, status: e.target.value })
+          }
+          style={{
+            height: "40px",
+            border: "solid 1px #ccc",
+            borderRadius: "3px",
+            paddingLeft: "10px",
+          }}
+        >
+          <option value="1">Active</option>
+          <option value="0">Non Active</option>
+        </select>
+      </div>
       <FormInput
         value={valueUri}
         getData={getValueUri}
