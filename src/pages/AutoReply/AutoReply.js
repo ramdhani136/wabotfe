@@ -1,33 +1,81 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Layout from "../../components/organism/layout/Layout";
 import styled from "styled-components";
 import ArList from "../../components/organism/ArList";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
+import axios from "axios";
+import { API_URI } from "../../utils/index";
+import _ from "lodash";
+import ReactLoading from "react-loading";
 
-const AutoReply = () => {
-  const ViewAutoReply = () => {
-    const dispatch = useDispatch();
-    const openModal = () => {
-      dispatch(modalSet({ active: true, page: "createAr" }));
-    };
+const ViewAutoReply = () => {
+  const [bots, setBots] = useState([]);
+  const dispatch = useDispatch();
+  const openModal = () => {
+    dispatch(modalSet({ active: true, page: "createAr" }));
+  };
+  const [value, setValue] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-    return (
-      <Wrapper>
-        <Title>
-          <Tleft>Auto reply list</Tleft>
-          <Tright>
-            <Button onClick={openModal}>Create new</Button>
-          </Tright>
-        </Title>
-        <Content>
-          <ArList />
-        </Content>
-      </Wrapper>
-    );
+  const getBots = () => {
+    axios
+      .get(`${API_URI}bots`)
+      .then((res) => {
+        setBots(res.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
+  const getValue = (e) => {
+    setValue(e);
+  };
+
+  useEffect(() => {
+    getBots();
+  }, []);
+
+  const filterData = (data) => {
+    return _.filter(data, function (query) {
+      var key = value
+        ? query.key.toLowerCase().includes(value.toLowerCase())
+        : true;
+
+      return key;
+    });
+  };
+
+  return (
+    <Wrapper>
+      <Title>
+        <Tleft>Auto reply list</Tleft>
+        <Tright>
+          <Button onClick={openModal}>Create new</Button>
+        </Tright>
+      </Title>
+      <Content>
+        {isLoading ? (
+          <Loading>
+            <ReactLoading type="spin" color="#e5e7ef" />
+          </Loading>
+        ) : (
+          <ArList
+            data={filterData(bots)}
+            getValue={getValue}
+            setValue={setValue}
+            value={value}
+          />
+        )}
+      </Content>
+    </Wrapper>
+  );
+};
+
+const AutoReply = () => {
   return (
     <>
       <Helmet>
@@ -99,4 +147,13 @@ const Button = styled.div`
     opacity: 1;
     transform: scale(1.005);
   }
+`;
+
+const Loading = styled.div`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
 `;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ArList = () => {
+const ArList = ({ data, getValue, setValue, value }) => {
   return (
     <Wrapper>
       <Title>
@@ -17,8 +17,9 @@ const ArList = () => {
         >
           Search :{" "}
         </a>
-        <Search />
+        <Search onChange={(e) => getValue(e.target.value)} value={value} />
         <CloseIcon
+          onClick={() => setValue("")}
           style={{
             marginLeft: "-25px",
             fontSize: "19px",
@@ -38,156 +39,121 @@ const ArList = () => {
           }}
         >
           {" "}
-          <table style={{ width: "100%" }} cellSpacing="0" cellPadding="5">
-            <thead style={{ fontSize: "0.87em", color: "gray" }}>
-              <tr style={{ border: "solid 1px #e5e7ef" }}>
-                <th
-                  style={{
-                    border: "solid 1px #e5e7ef",
-                    height: "28px",
-                    width: "5%",
-                  }}
-                >
-                  No
-                </th>
-                <th
-                  style={{
-                    border: "solid 1px #e5e7ef",
-                    textAlign: "left",
-                    marginLeft: "10px",
-                    width: "15%",
-                  }}
-                >
-                  Key
-                </th>
-                <th
-                  style={{
-                    border: "solid 1px #e5e7ef",
-                    textAlign: "left",
-                    width: "45%",
-                  }}
-                >
-                  Reply
-                </th>
-                <th
-                  style={{
-                    border: "solid 1px #e5e7ef",
-                    textAlign: "center",
-                    width: "15%",
-                  }}
-                >
-                  Status
-                </th>
-                <th style={{ border: "solid 1px #e5e7ef", width: "20%" }}>
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody style={{ fontSize: "0.86em", color: "gray" }}>
-              <tr style={{ cursor: "pointer" }}>
-                <td
-                  style={{
-                    textAlign: "center",
-                    border: "solid 1px #e5e7ef",
-                    height: "30px",
-                  }}
-                >
-                  1
-                </td>
-                <td
-                  style={{
-                    textAlign: "left",
-                    border: "solid 1px #e5e7ef",
-                  }}
-                >
-                  .menu
-                </td>
-                <td
-                  style={{
-                    textAlign: "left",
-                    border: "solid 1px #e5e7ef",
-                  }}
-                >
-                  Selamat data di PT.Ekatunggal Tunas Mandiri untuk bantuan
-                  operator ketik 1
-                </td>
-                <td
-                  style={{
-                    textAlign: "center",
-                    border: "solid 1px #e5e7ef",
-                  }}
-                >
-                  <FiberManualRecordIcon
+          {data.length < 1 ? (
+            <div
+              style={{
+                width: "100%",
+                textAlign: "center",
+                marginTop: "90px",
+                color: "#ddd",
+                fontSize: "0.9em",
+              }}
+            >
+              No data result
+            </div>
+          ) : (
+            <table style={{ width: "100%" }} cellSpacing="0" cellPadding="5">
+              <thead style={{ fontSize: "0.87em", color: "gray" }}>
+                <tr style={{ border: "solid 1px #e5e7ef" }}>
+                  <th
                     style={{
-                      fontSize: "10px",
-                      marginRight: "3px",
-                      color: "#98D85B",
+                      border: "solid 1px #e5e7ef",
+                      height: "28px",
+                      width: "5%",
                     }}
-                  />
-                  <a>Active</a>
-                </td>
-                <td
-                  style={{
-                    border: "solid 1px #e5e7ef",
-                  }}
-                >
-                  <Button bg="#AB372C">Delete</Button>
-                  <Button bg="#343A40">Edit</Button>
-                </td>
-              </tr>
-              <tr style={{ cursor: "pointer" }}>
-                <td
-                  style={{
-                    textAlign: "center",
-                    border: "solid 1px #e5e7ef",
-                    height: "30px",
-                  }}
-                >
-                  2
-                </td>
-                <td
-                  style={{
-                    textAlign: "left",
-                    border: "solid 1px #e5e7ef",
-                  }}
-                >
-                  .info
-                </td>
-                <td
-                  style={{
-                    textAlign: "left",
-                    border: "solid 1px #e5e7ef",
-                  }}
-                >
-                  Ekatunggal Tunas Mandiri adalah perusahan yang bergerak di
-                  bidang penjualan bahan baku springbed dan sofa
-                </td>
-                <td
-                  style={{
-                    textAlign: "center",
-                    border: "solid 1px #e5e7ef",
-                  }}
-                >
-                  <FiberManualRecordIcon
+                  >
+                    No
+                  </th>
+                  <th
                     style={{
-                      fontSize: "10px",
-                      marginRight: "3px",
-                      color: "#F85B5B",
+                      border: "solid 1px #e5e7ef",
+                      textAlign: "left",
+                      marginLeft: "10px",
+                      width: "15%",
                     }}
-                  />
-                  <a>Disabled</a>
-                </td>
-                <td
-                  style={{
-                    border: "solid 1px #e5e7ef",
-                  }}
-                >
-                  <Button bg="#AB372C">Delete</Button>
-                  <Button bg="#343A40">Edit</Button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  >
+                    Key
+                  </th>
+                  <th
+                    style={{
+                      border: "solid 1px #e5e7ef",
+                      textAlign: "left",
+                      width: "45%",
+                    }}
+                  >
+                    Reply
+                  </th>
+                  <th
+                    style={{
+                      border: "solid 1px #e5e7ef",
+                      textAlign: "center",
+                      width: "15%",
+                    }}
+                  >
+                    Status
+                  </th>
+                  <th style={{ border: "solid 1px #e5e7ef", width: "20%" }}>
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody style={{ fontSize: "0.86em", color: "gray" }}>
+                {data.map((item, id) => (
+                  <tr key={id} style={{ cursor: "pointer" }}>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        border: "solid 1px #e5e7ef",
+                        height: "30px",
+                      }}
+                    >
+                      {id + 1}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "left",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.key}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "left",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.message}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      <FiberManualRecordIcon
+                        style={{
+                          fontSize: "10px",
+                          marginRight: "3px",
+                          color: item.status ? "#98D85B" : "#F85B5B",
+                        }}
+                      />
+
+                      <a>{item.status ? "Active" : "Disabled"}</a>
+                    </td>
+                    <td
+                      style={{
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      <Button bg="#AB372C">Delete</Button>
+                      <Button bg="#343A40">Edit</Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </Content>
     </Wrapper>
