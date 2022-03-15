@@ -27,7 +27,7 @@ const FormCreateUser = () => {
   };
 
   const getDesc = (e) => {
-    setValue({ ...value, deskripsi: e.target.value });
+    setValue({ ...value, deskripsi: e });
   };
 
   const socket = io(SOCKET_URI, {
