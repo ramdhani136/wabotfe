@@ -8,7 +8,7 @@ const FormText = ({ label, placeholder, value, getData, valid, height }) => {
       <Textarea
         height={height}
         valid={valid}
-        onChange={(e) => getData(e)}
+        onChange={(e) => getData(e.target.value)}
         value={value}
         placeholder={placeholder}
       ></Textarea>

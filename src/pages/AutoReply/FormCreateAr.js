@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FormInput, FormText, SelectInput } from "../../components/atoms";
 import CloseIcon from "@mui/icons-material/Close";
@@ -8,6 +8,8 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState } from "draft-js";
 import AddIcon from "@mui/icons-material/Add";
 import Swal from "sweetalert2";
+import { API_URI } from "../../utils/";
+import axios from "axios";
 
 const FormCreateAr = () => {
   const [isValid, setIsValid] = useState(false);
@@ -16,13 +18,23 @@ const FormCreateAr = () => {
   const [image, setImage] = useState("");
   const [valueKey, setValueKey] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [keys, setKeys] = useState([
-    { id: 1, name: ".menu", status: 1 },
-    { id: 2, name: ".info", status: 1 },
-  ]);
+  const [keys, setKeys] = useState([]);
   const [valueUri, setValueUri] = useState("");
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [uriFiles, seturiFiles] = useState([]);
+  const [valueCreateKey, setValueCreateKey] = useState("");
+  const [valueData, setValueData] = useState({ deskripsi: "" });
+
+  const setAllKeys = () => {
+    axios
+      .get(`${API_URI}key`)
+      .then((res) => {
+        setKeys(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   const imageHandler = (e) => {
     const selectedFIles = [];
@@ -46,8 +58,9 @@ const FormCreateAr = () => {
   };
 
   const getKey = (e) => {
-    setValueKey(e);
+    setValueKey(e.name);
     setIsOpen(false);
+    setValueData({ ...valueData, id_key: e.id, key: e.name });
   };
 
   const setOpen = (e) => {
@@ -89,19 +102,73 @@ const FormCreateAr = () => {
     seturiFiles(newData);
   };
 
+  const saveKey = () => {
+    if (valueCreateKey !== "") {
+      const isDupl = keys.filter(
+        (key) => key.name.toLowerCase() === valueCreateKey.toLocaleLowerCase()
+      );
+      if (isDupl.length < 1) {
+        axios
+          .post(`${API_URI}key`, { name: valueCreateKey })
+          .then((result) => {
+            setValueCreateKey("");
+            setAllKeys();
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Check your input!!",
+            });
+          });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Data already exists!!",
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "You haven't input anything!!",
+      });
+    }
+  };
+
+  const getMesg = (e) => {
+    setValueData({ ...valueData, message: e });
+  };
+
+  useEffect(() => {
+    setAllKeys();
+  }, []);
+
+  const onResetSelect = () => {
+    setValueKey("");
+    setValueData({ ...valueData, id_key: "", key: "" });
+  };
+
   return (
     <Wrapper>
+      {console.log(valueData)}
       <SelectInput
         label="key"
         value={valueKey}
-        onReset={() => setValueKey("")}
+        onReset={() => onResetSelect()}
         data={filterData(keys)}
         setValue={(e) => setValueKey(e)}
         getSelect={getKey}
         isOpen={isOpen}
         setOpen={setOpen}
+        createNew={saveKey}
+        valueCreate={valueCreateKey}
+        setValueCreate={setValueCreateKey}
+        plCreate="Exp : .product"
+        placeholder="-Select Key-"
       />
-      <Label>Messages</Label>
+      {/* <Label>Messages</Label>
       <div
         style={{
           width: "87.5%",
@@ -119,15 +186,15 @@ const FormCreateAr = () => {
           editorClassName="editorClassName"
           onEditorStateChange={onEditorStateChange}
         />
-      </div>
-      {/* <FormText
+      </div> */}
+      <FormText
         valid
         label="Messages"
-        // value={value.deskripsi}
-        // getData={getDesc}
+        value={valueData.message}
+        getData={getMesg}
         height="200px"
         placeholder="Input your messages"
-      /> */}
+      />
       <FormInput
         value={valueUri}
         getData={getValueUri}

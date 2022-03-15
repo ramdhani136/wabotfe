@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
 
 const SelectInput = ({
   value,
@@ -11,13 +12,18 @@ const SelectInput = ({
   getSelect,
   setOpen,
   isOpen,
+  createNew,
+  valueCreate,
+  setValueCreate,
+  plCreate,
+  placeholder,
 }) => {
   return (
     <Wrapper onMouseLeave={() => setOpen(false)}>
       <Label>{label}</Label>
       <ButtonSelect onClick={() => setOpen(true)}>
         <Input
-          placeholder="-Select Data-"
+          placeholder={placeholder}
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
@@ -31,10 +37,35 @@ const SelectInput = ({
       <ListSelect isOpen={isOpen}>
         {data.length < 1 && <Nodata>Data does not exits</Nodata>}
         {data.map((list, id) => (
-          <IsData onClick={(e) => getSelect(list.name)} key={id}>
+          <IsData onClick={(e) => getSelect(list)} key={id}>
             {list.name}
           </IsData>
         ))}
+        <input
+          placeholder={plCreate}
+          style={{
+            width: "90%",
+            height: "33px",
+            marginLeft: "2%",
+            border: "solid 1px #ccc",
+            borderRadius: "2px",
+            paddingLeft: "10px",
+            paddingRight: "10px",
+            marginTop: "5px",
+            marginBotton: "5px",
+          }}
+          value={valueCreate}
+          onChange={(e) => setValueCreate(e.target.value)}
+        />
+        <IsData
+          style={{ color: "#000", display: "flex", alignItems: "center" }}
+          onClick={(e) => createNew()}
+        >
+          <a>Add New</a>
+          <AddIcon
+            style={{ fontSize: "14px", marginLeft: "5px", marginTop: "2px" }}
+          />
+        </IsData>
       </ListSelect>
     </Wrapper>
   );
