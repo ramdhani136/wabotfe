@@ -17,11 +17,12 @@ const SelectInput = ({
   setValueCreate,
   plCreate,
   placeholder,
+  valid,
 }) => {
   return (
     <Wrapper onMouseLeave={() => setOpen(false)}>
       <Label>{label}</Label>
-      <ButtonSelect onClick={() => setOpen(true)}>
+      <ButtonSelect valid={valid} onClick={() => setOpen(true)}>
         <Input
           placeholder={placeholder}
           value={value}
@@ -86,6 +87,7 @@ const ButtonSelect = styled.div`
   width: 97.3%;
   height: 40px;
   border: solid 1px #ccc;
+  border-color: ${(props) => (props.valid ? "#ccc" : "red")};
   align-items: center;
   justify-content: space-between;
   display: flex;

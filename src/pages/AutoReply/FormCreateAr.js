@@ -23,7 +23,13 @@ const FormCreateAr = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [uriFiles, seturiFiles] = useState([]);
   const [valueCreateKey, setValueCreateKey] = useState("");
-  const [valueData, setValueData] = useState({ deskripsi: "", status: 1 });
+  const [valueData, setValueData] = useState({
+    deskripsi: "",
+    status: 1,
+    id_key: "",
+    key: "",
+  });
+  const [keyValid, setKeyValid] = useState(false);
 
   const setAllKeys = () => {
     axios
@@ -150,10 +156,19 @@ const FormCreateAr = () => {
     setValueData({ ...valueData, id_key: "", key: "" });
   };
 
+  useEffect(() => {
+    if (valueData.id_key !== "") {
+      setKeyValid(true);
+    } else {
+      setKeyValid(false);
+    }
+  }, [valueData.id_key]);
+
   return (
     <Wrapper>
       {console.log(valueData)}
       <SelectInput
+        valid={keyValid}
         label="key"
         value={valueKey}
         onReset={() => onResetSelect()}

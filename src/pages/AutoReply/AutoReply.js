@@ -6,9 +6,10 @@ import ArList from "../../components/organism/ArList";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 import axios from "axios";
-import { API_URI } from "../../utils/index";
+import { API_URI, SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
+import { io } from "socket.io-client";
 
 const ViewAutoReply = () => {
   const [bots, setBots] = useState([]);
@@ -18,6 +19,12 @@ const ViewAutoReply = () => {
   };
   const [value, setValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const socket = io(SOCKET_URI, {
+    withCredentials: true,
+    extraHeaders: {
+      "react-client": "react-client",
+    },
+  });
 
   const getBots = () => {
     axios
@@ -37,6 +44,9 @@ const ViewAutoReply = () => {
 
   useEffect(() => {
     getBots();
+    // socket.on("tes", (data) => {
+    //   console.log(data);
+    // });
   }, []);
 
   const filterData = (data) => {
