@@ -69,7 +69,7 @@ const ArList = ({ data, getValue, setValue, value }) => {
                       border: "solid 1px #e5e7ef",
                       textAlign: "left",
                       marginLeft: "10px",
-                      width: "15%",
+                      width: "8%",
                     }}
                   >
                     Key
@@ -78,7 +78,17 @@ const ArList = ({ data, getValue, setValue, value }) => {
                     style={{
                       border: "solid 1px #e5e7ef",
                       textAlign: "left",
-                      width: "45%",
+                      marginLeft: "10px",
+                      width: "12%",
+                    }}
+                  >
+                    Menu
+                  </th>
+                  <th
+                    style={{
+                      border: "solid 1px #e5e7ef",
+                      textAlign: "left",
+                      width: "40%",
                     }}
                   >
                     Reply
@@ -116,6 +126,14 @@ const ArList = ({ data, getValue, setValue, value }) => {
                       }}
                     >
                       {item.key}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "left",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.menu}
                     </td>
                     <td
                       style={{

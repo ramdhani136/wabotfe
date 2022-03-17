@@ -10,32 +10,52 @@ import AddIcon from "@mui/icons-material/Add";
 import Swal from "sweetalert2";
 import { API_URI } from "../../utils/";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { modalSet } from "../../redux/slices/ModalSlice";
 
 const FormCreateAr = () => {
-  const [isValid, setIsValid] = useState(false);
   const [files, setFiles] = useState([]);
+  const dispatch = useDispatch();
   const [previewImg, setPreviewImg] = useState("");
   const [image, setImage] = useState("");
   const [valueKey, setValueKey] = useState("");
+  const [valueMenu, setValueMenu] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [keys, setKeys] = useState([]);
+  const [menus, setMenus] = useState([]);
   const [valueUri, setValueUri] = useState("");
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [uriFiles, seturiFiles] = useState([]);
   const [valueCreateKey, setValueCreateKey] = useState("");
+  const [valueCreateMenu, setValueCreateMenu] = useState("");
   const [valueData, setValueData] = useState({
-    deskripsi: "",
+    message: "",
     status: 1,
     id_key: "",
     key: "",
+    id_menu: "",
+    menu: "",
   });
   const [keyValid, setKeyValid] = useState(false);
+  const [menuValid, setMenuValid] = useState(false);
 
   const setAllKeys = () => {
     axios
       .get(`${API_URI}key`)
       .then((res) => {
         setKeys(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const setAllMenu = () => {
+    axios
+      .get(`${API_URI}menu`)
+      .then((res) => {
+        setMenus(res.data);
       })
       .catch((err) => {
         console.error(err);
@@ -53,10 +73,20 @@ const FormCreateAr = () => {
     setFiles(e.target.files);
   };
 
-  const filterData = (data) => {
+  const filterKey = (data) => {
     return _.filter(data, function (query) {
       var name = valueKey
         ? query.name.toLowerCase().includes(valueKey.toLowerCase())
+        : true;
+
+      return name;
+    });
+  };
+
+  const filterMenu = (data) => {
+    return _.filter(data, function (query) {
+      var name = valueMenu
+        ? query.name.toLowerCase().includes(valueMenu.toLowerCase())
         : true;
 
       return name;
@@ -69,8 +99,18 @@ const FormCreateAr = () => {
     setValueData({ ...valueData, id_key: e.id, key: e.name });
   };
 
+  const getMenu = (e) => {
+    setValueMenu(e.name);
+    setIsOpenMenu(false);
+    setValueData({ ...valueData, id_menu: e.id, menu: e.name });
+  };
+
   const setOpen = (e) => {
     setIsOpen(e);
+  };
+
+  const setOpenMenu = (e) => {
+    setIsOpenMenu(e);
   };
 
   const onEditorStateChange = (editorState) => {
@@ -143,17 +183,103 @@ const FormCreateAr = () => {
     }
   };
 
+  const saveMenu = () => {
+    if (valueCreateMenu !== "") {
+      const isDupl = menus.filter(
+        (menu) =>
+          menu.name.toLowerCase() === valueCreateMenu.toLocaleLowerCase()
+      );
+      if (isDupl.length < 1) {
+        axios
+          .post(`${API_URI}menu`, { name: valueCreateMenu })
+          .then((result) => {
+            setValueCreateMenu("");
+            setAllMenu();
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Check your input!!",
+            });
+          });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Data already exists!!",
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "You haven't input anything!!",
+      });
+    }
+  };
+
   const getMesg = (e) => {
     setValueData({ ...valueData, message: e });
   };
 
   useEffect(() => {
     setAllKeys();
+    setAllMenu();
   }, []);
 
-  const onResetSelect = () => {
+  const onResetKey = () => {
     setValueKey("");
     setValueData({ ...valueData, id_key: "", key: "" });
+  };
+
+  const onResetMenu = () => {
+    setValueMenu("");
+    setValueData({ ...valueData, id_menu: "", menu: "" });
+  };
+
+  const saveBot = () => {
+    if (keyValid && menuValid) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Save this data!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, save it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .post(`${API_URI}bots`, valueData)
+            .then((res) => {
+              dispatch(modalSet({ active: false, page: "", isLoading: false }));
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Your data has been saved",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            })
+            .catch((err) => {
+              dispatch(
+                modalSet({
+                  active: true,
+                  page: "createAr",
+                  isLoading: false,
+                })
+              );
+              console.log("err");
+              Swal.fire("Error!", "Your file cannot to save.", "error");
+            });
+        } else {
+          dispatch(
+            modalSet({ active: true, page: "createAr", isLoading: false })
+          );
+        }
+      });
+    }
   };
 
   useEffect(() => {
@@ -162,17 +288,22 @@ const FormCreateAr = () => {
     } else {
       setKeyValid(false);
     }
-  }, [valueData.id_key]);
+
+    if (valueData.id_menu !== "") {
+      setMenuValid(true);
+    } else {
+      setMenuValid(false);
+    }
+  }, [valueData.id_key, valueData.id_menu]);
 
   return (
     <Wrapper>
-      {console.log(valueData)}
       <SelectInput
         valid={keyValid}
         label="key"
         value={valueKey}
-        onReset={() => onResetSelect()}
-        data={filterData(keys)}
+        onReset={() => onResetKey()}
+        data={filterKey(keys)}
         setValue={(e) => setValueKey(e)}
         getSelect={getKey}
         isOpen={isOpen}
@@ -202,6 +333,22 @@ const FormCreateAr = () => {
           onEditorStateChange={onEditorStateChange}
         />
       </div> */}
+      <SelectInput
+        valid={menuValid}
+        label="Menu"
+        value={valueMenu}
+        onReset={() => onResetMenu()}
+        data={filterMenu(menus)}
+        setValue={(e) => setValueMenu(e)}
+        getSelect={getMenu}
+        isOpen={isOpenMenu}
+        setOpen={setOpenMenu}
+        createNew={saveMenu}
+        valueCreate={valueCreateMenu}
+        setValueCreate={setValueCreateMenu}
+        plCreate="Exp : Home, Profile, Info"
+        placeholder="-Select Menu-"
+      />
       <FormText
         valid
         label="Messages"
@@ -368,7 +515,9 @@ const FormCreateAr = () => {
             ))}
         </div>
       )}
-      <Button svalid={isValid}>Save</Button>
+      <Button onClick={saveBot} valid={keyValid && menuValid ? true : false}>
+        Save
+      </Button>
     </Wrapper>
   );
 };
@@ -393,7 +542,7 @@ const Button = styled.div`
   text-align: center;
   margin-top: 20px;
   border-radius: 2px;
-  opacity: ${(props) => (props.valid ? 1 : 0.8)};
+  opacity: ${(props) => (props.valid ? 1 : 0.5)};
   background-color: #5ab75d;
   float: left;
   color: white;
