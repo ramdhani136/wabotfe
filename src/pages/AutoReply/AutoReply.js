@@ -51,11 +51,11 @@ const ViewAutoReply = () => {
 
   const filterData = (data) => {
     return _.filter(data, function (query) {
-      var key = value
-        ? query.key.toLowerCase().includes(value.toLowerCase())
+      var menuAktif = value
+        ? query.menuAktif.name.toLowerCase().includes(value.toLowerCase())
         : true;
 
-      return key;
+      return menuAktif;
     });
   };
 

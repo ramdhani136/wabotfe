@@ -20,8 +20,15 @@ const FormCreateAr = () => {
   const [image, setImage] = useState("");
   const [valueKey, setValueKey] = useState("");
   const [valueMenu, setValueMenu] = useState("");
+  const [valueNext, setValueNext] = useState("");
+  const [valuePrevMenu, setValuePrevMenu] = useState("");
+  const [valuePrevKey, setValuePrevKey] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [isOpenNext, setIsOpenNext] = useState(false);
+  const [isOpenPrevMenu, setIsOpenPrevMenu] = useState(false);
+  const [isOpenPrevKey, setIsOpenPrevKey] = useState(false);
+
   const [keys, setKeys] = useState([]);
   const [menus, setMenus] = useState([]);
   const [valueUri, setValueUri] = useState("");
@@ -29,16 +36,21 @@ const FormCreateAr = () => {
   const [uriFiles, seturiFiles] = useState([]);
   const [valueCreateKey, setValueCreateKey] = useState("");
   const [valueCreateMenu, setValueCreateMenu] = useState("");
+  const [valueCreateNext, setValueCreateNext] = useState("");
   const [valueData, setValueData] = useState({
     message: "",
     status: 1,
     id_key: "",
-    key: "",
-    id_menu: "",
-    menu: "",
+    id_menuAktif: "",
+    id_prevKey: "",
+    id_prevMenu: "",
+    id_afterMenu: "",
   });
   const [keyValid, setKeyValid] = useState(false);
   const [menuValid, setMenuValid] = useState(false);
+  const [nextValid, setNextValid] = useState(false);
+  const [prevKeyValid, setPrevKey] = useState(false);
+  const [prevMenuValid, setPrevMenuValid] = useState(false);
 
   const setAllKeys = () => {
     axios
@@ -93,16 +105,64 @@ const FormCreateAr = () => {
     });
   };
 
+  const filterNext = (data) => {
+    return _.filter(data, function (query) {
+      var name = valueNext
+        ? query.name.toLowerCase().includes(valueNext.toLowerCase())
+        : true;
+
+      return name;
+    });
+  };
+
+  const filterPrevMenu = (data) => {
+    return _.filter(data, function (query) {
+      var name = valuePrevMenu
+        ? query.name.toLowerCase().includes(valuePrevMenu.toLowerCase())
+        : true;
+
+      return name;
+    });
+  };
+
+  const filterPrevKey = (data) => {
+    return _.filter(data, function (query) {
+      var name = valuePrevKey
+        ? query.name.toLowerCase().includes(valuePrevKey.toLowerCase())
+        : true;
+
+      return name;
+    });
+  };
+
   const getKey = (e) => {
     setValueKey(e.name);
     setIsOpen(false);
-    setValueData({ ...valueData, id_key: e.id, key: e.name });
+    setValueData({ ...valueData, id_key: e.id });
   };
 
   const getMenu = (e) => {
     setValueMenu(e.name);
     setIsOpenMenu(false);
-    setValueData({ ...valueData, id_menu: e.id, menu: e.name });
+    setValueData({ ...valueData, id_menuAktif: e.id });
+  };
+
+  const getNext = (e) => {
+    setValueNext(e.name);
+    setIsOpenNext(false);
+    setValueData({ ...valueData, id_afterMenu: e.id });
+  };
+
+  const getPrevKey = (e) => {
+    setValuePrevKey(e.name);
+    setIsOpenPrevKey(false);
+    setValueData({ ...valueData, id_prevKey: e.id });
+  };
+
+  const getPrevMenu = (e) => {
+    setValuePrevMenu(e.name);
+    setIsOpenPrevMenu(false);
+    setValueData({ ...valueData, id_prevMenu: e.id });
   };
 
   const setOpen = (e) => {
@@ -219,6 +279,42 @@ const FormCreateAr = () => {
     }
   };
 
+  const saveNext = () => {
+    if (valueCreateNext !== "") {
+      const isDupl = menus.filter(
+        (menu) =>
+          menu.name.toLowerCase() === valueCreateNext.toLocaleLowerCase()
+      );
+      if (isDupl.length < 1) {
+        axios
+          .post(`${API_URI}menu`, { name: valueCreateNext })
+          .then((result) => {
+            setValueCreateNext("");
+            setAllMenu();
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Check your input!!",
+            });
+          });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Data already exists!!",
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "You haven't input anything!!",
+      });
+    }
+  };
+
   const getMesg = (e) => {
     setValueData({ ...valueData, message: e });
   };
@@ -230,16 +326,31 @@ const FormCreateAr = () => {
 
   const onResetKey = () => {
     setValueKey("");
-    setValueData({ ...valueData, id_key: "", key: "" });
+    setValueData({ ...valueData, id_key: "" });
   };
 
   const onResetMenu = () => {
     setValueMenu("");
-    setValueData({ ...valueData, id_menu: "", menu: "" });
+    setValueData({ ...valueData, id_menuAktif: "" });
+  };
+
+  const onResetNext = () => {
+    setValueNext("");
+    setValueData({ ...valueData, id_afterMenu: "" });
+  };
+
+  const onResetPrevMenu = () => {
+    setValuePrevMenu("");
+    setValueData({ ...valueData, id_prevMenu: "" });
+  };
+
+  const onResetPrevKey = () => {
+    setValuePrevKey("");
+    setValueData({ ...valueData, id_prevKey: "" });
   };
 
   const saveBot = () => {
-    if (keyValid && menuValid) {
+    if (keyValid && menuValid && nextValid && prevKeyValid && prevMenuValid) {
       Swal.fire({
         title: "Are you sure?",
         text: "Save this data!",
@@ -283,21 +394,76 @@ const FormCreateAr = () => {
   };
 
   useEffect(() => {
+    if (valueKey === "") {
+      setValueData({ ...valueData, id_key: "" });
+    }
+  }, [valueKey]);
+
+  useEffect(() => {
+    if (valueMenu === "") {
+      setValueData({ ...valueData, id_menuAktif: "" });
+    }
+  }, [valueMenu]);
+
+  useEffect(() => {
+    if (valueNext === "") {
+      setValueData({ ...valueData, id_afterMenu: "" });
+    }
+  }, [valueNext]);
+
+  useEffect(() => {
+    if (valuePrevMenu === "") {
+      setValueData({ ...valueData, id_prevMenu: "" });
+    }
+  }, [valuePrevMenu]);
+
+  useEffect(() => {
+    if (valuePrevKey === "") {
+      setValueData({ ...valueData, id_prevKey: "" });
+    }
+  }, [valuePrevKey]);
+
+  useEffect(() => {
     if (valueData.id_key !== "") {
       setKeyValid(true);
     } else {
       setKeyValid(false);
     }
 
-    if (valueData.id_menu !== "") {
+    if (valueData.id_menuAktif !== "") {
       setMenuValid(true);
     } else {
       setMenuValid(false);
     }
-  }, [valueData.id_key, valueData.id_menu]);
+
+    if (valueData.id_afterMenu !== "") {
+      setNextValid(true);
+    } else {
+      setNextValid(false);
+    }
+
+    if (valueData.id_prevMenu !== "") {
+      setPrevMenuValid(true);
+    } else {
+      setPrevMenuValid(false);
+    }
+
+    if (valueData.id_prevKey !== "") {
+      setPrevKey(true);
+    } else {
+      setPrevKey(false);
+    }
+  }, [
+    valueData.id_key,
+    valueData.id_menuAktif,
+    valueData.id_afterMenu,
+    valueData.id_prevMenu,
+    valueData.id_prevKey,
+  ]);
 
   return (
     <Wrapper>
+      {console.log(valueData)}
       <SelectInput
         valid={keyValid}
         label="key"
@@ -313,6 +479,7 @@ const FormCreateAr = () => {
         setValueCreate={setValueCreateKey}
         plCreate="Exp : .product"
         placeholder="-Select Key-"
+        formCreate
       />
       {/* <Label>Messages</Label>
       <div
@@ -335,7 +502,7 @@ const FormCreateAr = () => {
       </div> */}
       <SelectInput
         valid={menuValid}
-        label="Menu"
+        label="Base Menu"
         value={valueMenu}
         onReset={() => onResetMenu()}
         data={filterMenu(menus)}
@@ -347,8 +514,58 @@ const FormCreateAr = () => {
         valueCreate={valueCreateMenu}
         setValueCreate={setValueCreateMenu}
         plCreate="Exp : Home, Profile, Info"
-        placeholder="-Select Menu-"
+        placeholder="-Select Base Menu-"
+        formCreate
       />
+
+      <SelectInput
+        valid={nextValid}
+        label="Next Menu"
+        value={valueNext}
+        onReset={() => onResetNext()}
+        data={filterNext(menus)}
+        setValue={(e) => setValueNext(e)}
+        getSelect={getNext}
+        isOpen={isOpenNext}
+        setOpen={setIsOpenNext}
+        createNew={saveNext}
+        valueCreate={valueCreateNext}
+        setValueCreate={setValueCreateNext}
+        plCreate="Exp : Home, Profile, Info"
+        placeholder="-Select Next Menu-"
+        formCreate
+      />
+
+      <SelectInput
+        valid={prevKeyValid}
+        label="Prev Key"
+        value={valuePrevKey}
+        onReset={() => onResetPrevKey()}
+        data={filterPrevKey(keys)}
+        setValue={(e) => setValuePrevKey(e)}
+        getSelect={getPrevKey}
+        isOpen={isOpenPrevKey}
+        setOpen={setIsOpenPrevKey}
+        formCreate={false}
+        plCreate="Exp : Home, Profile, Info"
+        placeholder="-Select Prev Key-"
+      />
+
+      <SelectInput
+        valid={prevMenuValid}
+        label="Prev Menu"
+        value={valuePrevMenu}
+        onReset={() => onResetPrevMenu()}
+        data={filterPrevMenu(menus)}
+        setValue={(e) => setValuePrevMenu(e)}
+        getSelect={getPrevMenu}
+        isOpen={isOpenPrevMenu}
+        setOpen={setIsOpenPrevMenu}
+        formCreate={false}
+        plCreate="Exp : Home, Profile, Info"
+        placeholder="-Select Prev Menu-"
+      />
+
       <FormText
         valid
         label="Messages"
@@ -515,7 +732,14 @@ const FormCreateAr = () => {
             ))}
         </div>
       )}
-      <Button onClick={saveBot} valid={keyValid && menuValid ? true : false}>
+      <Button
+        onClick={saveBot}
+        valid={
+          keyValid && menuValid && nextValid && prevKeyValid && prevMenuValid
+            ? true
+            : false
+        }
+      >
         Save
       </Button>
     </Wrapper>

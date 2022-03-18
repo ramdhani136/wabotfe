@@ -59,7 +59,7 @@ const ArList = ({ data, getValue, setValue, value }) => {
                     style={{
                       border: "solid 1px #e5e7ef",
                       height: "28px",
-                      width: "5%",
+                      textAlign: "center",
                     }}
                   >
                     No
@@ -67,9 +67,9 @@ const ArList = ({ data, getValue, setValue, value }) => {
                   <th
                     style={{
                       border: "solid 1px #e5e7ef",
-                      textAlign: "left",
+
                       marginLeft: "10px",
-                      width: "8%",
+                      textAlign: "center",
                     }}
                   >
                     Key
@@ -77,9 +77,9 @@ const ArList = ({ data, getValue, setValue, value }) => {
                   <th
                     style={{
                       border: "solid 1px #e5e7ef",
-                      textAlign: "left",
+                      textAlign: "center",
                       marginLeft: "10px",
-                      width: "12%",
+                      // width: "12%",
                     }}
                   >
                     Menu
@@ -87,8 +87,35 @@ const ArList = ({ data, getValue, setValue, value }) => {
                   <th
                     style={{
                       border: "solid 1px #e5e7ef",
-                      textAlign: "left",
-                      width: "40%",
+                      textAlign: "center",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    Prev Key
+                  </th>
+                  <th
+                    style={{
+                      border: "solid 1px #e5e7ef",
+                      textAlign: "center",
+                      marginLeft: "10px",
+                      // width: "12%",
+                    }}
+                  >
+                    Prev Menu
+                  </th>
+                  <th
+                    style={{
+                      border: "solid 1px #e5e7ef",
+                      textAlign: "center",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    Next Menu
+                  </th>
+                  <th
+                    style={{
+                      border: "solid 1px #e5e7ef",
+                      textAlign: "center",
                     }}
                   >
                     Reply
@@ -97,12 +124,12 @@ const ArList = ({ data, getValue, setValue, value }) => {
                     style={{
                       border: "solid 1px #e5e7ef",
                       textAlign: "center",
-                      width: "15%",
+                      width: "10%",
                     }}
                   >
                     Status
                   </th>
-                  <th style={{ border: "solid 1px #e5e7ef", width: "20%" }}>
+                  <th style={{ border: "solid 1px #e5e7ef", width: "14%" }}>
                     Action
                   </th>
                 </tr>
@@ -121,11 +148,43 @@ const ArList = ({ data, getValue, setValue, value }) => {
                     </td>
                     <td
                       style={{
-                        textAlign: "left",
+                        textAlign: "center",
                         border: "solid 1px #e5e7ef",
                       }}
                     >
-                      {item.key}
+                      {item.key.name}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.menuAktif.name}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.prevKey.name}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.prevMenu.name}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.afterMenu.name}
                     </td>
                     <td
                       style={{
@@ -133,15 +192,7 @@ const ArList = ({ data, getValue, setValue, value }) => {
                         border: "solid 1px #e5e7ef",
                       }}
                     >
-                      {item.menu}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "left",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
-                      {item.message}
+                      {item.message ? item.message : "No Message"}
                     </td>
                     <td
                       style={{

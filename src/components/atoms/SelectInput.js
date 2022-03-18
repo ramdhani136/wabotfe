@@ -18,6 +18,7 @@ const SelectInput = ({
   plCreate,
   placeholder,
   valid,
+  formCreate,
 }) => {
   return (
     <Wrapper onMouseLeave={() => setOpen(false)}>
@@ -42,31 +43,41 @@ const SelectInput = ({
             {list.name}
           </IsData>
         ))}
-        <input
-          placeholder={plCreate}
-          style={{
-            width: "90%",
-            height: "33px",
-            marginLeft: "2%",
-            border: "solid 1px #ccc",
-            borderRadius: "2px",
-            paddingLeft: "10px",
-            paddingRight: "10px",
-            marginTop: "5px",
-            marginBotton: "5px",
-          }}
-          value={valueCreate}
-          onChange={(e) => setValueCreate(e.target.value)}
-        />
-        <IsData
-          style={{ color: "#000", display: "flex", alignItems: "center" }}
-          onClick={(e) => createNew()}
-        >
-          <a>Add New</a>
-          <AddIcon
-            style={{ fontSize: "14px", marginLeft: "5px", marginTop: "2px" }}
-          />
-        </IsData>
+
+        {formCreate && (
+          <>
+            <input
+              placeholder={plCreate}
+              style={{
+                width: "90%",
+                height: "33px",
+                marginLeft: "2%",
+                border: "solid 1px #ccc",
+                borderRadius: "2px",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+                marginTop: "5px",
+                marginBotton: "5px",
+              }}
+              value={valueCreate}
+              onChange={(e) => setValueCreate(e.target.value)}
+            />
+
+            <IsData
+              style={{ color: "#000", display: "flex", alignItems: "center" }}
+              onClick={(e) => createNew()}
+            >
+              <a>Add New</a>
+              <AddIcon
+                style={{
+                  fontSize: "14px",
+                  marginLeft: "5px",
+                  marginTop: "2px",
+                }}
+              />
+            </IsData>
+          </>
+        )}
       </ListSelect>
     </Wrapper>
   );
