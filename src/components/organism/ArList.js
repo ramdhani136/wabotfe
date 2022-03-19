@@ -67,6 +67,16 @@ const ArList = ({ data, getValue, setValue, value }) => {
                   <th
                     style={{
                       border: "solid 1px #e5e7ef",
+                      textAlign: "center",
+                      marginLeft: "10px",
+                      // width: "12%",
+                    }}
+                  >
+                    Menu
+                  </th>
+                  <th
+                    style={{
+                      border: "solid 1px #e5e7ef",
 
                       marginLeft: "10px",
                       textAlign: "center",
@@ -79,19 +89,9 @@ const ArList = ({ data, getValue, setValue, value }) => {
                       border: "solid 1px #e5e7ef",
                       textAlign: "center",
                       marginLeft: "10px",
-                      // width: "12%",
                     }}
                   >
-                    Menu
-                  </th>
-                  <th
-                    style={{
-                      border: "solid 1px #e5e7ef",
-                      textAlign: "center",
-                      marginLeft: "10px",
-                    }}
-                  >
-                    Prev Key
+                    Next Menu
                   </th>
                   <th
                     style={{
@@ -110,7 +110,7 @@ const ArList = ({ data, getValue, setValue, value }) => {
                       marginLeft: "10px",
                     }}
                   >
-                    Next Menu
+                    Prev Key
                   </th>
                   <th
                     style={{
@@ -152,14 +152,6 @@ const ArList = ({ data, getValue, setValue, value }) => {
                         border: "solid 1px #e5e7ef",
                       }}
                     >
-                      {item.key.name}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
                       {item.menuAktif.name}
                     </td>
                     <td
@@ -168,7 +160,15 @@ const ArList = ({ data, getValue, setValue, value }) => {
                         border: "solid 1px #e5e7ef",
                       }}
                     >
-                      {item.prevKey.name}
+                      {item.key.name}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.afterMenu.name}
                     </td>
                     <td
                       style={{
@@ -184,7 +184,7 @@ const ArList = ({ data, getValue, setValue, value }) => {
                         border: "solid 1px #e5e7ef",
                       }}
                     >
-                      {item.afterMenu.name}
+                      {item.prevKey.name}
                     </td>
                     <td
                       style={{
