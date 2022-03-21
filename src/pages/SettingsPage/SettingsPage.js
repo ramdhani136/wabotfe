@@ -135,7 +135,7 @@ const SettingsPage = () => {
     <>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>WAblast - Accountg Settings</title>
+        <title>WAblast - Account Settings</title>
       </Helmet>
       <Layout Component={ViewSettings} />
     </>

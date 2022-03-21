@@ -2,35 +2,27 @@ import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Layout from "../../components/organism/layout/Layout";
 import styled from "styled-components";
-import ArList from "../../components/organism/ArList";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 import axios from "axios";
-import { API_URI, SOCKET_URI } from "../../utils/index";
+import { API_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
-import { io } from "socket.io-client";
+import ContactList from "../../components/organism/ContactList";
 
-const ViewAutoReply = () => {
-  const [bots, setBots] = useState([]);
+const ViewContact = () => {
+  const [contacts, setContacts] = useState([]);
   const dispatch = useDispatch();
-  const openModal = () => {
-    dispatch(modalSet({ active: true, page: "createAr" }));
-  };
   const [value, setValue] = useState("");
+  const openModal = () => {
+    dispatch(modalSet({ active: true, page: "createContact" }));
+  };
   const [isLoading, setIsLoading] = useState(true);
-  const socket = io(SOCKET_URI, {
-    withCredentials: true,
-    extraHeaders: {
-      "react-client": "react-client",
-    },
-  });
-
-  const getBots = () => {
+  const getContacts = () => {
     axios
-      .get(`${API_URI}bots`)
+      .get(`${API_URI}customer`)
       .then((res) => {
-        setBots(res.data);
+        setContacts(res.data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -43,26 +35,23 @@ const ViewAutoReply = () => {
   };
 
   useEffect(() => {
-    getBots();
-    // socket.on("tes", (data) => {
-    //   console.log(data);
-    // });
+    getContacts();
   }, []);
 
   const filterData = (data) => {
     return _.filter(data, function (query) {
-      var menuAktif = value
-        ? query.menuAktif.name.toLowerCase().includes(value.toLowerCase())
+      var name = value
+        ? query.name.toLowerCase().includes(value.toLowerCase())
         : true;
 
-      return menuAktif;
+      return name;
     });
   };
 
   return (
     <Wrapper>
       <Title>
-        <Tleft>Auto reply list</Tleft>
+        <Tleft>Contact list</Tleft>
         <Tright>
           <Button onClick={openModal}>Create new</Button>
         </Tright>
@@ -73,8 +62,8 @@ const ViewAutoReply = () => {
             <ReactLoading type="spin" color="#e5e7ef" />
           </Loading>
         ) : (
-          <ArList
-            data={filterData(bots)}
+          <ContactList
+            data={filterData(contacts)}
             getValue={getValue}
             setValue={setValue}
             value={value}
@@ -86,19 +75,19 @@ const ViewAutoReply = () => {
   );
 };
 
-const AutoReply = () => {
+const ContactPage = () => {
   return (
     <>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>WAblast - Auto Reply</title>
+        <title>WAblast - Contact</title>
       </Helmet>
-      <Layout Component={ViewAutoReply} />
+      <Layout Component={ViewContact} />
     </>
   );
 };
 
-export default AutoReply;
+export default ContactPage;
 
 const Wrapper = styled.div`
   width: 97%;

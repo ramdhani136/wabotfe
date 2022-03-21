@@ -6,8 +6,8 @@ import { API_URI } from "../../utils";
 const axios = require("axios");
 const Swal = require("sweetalert2");
 
-const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
-  const deleteAr = (id) => {
+const MenuList = ({ data, getValue, setValue, value, setIsLoading }) => {
+  const deleteMenu = (id) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -20,16 +20,16 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
       if (result.isConfirmed) {
         setIsLoading(true);
         axios
-          .delete(`${API_URI}bots/${id}`)
+          .delete(`${API_URI}menu/${id}`)
           .then((res) => {
             console.log("delete");
 
-            Swal.fire("Deleted!", "Your bots has been deleted.", "success");
+            Swal.fire("Deleted!", "Your menu has been deleted.", "success");
             setIsLoading(false);
           })
           .catch((err) => {
             console.log("err");
-            Swal.fire("Error!", "Your bots cannot to deleted.", "error");
+            Swal.fire("Error!", "Your menu cannot to deleted.", "error");
             setIsLoading(false);
           });
       }
@@ -91,6 +91,7 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       border: "solid 1px #e5e7ef",
                       height: "28px",
                       textAlign: "center",
+                      width: "10%",
                     }}
                   >
                     No
@@ -103,64 +104,19 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       // width: "12%",
                     }}
                   >
-                    Menu
-                  </th>
-                  <th
-                    style={{
-                      border: "solid 1px #e5e7ef",
-
-                      marginLeft: "10px",
-                      textAlign: "center",
-                    }}
-                  >
-                    Key
+                    Name
                   </th>
                   <th
                     style={{
                       border: "solid 1px #e5e7ef",
                       textAlign: "center",
                       marginLeft: "10px",
-                    }}
-                  >
-                    Next Menu
-                  </th>
-                  <th
-                    style={{
-                      border: "solid 1px #e5e7ef",
-                      textAlign: "center",
-                      marginLeft: "10px",
-                      // width: "12%",
-                    }}
-                  >
-                    Prev Menu
-                  </th>
-                  <th
-                    style={{
-                      border: "solid 1px #e5e7ef",
-                      textAlign: "center",
-                      marginLeft: "10px",
-                    }}
-                  >
-                    Prev Key
-                  </th>
-                  <th
-                    style={{
-                      border: "solid 1px #e5e7ef",
-                      textAlign: "center",
-                    }}
-                  >
-                    Reply
-                  </th>
-                  <th
-                    style={{
-                      border: "solid 1px #e5e7ef",
-                      textAlign: "center",
-                      width: "10%",
+                      width: "20%",
                     }}
                   >
                     Status
                   </th>
-                  <th style={{ border: "solid 1px #e5e7ef", width: "14%" }}>
+                  <th style={{ border: "solid 1px #e5e7ef", width: "27%" }}>
                     Action
                   </th>
                 </tr>
@@ -179,51 +135,11 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                     </td>
                     <td
                       style={{
-                        textAlign: "center",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
-                      {item.menuAktif.name}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
-                      {item.key.name}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
-                      {item.afterMenu.name}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
-                      {item.prevMenu.name}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
-                      {item.prevKey.name}
-                    </td>
-                    <td
-                      style={{
                         textAlign: "left",
                         border: "solid 1px #e5e7ef",
                       }}
                     >
-                      {item.message ? item.message : "No Message"}
+                      {item.name}
                     </td>
                     <td
                       style={{
@@ -246,7 +162,7 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                         border: "solid 1px #e5e7ef",
                       }}
                     >
-                      <Button bg="#AB372C" onClick={() => deleteAr(item.id)}>
+                      <Button bg="#AB372C" onClick={() => deleteMenu(item.id)}>
                         Delete
                       </Button>
                       <Button bg="#343A40">Edit</Button>
@@ -262,7 +178,7 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
   );
 };
 
-export default ArList;
+export default MenuList;
 
 const Wrapper = styled.div`
   width: 96%;

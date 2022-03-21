@@ -6,8 +6,8 @@ import { API_URI } from "../../utils";
 const axios = require("axios");
 const Swal = require("sweetalert2");
 
-const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
-  const deleteAr = (id) => {
+const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
+  const deleteContact = (id) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -20,16 +20,16 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
       if (result.isConfirmed) {
         setIsLoading(true);
         axios
-          .delete(`${API_URI}bots/${id}`)
+          .delete(`${API_URI}customer/${id}`)
           .then((res) => {
             console.log("delete");
 
-            Swal.fire("Deleted!", "Your bots has been deleted.", "success");
+            Swal.fire("Deleted!", "Your contact has been deleted.", "success");
             setIsLoading(false);
           })
           .catch((err) => {
             console.log("err");
-            Swal.fire("Error!", "Your bots cannot to deleted.", "error");
+            Swal.fire("Error!", "Your contact cannot to deleted.", "error");
             setIsLoading(false);
           });
       }
@@ -103,7 +103,7 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       // width: "12%",
                     }}
                   >
-                    Menu
+                    Name
                   </th>
                   <th
                     style={{
@@ -113,16 +113,17 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       textAlign: "center",
                     }}
                   >
-                    Key
+                    Phone
                   </th>
                   <th
                     style={{
                       border: "solid 1px #e5e7ef",
                       textAlign: "center",
                       marginLeft: "10px",
+                      width: "13%",
                     }}
                   >
-                    Next Menu
+                    City
                   </th>
                   <th
                     style={{
@@ -132,30 +133,24 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       // width: "12%",
                     }}
                   >
-                    Prev Menu
+                    Active Menu
                   </th>
                   <th
                     style={{
                       border: "solid 1px #e5e7ef",
                       textAlign: "center",
                       marginLeft: "10px",
+                      // width: "12%",
                     }}
                   >
-                    Prev Key
+                    Interest
                   </th>
                   <th
                     style={{
                       border: "solid 1px #e5e7ef",
                       textAlign: "center",
-                    }}
-                  >
-                    Reply
-                  </th>
-                  <th
-                    style={{
-                      border: "solid 1px #e5e7ef",
-                      textAlign: "center",
-                      width: "10%",
+                      marginLeft: "10px",
+                      width: "12%",
                     }}
                   >
                     Status
@@ -179,6 +174,30 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                     </td>
                     <td
                       style={{
+                        textAlign: "left",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.name}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "left",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.phone}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "left",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {item.kota ? item.kota : "Not set"}
+                    </td>
+                    <td
+                      style={{
                         textAlign: "center",
                         border: "solid 1px #e5e7ef",
                       }}
@@ -187,43 +206,11 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                     </td>
                     <td
                       style={{
-                        textAlign: "center",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
-                      {item.key.name}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
-                      {item.afterMenu.name}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
-                      {item.prevMenu.name}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        border: "solid 1px #e5e7ef",
-                      }}
-                    >
-                      {item.prevKey.name}
-                    </td>
-                    <td
-                      style={{
                         textAlign: "left",
                         border: "solid 1px #e5e7ef",
                       }}
                     >
-                      {item.message ? item.message : "No Message"}
+                      {item.item ? item.item : "Not set"}
                     </td>
                     <td
                       style={{
@@ -235,18 +222,21 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                         style={{
                           fontSize: "10px",
                           marginRight: "3px",
-                          color: item.status ? "#98D85B" : "#F85B5B",
+                          color: item.status ? "#F85B5B" : "#98D85B",
                         }}
                       />
 
-                      <a>{item.status ? "Active" : "Disabled"}</a>
+                      <a>{item.status ? "Done" : "Ready"}</a>
                     </td>
                     <td
                       style={{
                         border: "solid 1px #e5e7ef",
                       }}
                     >
-                      <Button bg="#AB372C" onClick={() => deleteAr(item.id)}>
+                      <Button
+                        bg="#AB372C"
+                        onClick={() => deleteContact(item.id)}
+                      >
                         Delete
                       </Button>
                       <Button bg="#343A40">Edit</Button>
@@ -262,7 +252,7 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
   );
 };
 
-export default ArList;
+export default ContactList;
 
 const Wrapper = styled.div`
   width: 96%;

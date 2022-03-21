@@ -9,17 +9,19 @@ import GroupIcon from "@mui/icons-material/Group";
 import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { useNavigate } from "react-router-dom";
+import KeyIcon from "@mui/icons-material/Key";
 
 const ContentComponent = ({ Page }) => {
   const navigate = useNavigate();
   const Menus = [
     { Icon: DashboardIcon, nama: "Dashboard", uri: "/" },
     { Icon: ContactPageIcon, nama: "Contacts", uri: "/contact" },
-    { Icon: WhatsAppIcon, nama: "Send Message", uri: "/send_message" },
+    // { Icon: WhatsAppIcon, nama: "Send Message", uri: "/send_message" },
+    { Icon: KeyIcon, nama: "Keys & Menu", uri: "/key&menu" },
     { Icon: ReplyAllIcon, nama: "Auto Reply", uri: "/bot" },
-    { Icon: SendIcon, nama: "Broadcast", uri: "/Broadcast" },
-    { Icon: GroupIcon, nama: "Group", uri: "/group" },
-    { Icon: ReportGmailerrorredIcon, nama: "Report", uri: "/report" },
+    // { Icon: SendIcon, nama: "Broadcast", uri: "/Broadcast" },
+    // { Icon: GroupIcon, nama: "Group", uri: "/group" },
+    // { Icon: ReportGmailerrorredIcon, nama: "Report", uri: "/report" },
     { Icon: AdminPanelSettingsIcon, nama: "Settings", uri: "/settings" },
   ];
 
@@ -58,7 +60,7 @@ const SideMenu = styled.div`
 `;
 
 const Content = styled.div`
-  flex: 0.8;
+  flex: 1;
   background-color: #f9f9f9;
 `;
 
