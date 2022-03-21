@@ -18,7 +18,7 @@ const ViewKeyMenu = () => {
   const [valueKey, setValueKey] = useState("");
   const [valueMenu, setValueMenu] = useState("");
   const openModalKey = () => {
-    dispatch(modalSet({ active: true, page: "createKeys" }));
+    dispatch(modalSet({ active: true, page: "createKey" }));
   };
 
   const openModalMenu = () => {
@@ -89,7 +89,7 @@ const ViewKeyMenu = () => {
         <Header>
           <Tleft>Key List</Tleft>
           <Tright>
-            <Button>Create new</Button>
+            <Button onClick={openModalKey}>Create new</Button>
           </Tright>
         </Header>
         <Content>
@@ -112,7 +112,7 @@ const ViewKeyMenu = () => {
         <Header>
           <Tleft>Menu list</Tleft>
           <Tright>
-            <Button>Create new</Button>
+            <Button onClick={openModalMenu}>Create new</Button>
           </Tright>
         </Header>
         <Content>

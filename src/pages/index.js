@@ -4,3 +4,5 @@ export { default as AutoReply } from "./AutoReply/AutoReply";
 export { default as FormCreateAr } from "./AutoReply/FormCreateAr";
 export { default as ContactPage } from "./ContactsPage/ContactPage";
 export { default as KeyAndMenuPage } from "./Key&Menu/KeyAndMenuPage";
+export { default as FormKey } from "./Key&Menu/FormKey";
+export { default as FormMenu } from "./Key&Menu/FormMenu";

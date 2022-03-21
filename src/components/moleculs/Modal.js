@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import FormCreateUser from "../../pages/SettingsPage/FormCreateUser";
 import ReactLoading from "react-loading";
 import FormCreateAr from "../../pages/AutoReply/FormCreateAr";
+import FormKey from "../../pages/Key&Menu/FormKey";
+import FormMenu from "../../pages/Key&Menu/FormMenu";
 
 const Modal = () => {
   const dataModal = useSelector(selectModal);
@@ -37,6 +39,12 @@ const Modal = () => {
           )}
           {dataModal.page === "createAr" && !dataModal.isLoading && (
             <FormCreateAr />
+          )}
+          {dataModal.page === "createKey" && !dataModal.isLoading && (
+            <FormKey />
+          )}
+          {dataModal.page === "createMenu" && !dataModal.isLoading && (
+            <FormMenu />
           )}
         </MainContent>
       </Content>
