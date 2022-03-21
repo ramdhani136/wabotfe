@@ -5,12 +5,19 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 import axios from "axios";
-import { API_URI } from "../../utils/index";
+import { API_URI, SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
 import ContactList from "../../components/organism/ContactList";
+import { io } from "socket.io-client";
 
 const ViewContact = () => {
+  const socket = io(SOCKET_URI, {
+    withCredentials: true,
+    extraHeaders: {
+      "react-client": "react-client",
+    },
+  });
   const [contacts, setContacts] = useState([]);
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
@@ -18,25 +25,10 @@ const ViewContact = () => {
     dispatch(modalSet({ active: true, page: "createContact" }));
   };
   const [isLoading, setIsLoading] = useState(true);
-  const getContacts = () => {
-    axios
-      .get(`${API_URI}customer`)
-      .then((res) => {
-        setContacts(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
 
   const getValue = (e) => {
     setValue(e);
   };
-
-  useEffect(() => {
-    getContacts();
-  }, []);
 
   const filterData = (data) => {
     return _.filter(data, function (query) {
@@ -47,6 +39,13 @@ const ViewContact = () => {
       return name;
     });
   };
+
+  useEffect(() => {
+    socket.on("customers", (data) => {
+      setContacts(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   return (
     <Wrapper>

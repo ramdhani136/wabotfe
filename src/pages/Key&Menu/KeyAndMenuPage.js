@@ -5,13 +5,20 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 import axios from "axios";
-import { API_URI } from "../../utils/index";
+import { API_URI, SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
 import KeyList from "../../components/organism/KeyList";
 import MenuList from "../../components/organism/MenuList";
+import { io } from "socket.io-client";
 
 const ViewKeyMenu = () => {
+  const socket = io(SOCKET_URI, {
+    withCredentials: true,
+    extraHeaders: {
+      "react-client": "react-client",
+    },
+  });
   const [keys, setKeys] = useState([]);
   const [menus, setMenu] = useState([]);
   const dispatch = useDispatch();
@@ -82,6 +89,12 @@ const ViewKeyMenu = () => {
       return name;
     });
   };
+
+  useEffect(() => {
+    socket.on("bots", (data) => {
+      // console.log(data);
+    });
+  });
 
   return (
     <Wrapper>

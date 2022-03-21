@@ -26,28 +26,25 @@ const ViewAutoReply = () => {
     },
   });
 
-  const getBots = () => {
-    axios
-      .get(`${API_URI}bots`)
-      .then((res) => {
-        setBots(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  // const getBots = () => {
+  //   axios
+  //     .get(`${API_URI}bots`)
+  //     .then((res) => {
+  //       setBots(res.data);
+  //       setIsLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
 
   const getValue = (e) => {
     setValue(e);
   };
 
-  useEffect(() => {
-    getBots();
-    // socket.on("tes", (data) => {
-    //   console.log(data);
-    // });
-  }, []);
+  // useEffect(() => {
+  //   getBots();
+  // }, []);
 
   const filterData = (data) => {
     return _.filter(data, function (query) {
@@ -58,6 +55,13 @@ const ViewAutoReply = () => {
       return menuAktif;
     });
   };
+
+  useEffect(() => {
+    socket.on("bots", (data) => {
+      setBots(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   return (
     <Wrapper>

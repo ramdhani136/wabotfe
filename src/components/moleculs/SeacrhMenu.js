@@ -11,11 +11,12 @@ const SeacrhMenu = () => {
   const Menus = [
     { nama: "Dashboard", uri: "/" },
     { nama: "Contacts", uri: "/contact" },
-    { nama: "Send Message", uri: "/send_message" },
+    // { nama: "Send Message", uri: "/send_message" },
     { nama: "Auto Reply", uri: "/bot" },
-    { nama: "Broadcast", uri: "/Broadcast" },
-    { nama: "Group", uri: "/group" },
-    { nama: "Report", uri: "/report" },
+    // { nama: "Broadcast", uri: "/Broadcast" },
+    { nama: "Keys & Menu", uri: "/key&menu" },
+    // { nama: "Group", uri: "/group" },
+    // { nama: "Report", uri: "/report" },
     { nama: "Settings", uri: "/settings" },
   ];
 
