@@ -3,6 +3,7 @@ import styled from "styled-components";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CloseIcon from "@mui/icons-material/Close";
 import { API_URI } from "../../utils";
+import moment from "moment";
 const axios = require("axios");
 const Swal = require("sweetalert2");
 
@@ -155,6 +156,16 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
                   >
                     Status
                   </th>
+                  <th
+                    style={{
+                      border: "solid 1px #e5e7ef",
+                      textAlign: "center",
+                      marginLeft: "10px",
+                      width: "12%",
+                    }}
+                  >
+                    Last Update
+                  </th>
                   <th style={{ border: "solid 1px #e5e7ef", width: "14%" }}>
                     Action
                   </th>
@@ -227,6 +238,14 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       />
 
                       <a>{item.status ? "Done" : "Ready"}</a>
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        border: "solid 1px #e5e7ef",
+                      }}
+                    >
+                      {moment(item.updatedAt).format("LLL")}
                     </td>
                     <td
                       style={{

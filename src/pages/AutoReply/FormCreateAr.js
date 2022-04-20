@@ -40,6 +40,7 @@ const FormCreateAr = () => {
   const [valueData, setValueData] = useState({
     message: "",
     status: 1,
+    forward: 0,
     id_key: "",
     id_menuAktif: "",
     id_prevKey: "",
@@ -463,7 +464,6 @@ const FormCreateAr = () => {
 
   return (
     <Wrapper>
-      {console.log(valueData)}
       <SelectInput
         valid={keyValid}
         label="key"
@@ -536,35 +536,71 @@ const FormCreateAr = () => {
         formCreate
       />
 
-      <SelectInput
-        valid={prevKeyValid}
-        label="Prev Key"
-        value={valuePrevKey}
-        onReset={() => onResetPrevKey()}
-        data={filterPrevKey(keys)}
-        setValue={(e) => setValuePrevKey(e)}
-        getSelect={getPrevKey}
-        isOpen={isOpenPrevKey}
-        setOpen={setIsOpenPrevKey}
-        formCreate={false}
-        plCreate="Exp : Home, Profile, Info"
-        placeholder="-Select Prev Key-"
-      />
+      <div
+        style={{
+          width: "87.5%",
+          height: "auto",
+          marginLeft: "6%",
+          marginTop: "10px",
+          display: "flex",
+          flexDirection: "column",
+          marginBottom: "10px",
+        }}
+      >
+        <label
+          style={{ fontSize: ` 0.9em`, color: "gray", marginBottom: "5px" }}
+        >
+          Show Message From Prev Menu
+        </label>
+        <select
+          onChange={(e) =>
+            setValueData({ ...valueData, forward: e.target.value })
+          }
+          style={{
+            height: "40px",
+            border: "solid 1px #ccc",
+            borderRadius: "3px",
+            paddingLeft: "10px",
+          }}
+        >
+          <option value="0">Non Active</option>
+          <option value="1">Active</option>
+        </select>
+      </div>
 
-      <SelectInput
-        valid={prevMenuValid}
-        label="Prev Menu"
-        value={valuePrevMenu}
-        onReset={() => onResetPrevMenu()}
-        data={filterPrevMenu(menus)}
-        setValue={(e) => setValuePrevMenu(e)}
-        getSelect={getPrevMenu}
-        isOpen={isOpenPrevMenu}
-        setOpen={setIsOpenPrevMenu}
-        formCreate={false}
-        plCreate="Exp : Home, Profile, Info"
-        placeholder="-Select Prev Menu-"
-      />
+      {valueData.forward === "1" && (
+        <>
+          <SelectInput
+            valid={prevKeyValid}
+            label="Prev Key"
+            value={valuePrevKey}
+            onReset={() => onResetPrevKey()}
+            data={filterPrevKey(keys)}
+            setValue={(e) => setValuePrevKey(e)}
+            getSelect={getPrevKey}
+            isOpen={isOpenPrevKey}
+            setOpen={setIsOpenPrevKey}
+            formCreate={false}
+            plCreate="Exp : Home, Profile, Info"
+            placeholder="-Select Prev Key-"
+          />
+
+          <SelectInput
+            valid={prevMenuValid}
+            label="Prev Menu"
+            value={valuePrevMenu}
+            onReset={() => onResetPrevMenu()}
+            data={filterPrevMenu(menus)}
+            setValue={(e) => setValuePrevMenu(e)}
+            getSelect={getPrevMenu}
+            isOpen={isOpenPrevMenu}
+            setOpen={setIsOpenPrevMenu}
+            formCreate={false}
+            plCreate="Exp : Home, Profile, Info"
+            placeholder="-Select Prev Menu-"
+          />
+        </>
+      )}
 
       <FormText
         valid
@@ -574,6 +610,7 @@ const FormCreateAr = () => {
         height="200px"
         placeholder="Input your messages"
       />
+
       <div
         style={{
           width: "87.5%",
