@@ -21,8 +21,8 @@ const FormCreateAr = () => {
   const [valueKey, setValueKey] = useState("");
   const [valueMenu, setValueMenu] = useState("");
   const [valueNext, setValueNext] = useState("");
-  const [valuePrevMenu, setValuePrevMenu] = useState("");
-  const [valuePrevKey, setValuePrevKey] = useState("");
+  const [valuePrevMenu, setValuePrevMenu] = useState("Disabled");
+  const [valuePrevKey, setValuePrevKey] = useState("Disabled");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isOpenNext, setIsOpenNext] = useState(false);
@@ -37,16 +37,17 @@ const FormCreateAr = () => {
   const [valueCreateKey, setValueCreateKey] = useState("");
   const [valueCreateMenu, setValueCreateMenu] = useState("");
   const [valueCreateNext, setValueCreateNext] = useState("");
-  const [valueData, setValueData] = useState({
+  const defaultValueData = {
     message: "",
     status: 1,
     forward: 0,
     id_key: "",
     id_menuAktif: "",
-    id_prevKey: "",
-    id_prevMenu: "",
+    id_prevMenu: 23,
+    id_prevKey: 20,
     id_afterMenu: "",
-  });
+  };
+  const [valueData, setValueData] = useState(defaultValueData);
   const [keyValid, setKeyValid] = useState(false);
   const [menuValid, setMenuValid] = useState(false);
   const [nextValid, setNextValid] = useState(false);
@@ -325,6 +326,18 @@ const FormCreateAr = () => {
     setAllMenu();
   }, []);
 
+  useEffect(() => {
+    if (valueData.forward === "1") {
+      setValuePrevMenu("");
+      setValuePrevKey("");
+      setValueData({ ...valueData, id_prevKey: "", id_prevMenu: "" });
+    } else {
+      setValuePrevMenu("Disabled");
+      setValuePrevKey("Disabled");
+      setValueData({ ...valueData, id_prevKey: 20, id_prevMenu: 23 });
+    }
+  }, [valueData.forward]);
+
   const onResetKey = () => {
     setValueKey("");
     setValueData({ ...valueData, id_key: "" });
@@ -365,14 +378,38 @@ const FormCreateAr = () => {
           axios
             .post(`${API_URI}bots`, valueData)
             .then((res) => {
-              dispatch(modalSet({ active: false, page: "", isLoading: false }));
-              Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Your data has been saved",
-                showConfirmButton: false,
-                timer: 1500,
-              });
+              if (uriFiles.length > 0) {
+                for (let i = 0; i < uriFiles.length; i++) {
+                  axios
+                    .post(`${API_URI}urifiles`, {
+                      id_bot: res.data.id,
+                      name: uriFiles[i].name,
+                    })
+                    .then((res) => {
+                      dispatch(
+                        modalSet({ active: false, page: "", isLoading: false })
+                      );
+                      Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Your data has been saved",
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
+                    });
+                }
+              } else {
+                dispatch(
+                  modalSet({ active: false, page: "", isLoading: false })
+                );
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "Your data has been saved",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+              }
             })
             .catch((err) => {
               dispatch(
@@ -481,6 +518,7 @@ const FormCreateAr = () => {
         placeholder="-Select Key-"
         formCreate
       />
+
       {/* <Label>Messages</Label>
       <div
         style={{
@@ -788,10 +826,8 @@ export default FormCreateAr;
 const Wrapper = styled.div`
   width: 100%;
   height: 93%;
-  overflow-y: scroll;
   padding-left: 10px;
   padding-top: 10px;
-  overflow-x: hidden;
 `;
 
 const Button = styled.div`

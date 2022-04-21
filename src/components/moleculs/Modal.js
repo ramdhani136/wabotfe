@@ -21,7 +21,13 @@ const Modal = () => {
   return (
     <>
       <Wrapper onClick={closeModal} active={dataModal.active}></Wrapper>
-      <Content active={dataModal.active} width="40%" height="87%" left="30%">
+      <Content
+        active={dataModal.active}
+        width="40%"
+        height="auto"
+        maxHeight="85%"
+        left="30%"
+      >
         <HeaderContent>
           <CloseIcon
             style={{ cursor: "pointer", fontSize: "25px", color: "gray" }}
@@ -66,6 +72,7 @@ const Content = styled.div`
   border-radius: 3px;
   width: ${(props) => props.width};
   height: ${(props) => props.height};
+  max-height: ${(props) => props.maxHeight};
   border: solid 1px gray;
   z-index: 1001;
   background-color: white;
@@ -74,8 +81,10 @@ const Content = styled.div`
   display: ${(props) => (props.active ? "flex" : "none")};
   flex-direction: column;
   top: 15px;
-  overflow-y: hidden;
+  overflow-y: scroll;
   overflow-x: hidden;
+  padding-top: 10px;
+  padding-bottom: 30px;
   animation: animatetop 0.2s;
   @keyframes animatetop {
     from {
