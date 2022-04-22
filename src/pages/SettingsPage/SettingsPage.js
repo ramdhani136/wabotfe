@@ -49,9 +49,9 @@ const SettingsPage = () => {
 
       socket.on("init", (data) => {
         const isUser = data.filter((dt) => dt.id === 1);
-        if (isUser[0].ready) {
-          setStatus("Whatsapp is ready ...");
-        }
+        // if (qr === "") {
+        //   setStatus("Whatsapp is ready ...");
+        // }
         setUsers(data);
         setIsLoading(false);
       });

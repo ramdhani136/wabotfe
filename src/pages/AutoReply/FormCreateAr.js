@@ -709,7 +709,7 @@ const FormCreateAr = () => {
           ))}
         </ListUri>
       )}
-      <FormInput
+      {/* <FormInput
         getData={imageHandler}
         name="files[]"
         multiple
@@ -717,7 +717,7 @@ const FormCreateAr = () => {
         label="Upload File"
         type="file"
         placeholder="Select your file"
-      />
+      /> */}
       {previewImg.length > 0 && (
         <div
           style={{
