@@ -9,6 +9,8 @@ import ReactLoading from "react-loading";
 import FormCreateAr from "../../pages/AutoReply/FormCreateAr";
 import FormKey from "../../pages/Key&Menu/FormKey";
 import FormMenu from "../../pages/Key&Menu/FormMenu";
+import FormSales from "../../pages/SalesPage/FormSales";
+import FormSalesGroup from "../../pages/SalesGroupPage/FormSalesGroup";
 
 const Modal = () => {
   const dataModal = useSelector(selectModal);
@@ -51,6 +53,12 @@ const Modal = () => {
           )}
           {dataModal.page === "createMenu" && !dataModal.isLoading && (
             <FormMenu />
+          )}
+          {dataModal.page === "createSales" && !dataModal.isLoading && (
+            <FormSales />
+          )}
+          {dataModal.page === "createSalesGroup" && !dataModal.isLoading && (
+            <FormSalesGroup />
           )}
         </MainContent>
       </Content>

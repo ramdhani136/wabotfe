@@ -5,6 +5,8 @@ import {
   ContactPage,
   HomePage,
   KeyAndMenuPage,
+  SalesGroupPage,
+  SalesPage,
   SettingsPage,
 } from "./pages";
 import { store } from "./redux/store";
@@ -21,6 +23,8 @@ const App = () => {
           <Route path="/bot" element={<AutoReply />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/key&menu" element={<KeyAndMenuPage />} />
+          <Route path="/sales" element={<SalesPage />} />
+          <Route path="/salesgroup" element={<SalesGroupPage />} />
         </Routes>
       </BrowserRouter>
     </Provider>

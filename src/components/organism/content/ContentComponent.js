@@ -10,6 +10,8 @@ import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { useNavigate } from "react-router-dom";
 import KeyIcon from "@mui/icons-material/Key";
+import PeopleIcon from "@mui/icons-material/People";
+import FolderSharedIcon from "@mui/icons-material/FolderShared";
 
 const ContentComponent = ({ Page }) => {
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ const ContentComponent = ({ Page }) => {
     // { Icon: SendIcon, nama: "Broadcast", uri: "/Broadcast" },
     // { Icon: GroupIcon, nama: "Group", uri: "/group" },
     // { Icon: ReportGmailerrorredIcon, nama: "Report", uri: "/report" },
+    { Icon: PeopleIcon, nama: "Sales", uri: "/sales" },
+    { Icon: FolderSharedIcon, nama: "Sales Group", uri: "/salesgroup" },
     { Icon: AdminPanelSettingsIcon, nama: "Settings", uri: "/settings" },
   ];
 

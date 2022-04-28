@@ -9,9 +9,10 @@ const FormInput = ({
   getData,
   valid,
   multiple,
+  mb,
 }) => {
   return (
-    <FormGroup>
+    <FormGroup mb={mb}>
       <Label>{label}</Label>
       <Input
         valid={valid}
@@ -31,6 +32,7 @@ const FormGroup = styled.div`
   width: 100%;
   height: auto;
   margin-top: 10px;
+  margin-bottom: ${(props) => (props.mb ? props.mb : 0)};
 `;
 
 const Label = styled.div`
