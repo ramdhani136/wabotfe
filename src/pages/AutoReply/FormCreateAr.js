@@ -3,36 +3,48 @@ import styled from "styled-components";
 import { FormInput, FormText, SelectInput } from "../../components/atoms";
 import CloseIcon from "@mui/icons-material/Close";
 import _ from "lodash";
-import { Editor } from "react-draft-wysiwyg";
+// import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState } from "draft-js";
+// import { EditorState } from "draft-js";
 import AddIcon from "@mui/icons-material/Add";
 import Swal from "sweetalert2";
-import { API_URI } from "../../utils/";
+import { API_URI, SOCKET_URI } from "../../utils/";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
+import { io } from "socket.io-client";
 
 const FormCreateAr = () => {
+  const socket = io(SOCKET_URI, {
+    withCredentials: true,
+    extraHeaders: {
+      "react-client": "react-client",
+    },
+  });
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const [previewImg, setPreviewImg] = useState("");
-  const [image, setImage] = useState("");
+  // const [image, setImage] = useState("");
   const [valueKey, setValueKey] = useState("");
   const [valueMenu, setValueMenu] = useState("");
   const [valueNext, setValueNext] = useState("");
+  const [valueGroupSales, setValueGroupSales] = useState("");
   const [valuePrevMenu, setValuePrevMenu] = useState("Disabled");
   const [valuePrevKey, setValuePrevKey] = useState("Disabled");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isOpenNext, setIsOpenNext] = useState(false);
+  const [isOpenGroup, setIsOpenGroup] = useState(false);
   const [isOpenPrevMenu, setIsOpenPrevMenu] = useState(false);
   const [isOpenPrevKey, setIsOpenPrevKey] = useState(false);
+  const [sendContact, setSendContact] = useState(0);
+  const [selectedGroup, setSelectedGroup] = useState([]);
 
   const [keys, setKeys] = useState([]);
   const [menus, setMenus] = useState([]);
+  const [groupSales, setGroupSales] = useState([]);
   const [valueUri, setValueUri] = useState("");
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [uriFiles, seturiFiles] = useState([]);
   const [valueCreateKey, setValueCreateKey] = useState("");
   const [valueCreateMenu, setValueCreateMenu] = useState("");
@@ -53,6 +65,7 @@ const FormCreateAr = () => {
   const [nextValid, setNextValid] = useState(false);
   const [prevKeyValid, setPrevKey] = useState(false);
   const [prevMenuValid, setPrevMenuValid] = useState(false);
+  const [contactData, setContactdata] = useState([]);
 
   const setAllKeys = () => {
     axios
@@ -76,16 +89,16 @@ const FormCreateAr = () => {
       });
   };
 
-  const imageHandler = (e) => {
-    const selectedFIles = [];
-    const targetFiles = e.target.files;
-    const targetFilesObject = [...targetFiles];
-    targetFilesObject.map((file) => {
-      return selectedFIles.push(URL.createObjectURL(file));
-    });
-    setPreviewImg(selectedFIles);
-    setFiles(e.target.files);
-  };
+  // const imageHandler = (e) => {
+  //   const selectedFIles = [];
+  //   const targetFiles = e.target.files;
+  //   const targetFilesObject = [...targetFiles];
+  //   targetFilesObject.map((file) => {
+  //     return selectedFIles.push(URL.createObjectURL(file));
+  //   });
+  //   setPreviewImg(selectedFIles);
+  //   setFiles(e.target.files);
+  // };
 
   const filterKey = (data) => {
     return _.filter(data, function (query) {
@@ -111,6 +124,16 @@ const FormCreateAr = () => {
     return _.filter(data, function (query) {
       var name = valueNext
         ? query.name.toLowerCase().includes(valueNext.toLowerCase())
+        : true;
+
+      return name;
+    });
+  };
+
+  const filterGroup = (data) => {
+    return _.filter(data, function (query) {
+      var name = valueGroupSales
+        ? query.name.toLowerCase().includes(valueGroupSales.toLowerCase())
         : true;
 
       return name;
@@ -155,6 +178,21 @@ const FormCreateAr = () => {
     setValueData({ ...valueData, id_afterMenu: e.id });
   };
 
+  const getGroupSales = (e) => {
+    setValueGroupSales("");
+    setIsOpenGroup(false);
+    setSelectedGroup([]);
+    // Tambah sales
+    if (contactData.length < 1) {
+      setContactdata(e.sales);
+    } else {
+      const newData = contactData.concat(
+        e.sales.filter((item) => contactData.indexOf(item) < 0)
+      );
+      setContactdata(newData);
+    }
+  };
+
   const getPrevKey = (e) => {
     setValuePrevKey(e.name);
     setIsOpenPrevKey(false);
@@ -175,9 +213,9 @@ const FormCreateAr = () => {
     setIsOpenMenu(e);
   };
 
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
-  };
+  // const onEditorStateChange = (editorState) => {
+  //   setEditorState(editorState);
+  // };
 
   const getValueUri = (e) => {
     setValueUri(e.target.value);
@@ -208,6 +246,18 @@ const FormCreateAr = () => {
   const delUriFile = (e) => {
     const newData = uriFiles.filter((file) => file.id !== e);
     seturiFiles(newData);
+  };
+
+  const delContact = (e) => {
+    const newData = contactData.filter((file) => file.id !== e);
+    setContactdata(newData);
+  };
+
+  const delGroup = (e) => {
+    const newData = selectedGroup.filter((file) => file.id !== e);
+    setSelectedGroup(newData);
+    const newContact = contactData.filter((contact) => contact.id_group !== e);
+    setContactdata(newContact);
   };
 
   const saveKey = () => {
@@ -322,6 +372,9 @@ const FormCreateAr = () => {
   };
 
   useEffect(() => {
+    socket.on("salesgroup", (data) => {
+      setGroupSales(data);
+    });
     setAllKeys();
     setAllMenu();
   }, []);
@@ -499,6 +552,40 @@ const FormCreateAr = () => {
     valueData.id_prevKey,
   ]);
 
+  useEffect(() => {
+    if (contactData.length > 0) {
+      let newData = [];
+      for (let i = 0; i < contactData.length; i++) {
+        if (newData.length < 1) {
+          newData.push({
+            id: contactData[i].group.id,
+            name: contactData[i].group.name,
+          });
+        } else {
+          const dupl = newData.filter(
+            (item) => item.id === contactData[i].id_group
+          );
+
+          if (dupl.length < 1) {
+            newData.push({
+              id: contactData[i].group.id,
+              name: contactData[i].group.name,
+            });
+          }
+        }
+      }
+      setSelectedGroup(newData);
+    } else {
+      setSelectedGroup([]);
+    }
+  }, [contactData]);
+
+  useEffect(() => {
+    if (sendContact === 1 || sendContact === "1") {
+      setContactdata([]);
+    }
+  }, [sendContact]);
+
   return (
     <Wrapper>
       <SelectInput
@@ -601,7 +688,7 @@ const FormCreateAr = () => {
             paddingLeft: "10px",
           }}
         >
-          <option value="0">Non Active</option>
+          <option value="0">Disabled</option>
           <option value="1">Active</option>
         </select>
       </div>
@@ -676,7 +763,7 @@ const FormCreateAr = () => {
           }}
         >
           <option value="1">Active</option>
-          <option value="0">Non Active</option>
+          <option value="0">Disabled</option>
         </select>
       </div>
       <FormInput
@@ -806,6 +893,102 @@ const FormCreateAr = () => {
               </div>
             ))}
         </div>
+      )}
+
+      <div
+        style={{
+          width: "87.5%",
+          height: "auto",
+          marginLeft: "6%",
+          marginTop: "10px",
+          display: "flex",
+          flexDirection: "column",
+          marginBottom: "10px",
+        }}
+      >
+        <label
+          style={{ fontSize: ` 0.9em`, color: "gray", marginBottom: "5px" }}
+        >
+          Send Contact
+        </label>
+        <select
+          value={sendContact}
+          onChange={(e) => setSendContact(e.target.value)}
+          style={{
+            height: "40px",
+            border: "solid 1px #ccc",
+            borderRadius: "3px",
+            paddingLeft: "10px",
+          }}
+        >
+          <option value="1">Active</option>
+          <option value="0">Disabled</option>
+        </select>
+      </div>
+      {sendContact === "1" && (
+        <>
+          {" "}
+          <SelectInput
+            valid={true}
+            label="Group"
+            value={valueGroupSales}
+            onReset={() => setValueGroupSales("")}
+            data={filterGroup(groupSales)}
+            setValue={(e) => setValueGroupSales(e)}
+            getSelect={getGroupSales}
+            isOpen={isOpenGroup}
+            setOpen={setIsOpenGroup}
+            placeholder="-Select Sales Group-"
+          />
+          {selectedGroup.length > 0 && (
+            <ListUri>
+              {selectedGroup.map((item, id) => (
+                <Uri key={id}>
+                  <a
+                    style={{ color: "white", textDecoration: "none" }}
+                    onClick={() => toLink(item.name)}
+                  >
+                    {item.name.substring(0, 55)}
+                  </a>
+                  <CloseIcon
+                    onClick={() => delGroup(item.id)}
+                    style={{ fontSize: "18px", marginLeft: "10px" }}
+                  />
+                </Uri>
+              ))}
+            </ListUri>
+          )}
+          <SelectInput
+            valid={true}
+            label="Sales"
+            value={valueGroupSales}
+            onReset={() => setValueGroupSales("")}
+            data={filterGroup(groupSales)}
+            setValue={(e) => setValueGroupSales(e)}
+            getSelect={getGroupSales}
+            isOpen={isOpenGroup}
+            setOpen={setIsOpenGroup}
+            placeholder="-Select Sales Group-"
+          />
+          {contactData.length > 0 && (
+            <ListUri>
+              {contactData.map((item, id) => (
+                <Uri key={id}>
+                  <a
+                    style={{ color: "white", textDecoration: "none" }}
+                    onClick={() => toLink(item.name)}
+                  >
+                    {item.name.substring(0, 55)}
+                  </a>
+                  <CloseIcon
+                    onClick={() => delContact(item.id)}
+                    style={{ fontSize: "18px", marginLeft: "10px" }}
+                  />
+                </Uri>
+              ))}
+            </ListUri>
+          )}
+        </>
       )}
       <Button
         onClick={saveBot}
