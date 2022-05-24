@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import CloseIcon from "@mui/icons-material/Close";
 
 const FormInput = ({
   label,
@@ -10,18 +11,44 @@ const FormInput = ({
   valid,
   multiple,
   mb,
+  btnRemove,
+  actionRemove,
+  refRemov,
 }) => {
   return (
     <FormGroup mb={mb}>
       <Label>{label}</Label>
-      <Input
-        valid={valid}
-        onChange={(e) => getData(e)}
-        value={value}
-        type={type}
-        placeholder={placeholder}
-        multiple={multiple}
-      />
+      <div
+        style={{
+          float: "left",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Input
+          valid={valid}
+          onChange={(e) => getData(e)}
+          value={value}
+          type={type}
+          placeholder={placeholder}
+          multiple={multiple}
+        />
+        {btnRemove && (
+          <>
+            <CloseIcon
+              onClick={() => actionRemove(refRemov)}
+              style={{
+                cursor: "pointer",
+                fontSize: "20px",
+                color: "#b44b42",
+                marginLeft: "5px",
+              }}
+            />
+          </>
+        )}
+      </div>
     </FormGroup>
   );
 };
@@ -29,10 +56,11 @@ const FormInput = ({
 export default FormInput;
 
 const FormGroup = styled.div`
-  width: 100%;
+  width: 93.5%;
   height: auto;
-  margin-top: 10px;
+  margin-top: 7px;
   margin-bottom: ${(props) => (props.mb ? props.mb : 0)};
+  float: left;
 `;
 
 const Label = styled.div`
@@ -41,12 +69,12 @@ const Label = styled.div`
   font-size: 0.9em;
   color: gray;
   float: left;
+  margin-bottom: 5px;
 `;
 
 const Input = styled.input`
-  margin-top: 8px;
-  width: 85%;
-  margin-left: 6%;
+  margin-left: 6.5%;
+  flex: 1;
   height: 35px;
   outline: none;
   padding-left: 10px;

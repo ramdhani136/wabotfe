@@ -27,22 +27,30 @@ const FormCreateAr = () => {
   // const [image, setImage] = useState("");
   const [valueKey, setValueKey] = useState("");
   const [valueMenu, setValueMenu] = useState("");
+  const [valueUpdateData, setValueUpdateData] = useState("");
   const [valueNext, setValueNext] = useState("");
   const [valueGroupSales, setValueGroupSales] = useState("");
+  const [valueSales, setValueSales] = useState("");
   const [valuePrevMenu, setValuePrevMenu] = useState("Disabled");
   const [valuePrevKey, setValuePrevKey] = useState("Disabled");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [isOpenData, setIsOpenData] = useState(false);
   const [isOpenNext, setIsOpenNext] = useState(false);
   const [isOpenGroup, setIsOpenGroup] = useState(false);
+  const [isOpenSales, setIsOpenSales] = useState(false);
   const [isOpenPrevMenu, setIsOpenPrevMenu] = useState(false);
   const [isOpenPrevKey, setIsOpenPrevKey] = useState(false);
-  const [sendContact, setSendContact] = useState(0);
+  const [sendContact, setSendContact] = useState("0");
   const [selectedGroup, setSelectedGroup] = useState([]);
+  const [updateData, setUpdateData] = useState([
+    { id: 1, name: "interest", active: "0", value: "" },
+  ]);
 
   const [keys, setKeys] = useState([]);
   const [menus, setMenus] = useState([]);
   const [groupSales, setGroupSales] = useState([]);
+  const [sales, setSales] = useState([]);
   const [valueUri, setValueUri] = useState("");
   // const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [uriFiles, seturiFiles] = useState([]);
@@ -120,6 +128,16 @@ const FormCreateAr = () => {
     });
   };
 
+  const filterUpdateData = (data) => {
+    return _.filter(data, function (query) {
+      var name = valueUpdateData
+        ? query.name.toLowerCase().includes(valueUpdateData.toLowerCase())
+        : true;
+
+      return name;
+    });
+  };
+
   const filterNext = (data) => {
     return _.filter(data, function (query) {
       var name = valueNext
@@ -134,6 +152,16 @@ const FormCreateAr = () => {
     return _.filter(data, function (query) {
       var name = valueGroupSales
         ? query.name.toLowerCase().includes(valueGroupSales.toLowerCase())
+        : true;
+
+      return name;
+    });
+  };
+
+  const filterSales = (data) => {
+    return _.filter(data, function (query) {
+      var name = valueSales
+        ? query.name.toLowerCase().includes(valueSales.toLowerCase())
         : true;
 
       return name;
@@ -172,6 +200,15 @@ const FormCreateAr = () => {
     setValueData({ ...valueData, id_menuAktif: e.id });
   };
 
+  const getValueData = (e) => {
+    setValueUpdateData("");
+    setIsOpenData(false);
+    e.active = "1";
+    // const newData = updateData.filter((item) => item.id !== e.id);
+    // const fixdata = newData.push(e);
+    // console.log(e);
+  };
+
   const getNext = (e) => {
     setValueNext(e.name);
     setIsOpenNext(false);
@@ -190,6 +227,21 @@ const FormCreateAr = () => {
         e.sales.filter((item) => contactData.indexOf(item) < 0)
       );
       setContactdata(newData);
+    }
+  };
+
+  const getSales = (e) => {
+    setValueSales("");
+    setIsOpenSales(false);
+    // Tambah sales
+    if (contactData.length < 1) {
+      setContactdata([...contactData, e]);
+    } else {
+      const newData = contactData.filter((item) => item.id === e.id);
+
+      if (newData.length < 1) {
+        setContactdata([...contactData, e]);
+      }
     }
   };
 
@@ -375,6 +427,9 @@ const FormCreateAr = () => {
     socket.on("salesgroup", (data) => {
       setGroupSales(data);
     });
+    socket.on("sales", (data) => {
+      setSales(data);
+    });
     setAllKeys();
     setAllMenu();
   }, []);
@@ -399,6 +454,14 @@ const FormCreateAr = () => {
   const onResetMenu = () => {
     setValueMenu("");
     setValueData({ ...valueData, id_menuAktif: "" });
+  };
+
+  const removeData = (e) => {
+    const hapusItem = updateData.filter((item) => item.name !== e);
+    const dataBaru = updateData.filter((item) => item.name === e);
+    dataBaru[0].active = "0";
+    dataBaru[0].value = "";
+    setUpdateData([...hapusItem, dataBaru[0]]);
   };
 
   const onResetNext = () => {
@@ -689,7 +752,7 @@ const FormCreateAr = () => {
           }}
         >
           <option value="0">Disabled</option>
-          <option value="1">Active</option>
+          <option value="1">Enabled</option>
         </select>
       </div>
 
@@ -762,7 +825,7 @@ const FormCreateAr = () => {
             paddingLeft: "10px",
           }}
         >
-          <option value="1">Active</option>
+          <option value="1">Enabled</option>
           <option value="0">Disabled</option>
         </select>
       </div>
@@ -921,13 +984,12 @@ const FormCreateAr = () => {
             paddingLeft: "10px",
           }}
         >
-          <option value="1">Active</option>
+          <option value="1">Enabled</option>
           <option value="0">Disabled</option>
         </select>
       </div>
       {sendContact === "1" && (
         <>
-          {" "}
           <SelectInput
             valid={true}
             label="Group"
@@ -961,14 +1023,14 @@ const FormCreateAr = () => {
           <SelectInput
             valid={true}
             label="Sales"
-            value={valueGroupSales}
-            onReset={() => setValueGroupSales("")}
-            data={filterGroup(groupSales)}
-            setValue={(e) => setValueGroupSales(e)}
-            getSelect={getGroupSales}
-            isOpen={isOpenGroup}
-            setOpen={setIsOpenGroup}
-            placeholder="-Select Sales Group-"
+            value={valueSales}
+            onReset={() => setValueSales("")}
+            data={filterSales(sales)}
+            setValue={(e) => setValueSales(e)}
+            getSelect={getSales}
+            isOpen={isOpenSales}
+            setOpen={setIsOpenSales}
+            placeholder="-Select Sales-"
           />
           {contactData.length > 0 && (
             <ListUri>
@@ -989,6 +1051,48 @@ const FormCreateAr = () => {
             </ListUri>
           )}
         </>
+      )}
+
+      <h4
+        style={{
+          float: "left",
+          marginLeft: "6%",
+          marginTop: "5px",
+          marginBottom: "10px",
+        }}
+      >
+        Update data
+      </h4>
+
+      <SelectInput
+        valid={true}
+        label="Data"
+        value={valueUpdateData}
+        onReset={() => setValueUpdateData("")}
+        data={filterUpdateData(updateData)}
+        setValue={(e) => setValueUpdateData(e)}
+        getSelect={getValueData}
+        isOpen={isOpenData}
+        setOpen={setIsOpenData}
+        placeholder="-Select Data-"
+      />
+      {updateData[0].active === "1" && (
+        <FormInput
+          value={updateData[0].value}
+          getData={(e) => {
+            const found = updateData.filter((item) => item.name === "interest");
+            const notEq = updateData.filter((item) => item.name !== "interest");
+            found[0].value = e.target.value;
+            setUpdateData([...notEq, found[0]]);
+          }}
+          label="Interest"
+          type="text"
+          placeholder="Input your interest value"
+          btnRemove
+          actionRemove={removeData}
+          refRemov="interest"
+          valid
+        />
       )}
       <Button
         onClick={saveBot}
