@@ -492,28 +492,66 @@ const FormCreateAr = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           axios
-            .post(`${API_URI}bots`, valueData)
+            .post(`${API_URI}bots`, {
+              ...valueData,
+              interest: updateData[0].value,
+            })
             .then((res) => {
               if (uriFiles.length > 0) {
                 for (let i = 0; i < uriFiles.length; i++) {
-                  axios
-                    .post(`${API_URI}urifiles`, {
-                      id_bot: res.data.id,
-                      name: uriFiles[i].name,
-                    })
-                    .then((res) => {
-                      dispatch(
-                        modalSet({ active: false, page: "", isLoading: false })
-                      );
-                      Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "Your data has been saved",
-                        showConfirmButton: false,
-                        timer: 1500,
-                      });
-                    });
+                  axios.post(`${API_URI}urifiles`, {
+                    id_bot: res.data.id,
+                    name: uriFiles[i].name,
+                  });
                 }
+                if (contactData.length < 1) {
+                  dispatch(
+                    modalSet({
+                      active: false,
+                      page: "",
+                      isLoading: false,
+                    })
+                  );
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Your data has been saved",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                }
+              } else {
+                if (contactData.length < 1) {
+                  dispatch(
+                    modalSet({ active: false, page: "", isLoading: false })
+                  );
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Your data has been saved",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                }
+              }
+              // cUpload kontak sales
+              if (contactData.length > 0) {
+                for (let i = 0; i < contactData.length; i++) {
+                  axios.post(`${API_URI}botcontact`, {
+                    id_bot: res.data.id,
+                    id_sales: contactData[i].id,
+                  });
+                }
+                dispatch(
+                  modalSet({ active: false, page: "", isLoading: false })
+                );
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "Your data has been saved",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
               } else {
                 dispatch(
                   modalSet({ active: false, page: "", isLoading: false })
@@ -990,7 +1028,7 @@ const FormCreateAr = () => {
       </div>
       {sendContact === "1" && (
         <>
-          <SelectInput
+          {/* <SelectInput
             valid={true}
             label="Group"
             value={valueGroupSales}
@@ -1001,8 +1039,8 @@ const FormCreateAr = () => {
             isOpen={isOpenGroup}
             setOpen={setIsOpenGroup}
             placeholder="-Select Sales Group-"
-          />
-          {selectedGroup.length > 0 && (
+          /> */}
+          {/* {selectedGroup.length > 0 && (
             <ListUri>
               {selectedGroup.map((item, id) => (
                 <Uri key={id}>
@@ -1019,7 +1057,7 @@ const FormCreateAr = () => {
                 </Uri>
               ))}
             </ListUri>
-          )}
+          )} */}
           <SelectInput
             valid={true}
             label="Sales"

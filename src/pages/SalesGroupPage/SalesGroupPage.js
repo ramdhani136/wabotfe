@@ -49,7 +49,7 @@ const ViewContact = () => {
   return (
     <Wrapper>
       <Title>
-        <Tleft>Sales list</Tleft>
+        <Tleft>Sales Group list</Tleft>
         <Tright>
           <Button onClick={openModal}>Create new</Button>
         </Tright>
