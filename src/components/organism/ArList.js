@@ -100,7 +100,6 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       border: "solid 1px #e5e7ef",
                       textAlign: "center",
                       marginLeft: "10px",
-                      // width: "12%",
                     }}
                   >
                     Menu
