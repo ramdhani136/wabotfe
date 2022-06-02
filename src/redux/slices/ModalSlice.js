@@ -7,6 +7,7 @@ export const modalSlice = createSlice({
       active: false,
       page: "",
       isLoading: false,
+      data: { nama: "ilham" },
     },
   },
   reducers: {

@@ -43,22 +43,22 @@ const Modal = () => {
             </Loading>
           )}
           {dataModal.page === "createUser" && !dataModal.isLoading && (
-            <FormCreateUser />
+            <FormCreateUser data={dataModal.data} />
           )}
           {dataModal.page === "createAr" && !dataModal.isLoading && (
-            <FormCreateAr />
+            <FormCreateAr data={dataModal.data} />
           )}
           {dataModal.page === "createKey" && !dataModal.isLoading && (
-            <FormKey />
+            <FormKey data={dataModal.data} />
           )}
           {dataModal.page === "createMenu" && !dataModal.isLoading && (
-            <FormMenu />
+            <FormMenu data={dataModal.data} />
           )}
           {dataModal.page === "createSales" && !dataModal.isLoading && (
-            <FormSales />
+            <FormSales data={dataModal.data} />
           )}
           {dataModal.page === "createSalesGroup" && !dataModal.isLoading && (
-            <FormSalesGroup />
+            <FormSalesGroup data={dataModal.data} />
           )}
         </MainContent>
       </Content>

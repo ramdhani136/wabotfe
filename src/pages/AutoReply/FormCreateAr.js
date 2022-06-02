@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 import { io } from "socket.io-client";
 
-const FormCreateAr = () => {
+const FormCreateAr = ({ data }) => {
   const socket = io(SOCKET_URI, {
     withCredentials: true,
     extraHeaders: {
@@ -67,6 +67,7 @@ const FormCreateAr = () => {
     id_prevKey: 20,
     id_afterMenu: "",
   };
+  const [valueEdit, setValueEdit] = useState({});
   const [valueData, setValueData] = useState(defaultValueData);
   const [keyValid, setKeyValid] = useState(false);
   const [menuValid, setMenuValid] = useState(false);
@@ -74,6 +75,10 @@ const FormCreateAr = () => {
   const [prevKeyValid, setPrevKey] = useState(false);
   const [prevMenuValid, setPrevMenuValid] = useState(false);
   const [contactData, setContactdata] = useState([]);
+  const [typeAction, setTypeAction] = useState("submit");
+  const [editUrifiles, setEditUriFiles] = useState([]);
+  const [editContact, setEditContact] = useState([]);
+  const [otherValid, setOtherValid] = useState(false);
 
   const setAllKeys = () => {
     axios
@@ -424,21 +429,20 @@ const FormCreateAr = () => {
   };
 
   useEffect(() => {
-    socket.on("salesgroup", (data) => {
-      setGroupSales(data);
-    });
-    socket.on("sales", (data) => {
-      setSales(data);
-    });
-    setAllKeys();
-    setAllMenu();
-  }, []);
-
-  useEffect(() => {
-    if (valueData.forward === "1") {
-      setValuePrevMenu("");
-      setValuePrevKey("");
-      setValueData({ ...valueData, id_prevKey: "", id_prevMenu: "" });
+    if (valueData.forward == "1") {
+      if (!data) {
+        setValuePrevMenu("");
+        setValuePrevKey("");
+        setValueData({ ...valueData, id_prevKey: "", id_prevMenu: "" });
+      } else {
+        setValuePrevMenu(data.item.prevMenu.name);
+        setValuePrevKey(data.item.prevKey.name);
+        setValueData({
+          ...valueData,
+          id_prevKey: data.item.id_prevKey,
+          id_prevMenu: data.item.id_prevMenu,
+        });
+      }
     } else {
       setValuePrevMenu("Disabled");
       setValuePrevKey("Disabled");
@@ -457,6 +461,13 @@ const FormCreateAr = () => {
   };
 
   const removeData = (e) => {
+    // if (!data) {
+    //   const hapusItem = updateData.filter((item) => item.name !== e);
+    //   const dataBaru = updateData.filter((item) => item.name === e);
+    //   dataBaru[0].active = "0";
+    //   dataBaru[0].value = "";
+    //   setUpdateData([...hapusItem, dataBaru[0]]);
+    // }
     const hapusItem = updateData.filter((item) => item.name !== e);
     const dataBaru = updateData.filter((item) => item.name === e);
     dataBaru[0].active = "0";
@@ -534,7 +545,7 @@ const FormCreateAr = () => {
                   });
                 }
               }
-              // cUpload kontak sales
+              // Upload kontak sales
               if (contactData.length > 0) {
                 for (let i = 0; i < contactData.length; i++) {
                   axios.post(`${API_URI}botcontact`, {
@@ -582,6 +593,11 @@ const FormCreateAr = () => {
           );
         }
       });
+    }
+  };
+
+  const updateBot = () => {
+    if (keyValid && menuValid && nextValid && prevKeyValid && prevMenuValid) {
     }
   };
 
@@ -682,11 +698,110 @@ const FormCreateAr = () => {
   }, [contactData]);
 
   useEffect(() => {
-    if (sendContact === 1 || sendContact === "1") {
-      setContactdata([]);
+    if (!data) {
+      if (sendContact === 1 || sendContact === "1") {
+        setContactdata([]);
+      }
+    } else {
+      if (sendContact === 0 || sendContact === "0") {
+        setContactdata([]);
+      }
     }
   }, [sendContact]);
 
+  useEffect(() => {
+    var isChangeBot = false;
+    if (JSON.stringify(valueEdit) !== JSON.stringify(valueData)) {
+      isChangeBot = true;
+    } else {
+      isChangeBot = false;
+    }
+    var isChangeIntr = false;
+    if (data.item.interest != updateData[0].value) {
+      isChangeIntr = true;
+    } else {
+      isChangeIntr = false;
+    }
+
+    var isChangeUri = false;
+    if (JSON.stringify(editUrifiles) !== JSON.stringify(uriFiles)) {
+      isChangeUri = true;
+    } else {
+      isChangeUri = false;
+    }
+
+    var isChangeContact = false;
+    if (JSON.stringify(editContact) !== JSON.stringify(contactData)) {
+      isChangeContact = true;
+    } else {
+      isChangeContact = false;
+    }
+
+    if (isChangeBot || isChangeIntr || isChangeUri || isChangeContact) {
+      setOtherValid(true);
+    } else {
+      setOtherValid(false);
+    }
+  }, [valueData, updateData[0].value, uriFiles, contactData]);
+
+  useEffect(() => {
+    socket.on("salesgroup", (data) => {
+      setGroupSales(data);
+    });
+    socket.on("sales", (data) => {
+      setSales(data);
+    });
+    setAllKeys();
+    setAllMenu();
+
+    if (data) {
+      if (data.item.interest) {
+        updateData[0].active = "1";
+        updateData[0].value = data.item.interest;
+      }
+      if (data.item.urifiles.length > 0) {
+        setEditUriFiles(data.item.urifiles);
+        seturiFiles(data.item.urifiles);
+      }
+
+      if (data.item.botcontact.length > 0) {
+        setSendContact("1");
+        let rangkumContact = [];
+        for (let i = 0; i < data.item.botcontact.length; i++) {
+          rangkumContact.push(data.item.botcontact[i].sales);
+        }
+        setEditContact(rangkumContact);
+        setContactdata(rangkumContact);
+      }
+
+      setValueEdit({
+        message: data.item.message,
+        status: data.item.status === true ? "1" : "0",
+        forward: data.item.forward === true ? "1" : "0",
+        id_key: data.item.id_key,
+        id_menuAktif: data.item.id_menuAktif,
+        id_prevMenu: data.item.id_prevMenu,
+        id_prevKey: data.item.id_prevKey,
+        id_afterMenu: data.item.id_afterMenu,
+      });
+      setValueData({
+        message: data.item.message,
+        status: data.item.status === true ? "1" : "0",
+        forward: data.item.forward === true ? "1" : "0",
+        id_key: data.item.id_key,
+        id_menuAktif: data.item.id_menuAktif,
+        id_prevMenu: data.item.id_prevMenu,
+        id_prevKey: data.item.id_prevKey,
+        id_afterMenu: data.item.id_afterMenu,
+      });
+      setValueMenu(data.item.menuAktif.name);
+      setValueKey(data.item.key.name);
+      setValueNext(data.item.afterMenu.name);
+      setValuePrevKey(data.item.prevKey.name);
+      setValuePrevMenu(data.item.prevMenu.name);
+      setTypeAction("update");
+    }
+  }, []);
   return (
     <Wrapper>
       <SelectInput
@@ -706,7 +821,6 @@ const FormCreateAr = () => {
         placeholder="-Select Key-"
         formCreate
       />
-
       {/* <Label>Messages</Label>
       <div
         style={{
@@ -779,6 +893,7 @@ const FormCreateAr = () => {
           Show Message From Prev Menu
         </label>
         <select
+          value={valueData.forward}
           onChange={(e) =>
             setValueData({ ...valueData, forward: e.target.value })
           }
@@ -794,7 +909,7 @@ const FormCreateAr = () => {
         </select>
       </div>
 
-      {valueData.forward === "1" && (
+      {valueData.forward == "1" && (
         <>
           <SelectInput
             valid={prevKeyValid}
@@ -810,7 +925,6 @@ const FormCreateAr = () => {
             plCreate="Exp : Home, Profile, Info"
             placeholder="-Select Prev Key-"
           />
-
           <SelectInput
             valid={prevMenuValid}
             label="Prev Menu"
@@ -853,6 +967,7 @@ const FormCreateAr = () => {
           Status
         </label>
         <select
+          value={valueData.status}
           onChange={(e) =>
             setValueData({ ...valueData, status: e.target.value })
           }
@@ -1133,14 +1248,27 @@ const FormCreateAr = () => {
         />
       )}
       <Button
-        onClick={saveBot}
+        onClick={typeAction == "submit" ? saveBot : updateBot}
         valid={
-          keyValid && menuValid && nextValid && prevKeyValid && prevMenuValid
+          !data
+            ? keyValid &&
+              menuValid &&
+              nextValid &&
+              prevKeyValid &&
+              prevMenuValid
+              ? true
+              : false
+            : keyValid &&
+              menuValid &&
+              nextValid &&
+              prevKeyValid &&
+              prevMenuValid &&
+              otherValid
             ? true
             : false
         }
       >
-        Save
+        {typeAction == "submit" ? "Save" : "Update"}
       </Button>
     </Wrapper>
   );
