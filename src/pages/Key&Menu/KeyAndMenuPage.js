@@ -33,29 +33,29 @@ const ViewKeyMenu = () => {
   };
   const [isLoadingKey, setIsLoadingKey] = useState(true);
   const [isLoadingMenu, setIsLoadingMenu] = useState(true);
-  const getKeys = () => {
-    axios
-      .get(`${API_URI}key`)
-      .then((res) => {
-        setKeys(res.data);
-        setIsLoadingKey(false);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  // const getKeys = () => {
+  //   axios
+  //     .get(`${API_URI}key`)
+  //     .then((res) => {
+  //       setKeys(res.data);
+  //       setIsLoadingKey(false);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
 
-  const getMenu = () => {
-    axios
-      .get(`${API_URI}menu`)
-      .then((res) => {
-        setMenu(res.data);
-        setIsLoadingMenu(false);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  // const getMenu = () => {
+  //   axios
+  //     .get(`${API_URI}menu`)
+  //     .then((res) => {
+  //       setMenu(res.data);
+  //       setIsLoadingMenu(false);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
 
   const getValueKey = (e) => {
     setValueKey(e);
@@ -66,8 +66,17 @@ const ViewKeyMenu = () => {
   };
 
   useEffect(() => {
-    getKeys();
-    getMenu();
+    // getKeys();
+    // getMenu();
+    socket.on("menus", (data) => {
+      setMenu(data);
+      setIsLoadingMenu(false);
+    });
+
+    socket.on("keys", (data) => {
+      setKeys(data);
+      setIsLoadingKey(false);
+    });
   }, []);
 
   const filterKey = (data) => {
@@ -89,12 +98,6 @@ const ViewKeyMenu = () => {
       return name;
     });
   };
-
-  useEffect(() => {
-    socket.on("bots", (data) => {
-      // console.log(data);
-    });
-  });
 
   return (
     <Wrapper>

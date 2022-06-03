@@ -502,6 +502,13 @@ const FormCreateAr = ({ data }) => {
         confirmButtonText: "Yes, save it!",
       }).then((result) => {
         if (result.isConfirmed) {
+          dispatch(
+            modalSet({
+              active: true,
+              page: "createAr",
+              isLoading: true,
+            })
+          );
           axios
             .post(`${API_URI}bots`, {
               ...valueData,
@@ -598,6 +605,260 @@ const FormCreateAr = ({ data }) => {
 
   const updateBot = () => {
     if (keyValid && menuValid && nextValid && prevKeyValid && prevMenuValid) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Save this data!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, save it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            modalSet({
+              active: true,
+              page: "createAr",
+              isLoading: true,
+              data: data,
+            })
+          );
+          let newContact = () => {
+            return axios
+              .delete(`${API_URI}botcontact/bot/${data.item.id}`)
+              .then((res) => {
+                // Upload kontak sales
+                if (contactData.length > 0) {
+                  for (let i = 0; i < contactData.length; i++) {
+                    axios.post(`${API_URI}botcontact`, {
+                      id_bot: data.item.id,
+                      id_sales: contactData[i].id,
+                    });
+                  }
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          };
+
+          let newUri = () => {
+            return axios
+              .delete(`${API_URI}urifiles/bot/${data.item.id}`)
+              .then((res) => {
+                if (uriFiles.length > 0) {
+                  for (let i = 0; i < uriFiles.length; i++) {
+                    axios.post(`${API_URI}urifiles`, {
+                      id_bot: data.item.id,
+                      name: uriFiles[i].name,
+                    });
+                  }
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          };
+
+          if (
+            JSON.stringify(valueEdit) !== JSON.stringify(valueData) ||
+            data.item.interest != updateData[0].value
+          ) {
+            let setValue = {};
+            if (data.item.interest != updateData[0].value) {
+              setValue = { ...valueData, interest: updateData[0].value };
+            } else {
+              setValue = { ...valueData };
+            }
+
+            axios
+              .put(`${API_URI}bots/${data.item.id}`, setValue)
+              .then((res) => {
+                if (
+                  JSON.stringify(editContact) !== JSON.stringify(contactData) &&
+                  JSON.stringify(editUrifiles) !== JSON.stringify(uriFiles)
+                ) {
+                  newContact().then((res) => {
+                    newUri().then((res) => {
+                      dispatch(
+                        modalSet({
+                          active: false,
+                          page: "",
+                          isLoading: false,
+                        })
+                      );
+                      Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Your data has been saved",
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
+                    });
+                  });
+                } else {
+                  if (
+                    JSON.stringify(editContact) !== JSON.stringify(contactData)
+                  ) {
+                    newContact().then((res) => {
+                      dispatch(
+                        modalSet({
+                          active: false,
+                          page: "",
+                          isLoading: false,
+                        })
+                      );
+                      Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Your data has been saved",
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
+                    });
+                  } else if (
+                    JSON.stringify(editUrifiles) !== JSON.stringify(uriFiles)
+                  ) {
+                    newUri().then((res) => {
+                      dispatch(
+                        modalSet({
+                          active: false,
+                          page: "",
+                          isLoading: false,
+                        })
+                      );
+                      Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Your data has been saved",
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
+                    });
+                  } else {
+                    dispatch(
+                      modalSet({
+                        active: false,
+                        page: "",
+                        isLoading: false,
+                      })
+                    );
+                    Swal.fire({
+                      position: "top-end",
+                      icon: "success",
+                      title: "Your data has been saved",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+                  }
+                }
+              })
+              .catch((err) => {
+                dispatch(
+                  modalSet({
+                    active: true,
+                    page: "createAr",
+                    isLoading: false,
+                    data: data,
+                  })
+                );
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "Your data has been saved",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+              });
+          } else {
+            if (
+              JSON.stringify(editContact) !== JSON.stringify(contactData) &&
+              JSON.stringify(editUrifiles) !== JSON.stringify(uriFiles)
+            ) {
+              newContact().then((res) => {
+                newUri().then((res) => {
+                  dispatch(
+                    modalSet({
+                      active: false,
+                      page: "",
+                      isLoading: false,
+                    })
+                  );
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Your data has been saved",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                });
+              });
+            } else {
+              if (JSON.stringify(editContact) !== JSON.stringify(contactData)) {
+                newContact().then((res) => {
+                  dispatch(
+                    modalSet({
+                      active: false,
+                      page: "",
+                      isLoading: false,
+                    })
+                  );
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Your data has been saved",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                });
+              } else if (
+                JSON.stringify(editUrifiles) !== JSON.stringify(uriFiles)
+              ) {
+                newUri().then((res) => {
+                  dispatch(
+                    modalSet({
+                      active: false,
+                      page: "",
+                      isLoading: false,
+                    })
+                  );
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Your data has been saved",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                });
+              } else {
+                dispatch(
+                  modalSet({
+                    active: false,
+                    page: "",
+                    isLoading: false,
+                  })
+                );
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "Your data has been saved",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+              }
+            }
+          }
+        } else {
+          dispatch(
+            modalSet({
+              active: true,
+              page: "createAr",
+              isLoading: false,
+              data: data,
+            })
+          );
+        }
+      });
     }
   };
 
@@ -710,37 +971,39 @@ const FormCreateAr = ({ data }) => {
   }, [sendContact]);
 
   useEffect(() => {
-    var isChangeBot = false;
-    if (JSON.stringify(valueEdit) !== JSON.stringify(valueData)) {
-      isChangeBot = true;
-    } else {
-      isChangeBot = false;
-    }
-    var isChangeIntr = false;
-    if (data.item.interest != updateData[0].value) {
-      isChangeIntr = true;
-    } else {
-      isChangeIntr = false;
-    }
+    if (data) {
+      var isChangeBot = false;
+      if (JSON.stringify(valueEdit) !== JSON.stringify(valueData)) {
+        isChangeBot = true;
+      } else {
+        isChangeBot = false;
+      }
+      var isChangeIntr = false;
+      if (data.item.interest != updateData[0].value) {
+        isChangeIntr = true;
+      } else {
+        isChangeIntr = false;
+      }
 
-    var isChangeUri = false;
-    if (JSON.stringify(editUrifiles) !== JSON.stringify(uriFiles)) {
-      isChangeUri = true;
-    } else {
-      isChangeUri = false;
-    }
+      var isChangeUri = false;
+      if (JSON.stringify(editUrifiles) !== JSON.stringify(uriFiles)) {
+        isChangeUri = true;
+      } else {
+        isChangeUri = false;
+      }
 
-    var isChangeContact = false;
-    if (JSON.stringify(editContact) !== JSON.stringify(contactData)) {
-      isChangeContact = true;
-    } else {
-      isChangeContact = false;
-    }
+      var isChangeContact = false;
+      if (JSON.stringify(editContact) !== JSON.stringify(contactData)) {
+        isChangeContact = true;
+      } else {
+        isChangeContact = false;
+      }
 
-    if (isChangeBot || isChangeIntr || isChangeUri || isChangeContact) {
-      setOtherValid(true);
-    } else {
-      setOtherValid(false);
+      if (isChangeBot || isChangeIntr || isChangeUri || isChangeContact) {
+        setOtherValid(true);
+      } else {
+        setOtherValid(false);
+      }
     }
   }, [valueData, updateData[0].value, uriFiles, contactData]);
 

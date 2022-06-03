@@ -106,10 +106,10 @@ export default AutoReply;
 
 const Wrapper = styled.div`
   width: 97%;
-  height: 90%;
+  height: 95%;
   border: solid 1px #e5e7ef;
   margin-left: 1.5%;
-  margin-top: 20px;
+  margin-top: 10px;
   border-radius: 3px;
   background-color: white;
   display: flex;

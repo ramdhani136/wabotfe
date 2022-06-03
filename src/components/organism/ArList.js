@@ -67,7 +67,7 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
         <div
           style={{
             width: "100%",
-            height: "300px",
+            height: "350px",
             overflowY: "scroll",
             marginTop: "10px",
           }}
@@ -87,7 +87,17 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
             </div>
           ) : (
             <table style={{ width: "100%" }} cellSpacing="0" cellPadding="5">
-              <thead style={{ fontSize: "0.87em", color: "gray" }}>
+              <thead
+                style={{
+                  fontSize: "0.87em",
+                  color: "gray",
+                  position: "sticky",
+                  top: "0px",
+                  backgroundColor: "white",
+                  zIndex: 100,
+                  borderBottomWidth: "3px",
+                }}
+              >
                 <tr style={{ border: "solid 1px #e5e7ef" }}>
                   <th
                     style={{
@@ -252,15 +262,15 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                         Delete
                       </Button>
                       <Button
-                        onClick={() =>
+                        onClick={() => {
                           dispatch(
                             modalSet({
                               active: true,
                               page: "createAr",
                               data: { item },
                             })
-                          )
-                        }
+                          );
+                        }}
                         bg="#343A40"
                       >
                         Edit

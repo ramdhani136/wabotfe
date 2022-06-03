@@ -84,7 +84,17 @@ const KeyList = ({ data, getValue, setValue, value, setIsLoading }) => {
             </div>
           ) : (
             <table style={{ width: "100%" }} cellSpacing="0" cellPadding="5">
-              <thead style={{ fontSize: "0.87em", color: "gray" }}>
+              <thead
+                style={{
+                  fontSize: "0.87em",
+                  color: "gray",
+                  position: "sticky",
+                  top: "0px",
+                  backgroundColor: "white",
+                  zIndex: 100,
+                  borderBottomWidth: "3px",
+                }}
+              >
                 <tr style={{ border: "solid 1px #e5e7ef" }}>
                   <th
                     style={{

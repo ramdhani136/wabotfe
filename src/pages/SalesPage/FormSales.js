@@ -137,6 +137,13 @@ const FormSales = () => {
         confirmButtonText: "Yes, save it!",
       }).then((result) => {
         if (result.isConfirmed) {
+          dispatch(
+            modalSet({
+              active: true,
+              page: "createSales",
+              isLoading: true,
+            })
+          );
           axios
             .post(`${API_URI}sales`, valueData)
             .then((res) => {
