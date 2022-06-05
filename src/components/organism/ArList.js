@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
 import { API_URI } from "../../utils";
 import { useDispatch } from "react-redux";
@@ -10,6 +11,8 @@ const Swal = require("sweetalert2");
 
 const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
   const dispatch = useDispatch();
+  const [order, setOrder] = useState("ASC");
+  const [newData, setNewData] = useState(data);
   const deleteAr = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -38,6 +41,104 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
       }
     });
   };
+
+  const sorting = (col) => {
+    let stored = [];
+    if (order === "ASC") {
+      if (col === "menu") {
+        stored = [...data].sort((a, b) =>
+          a.menuAktif["name"].toLowerCase() > b.menuAktif["name"].toLowerCase()
+            ? 1
+            : -1
+        );
+      }
+      if (col === "key") {
+        stored = [...data].sort((a, b) =>
+          a.key["name"].toLowerCase() > b.key["name"].toLowerCase() ? 1 : -1
+        );
+      }
+      if (col === "nextMenu") {
+        stored = [...data].sort((a, b) =>
+          a.afterMenu["name"].toLowerCase() > b.afterMenu["name"].toLowerCase()
+            ? 1
+            : -1
+        );
+      }
+      if (col === "prevMenu") {
+        stored = [...data].sort((a, b) =>
+          a.prevMenu["name"].toLowerCase() > b.prevMenu["name"].toLowerCase()
+            ? 1
+            : -1
+        );
+      }
+      if (col === "prevKey") {
+        stored = [...data].sort((a, b) =>
+          a.prevKey["name"].toLowerCase() > b.prevKey["name"].toLowerCase()
+            ? 1
+            : -1
+        );
+      }
+      if (col === "reply") {
+        stored = [...data].sort((a, b) =>
+          a["message"].toLowerCase() > b["message"].toLowerCase() ? 1 : -1
+        );
+      }
+      if (col === "status") {
+        stored = [...data].sort((a, b) => (a["status"] > b["status"] ? 1 : -1));
+      }
+      setOrder("DESC");
+    } else if (order === "DESC") {
+      if (col === "menu") {
+        stored = [...data].sort((a, b) =>
+          a.menuAktif["name"].toLowerCase() < b.menuAktif["name"].toLowerCase()
+            ? 1
+            : -1
+        );
+      }
+      if (col === "key") {
+        stored = [...data].sort((a, b) =>
+          a.key["name"].toLowerCase() < b.key["name"].toLowerCase() ? 1 : -1
+        );
+      }
+      if (col === "nextMenu") {
+        stored = [...data].sort((a, b) =>
+          a.afterMenu["name"].toLowerCase() < b.afterMenu["name"].toLowerCase()
+            ? 1
+            : -1
+        );
+      }
+      if (col === "prevMenu") {
+        stored = [...data].sort((a, b) =>
+          a.prevMenu["name"].toLowerCase() < b.prevMenu["name"].toLowerCase()
+            ? 1
+            : -1
+        );
+      }
+      if (col === "prevKey") {
+        stored = [...data].sort((a, b) =>
+          a.prevKey["name"].toLowerCase() < b.prevKey["name"].toLowerCase()
+            ? 1
+            : -1
+        );
+      }
+      if (col === "reply") {
+        stored = [...data].sort((a, b) =>
+          a["message"].toLowerCase() < b["message"].toLowerCase() ? 1 : -1
+        );
+      }
+      if (col === "status") {
+        stored = [...data].sort((a, b) => (a["status"] < b["status"] ? 1 : -1));
+      }
+
+      setOrder("ASC");
+    }
+    setNewData(stored);
+  };
+
+  useEffect(() => {
+    setNewData(data);
+  }, [data]);
+
   return (
     <Wrapper>
       <Title>
@@ -115,17 +216,51 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       marginLeft: "10px",
                     }}
                   >
-                    Menu
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <a style={{ flex: 1 }}>Menu</a>
+                      <FilterListIcon
+                        onClick={() => sorting("menu")}
+                        style={{
+                          fontSize: "13px",
+                          marginLeft: "5px",
+                          marginRight: "5px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </div>
                   </th>
                   <th
                     style={{
                       border: "solid 1px #e5e7ef",
-
                       marginLeft: "10px",
                       textAlign: "center",
                     }}
                   >
-                    Key
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <a style={{ flex: 1 }}>Key</a>
+                      <FilterListIcon
+                        onClick={() => sorting("key")}
+                        style={{
+                          fontSize: "13px",
+                          marginLeft: "5px",
+                          marginRight: "5px",
+                          marginTop: "2px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </div>
                   </th>
                   <th
                     style={{
@@ -134,7 +269,24 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       marginLeft: "10px",
                     }}
                   >
-                    Next Menu
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <a style={{ flex: 1 }}>Next Menu</a>
+                      <FilterListIcon
+                        onClick={() => sorting("nextMenu")}
+                        style={{
+                          fontSize: "13px",
+                          marginLeft: "5px",
+                          marginRight: "5px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </div>
                   </th>
                   <th
                     style={{
@@ -144,7 +296,24 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       // width: "12%",
                     }}
                   >
-                    Prev Menu
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <a style={{ flex: 1 }}>Prev Menu</a>
+                      <FilterListIcon
+                        onClick={() => sorting("prevMenu")}
+                        style={{
+                          fontSize: "13px",
+                          marginLeft: "5px",
+                          marginRight: "5px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </div>
                   </th>
                   <th
                     style={{
@@ -153,7 +322,24 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       marginLeft: "10px",
                     }}
                   >
-                    Prev Key
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <a style={{ flex: 1 }}>Prev Key</a>
+                      <FilterListIcon
+                        onClick={() => sorting("prevKey")}
+                        style={{
+                          fontSize: "13px",
+                          marginLeft: "5px",
+                          marginRight: "5px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </div>
                   </th>
                   <th
                     style={{
@@ -161,7 +347,24 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       textAlign: "center",
                     }}
                   >
-                    Reply
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <a style={{ flex: 1 }}>Reply</a>
+                      <FilterListIcon
+                        onClick={() => sorting("reply")}
+                        style={{
+                          fontSize: "13px",
+                          marginLeft: "5px",
+                          marginRight: "5px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </div>
                   </th>
                   <th
                     style={{
@@ -170,7 +373,24 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       width: "10%",
                     }}
                   >
-                    Status
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <a style={{ flex: 1 }}>Status</a>
+                      <FilterListIcon
+                        onClick={() => sorting("status")}
+                        style={{
+                          fontSize: "13px",
+                          marginLeft: "5px",
+                          marginRight: "5px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </div>
                   </th>
                   <th style={{ border: "solid 1px #e5e7ef", width: "14%" }}>
                     Action
@@ -178,7 +398,7 @@ const ArList = ({ data, getValue, setValue, value, setIsLoading }) => {
                 </tr>
               </thead>
               <tbody style={{ fontSize: "0.86em", color: "gray" }}>
-                {data.map((item, id) => (
+                {newData.map((item, id) => (
                   <tr key={id} style={{ cursor: "pointer" }}>
                     <td
                       style={{

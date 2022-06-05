@@ -8,9 +8,10 @@ import { io } from "socket.io-client";
 const Swal = require("sweetalert2");
 const axios = require("axios");
 
-const FormKey = () => {
+const FormKey = ({ data }) => {
   const defaultValue = { name: "", status: 1 };
   const [value, setValue] = useState(defaultValue);
+  const [prevValue, setPrevValue] = useState({});
   const [validName, setValidName] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const dispatch = useDispatch();
@@ -28,30 +29,43 @@ const FormKey = () => {
     },
   });
 
-  const cekValid = () => {
-    if (value.name !== "") {
-      setValidName(true);
-    } else {
-      setValidName(false);
-    }
-  };
-
   useEffect(() => {
-    cekValid();
+    if (data) {
+      if (
+        value.name !== "" &&
+        JSON.stringify(prevValue) !== JSON.stringify(value)
+      ) {
+        setIsValid(true);
+      } else {
+        setIsValid(false);
+      }
+      if (value.name !== "") {
+        setValidName(true);
+      } else {
+        setValidName(false);
+      }
+    } else {
+      if (value.name !== "") {
+        setIsValid(true);
+        setValidName(true);
+      } else {
+        setIsValid(false);
+        setValidName(false);
+      }
+    }
   }, [value]);
-
-  useEffect(() => {
-    if (validName) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
-  });
 
   useEffect(() => {
     socket.on("init", (data) => {
       setUsers(data);
     });
+    if (data) {
+      setPrevValue({
+        name: data.item.name,
+        status: data.item.status ? "1" : "0",
+      });
+      setValue({ name: data.item.name, status: data.item.status ? "1" : "0" });
+    }
   }, []);
 
   // useEffect(() => {
@@ -110,6 +124,56 @@ const FormKey = () => {
     }
   };
 
+  const onUpdate = () => {
+    if (
+      value.name !== "" &&
+      JSON.stringify(prevValue) !== JSON.stringify(value)
+    ) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Update this data!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, update it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            modalSet({ active: true, page: "createKey", isLoading: true })
+          );
+          axios
+            .put(`${API_URI}key/${data.item.id}`, value)
+            .then((res) => {
+              dispatch(modalSet({ active: false, page: "", isLoading: false }));
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Your data has been saved",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            })
+            .catch((err) => {
+              dispatch(
+                modalSet({
+                  active: true,
+                  page: "createKey",
+                  isLoading: false,
+                })
+              );
+              console.log("err");
+              Swal.fire("Error!", "Your data cannot to save.", "error");
+            });
+        } else {
+          dispatch(
+            modalSet({ active: true, page: "createKey", isLoading: false })
+          );
+        }
+      });
+    }
+  };
+
   return (
     <>
       <FormInput
@@ -136,6 +200,7 @@ const FormKey = () => {
           Status
         </label>
         <select
+          value={value.status}
           onChange={(e) => setValue({ ...value, status: e.target.value })}
           style={{
             height: "40px",
@@ -145,11 +210,11 @@ const FormKey = () => {
           }}
         >
           <option value="1">Active</option>
-          <option value="0">Non Active</option>
+          <option value="0">Disabled</option>
         </select>
       </div>
-      <Button onClick={onSubmit} valid={isValid}>
-        Save
+      <Button onClick={data ? onUpdate : onSubmit} valid={isValid}>
+        {data ? "Update" : "Save"}
       </Button>
     </>
   );

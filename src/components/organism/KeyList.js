@@ -3,10 +3,13 @@ import styled from "styled-components";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CloseIcon from "@mui/icons-material/Close";
 import { API_URI } from "../../utils";
+import { useDispatch } from "react-redux";
+import { modalSet } from "../../redux/slices/ModalSlice";
 const axios = require("axios");
 const Swal = require("sweetalert2");
 
 const KeyList = ({ data, getValue, setValue, value, setIsLoading }) => {
+  const dispatch = useDispatch();
   const deleteKey = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -175,7 +178,20 @@ const KeyList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       <Button bg="#AB372C " onClick={() => deleteKey(item.id)}>
                         Delete
                       </Button>
-                      <Button bg="#343A40">Edit</Button>
+                      <Button
+                        bg="#343A40"
+                        onClick={() => {
+                          dispatch(
+                            modalSet({
+                              active: true,
+                              page: "createKey",
+                              data: { item },
+                            })
+                          );
+                        }}
+                      >
+                        Edit
+                      </Button>
                     </td>
                   </tr>
                 ))}
