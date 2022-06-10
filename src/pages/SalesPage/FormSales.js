@@ -10,7 +10,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 
-const FormSales = () => {
+const FormSales = ({ data }) => {
   const defaultValue = { name: "", id_group: "", phone: "", status: 1 };
   const [valueData, setValueData] = useState(defaultValue);
   const [valueGroup, setValueGroup] = useState("");
@@ -19,11 +19,28 @@ const FormSales = () => {
   const [validPhone, setValidPhone] = useState(false);
   const [group, setGroup] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [prevValue, setPrevValue] = useState({});
   const [valueCreateGroup, setValueCreateGroup] = useState("");
   const dispatch = useDispatch();
+  const [validUpdate, setValidUpdate] = useState(false);
 
   useEffect(() => {
     setAllGroup();
+    if (data) {
+      setPrevValue({
+        name: data.item.name,
+        status: data.item.status ? "1" : "0",
+        id_group: data.item.id_group,
+        phone: data.item.phone,
+      });
+      setValueGroup(data.item.group.name);
+      setValueData({
+        name: data.item.name,
+        status: data.item.status ? "1" : "0",
+        id_group: data.item.id_group,
+        phone: data.item.phone,
+      });
+    }
   }, []);
 
   const setAllGroup = () => {
@@ -123,7 +140,15 @@ const FormSales = () => {
     } else {
       setValidPhone(false);
     }
-  }, [valueData.name, valueData.id_group, valueData.phone]);
+
+    if (data) {
+      if (JSON.stringify(valueData) !== JSON.stringify(prevValue)) {
+        setValidUpdate(true);
+      } else {
+        setValidUpdate(false);
+      }
+    }
+  }, [valueData]);
 
   const saveSales = () => {
     if (validName && groupValid && validPhone) {
@@ -170,6 +195,64 @@ const FormSales = () => {
         } else {
           dispatch(
             modalSet({ active: true, page: "createSales", isLoading: false })
+          );
+        }
+      });
+    }
+  };
+
+  const updateSales = () => {
+    if (validName && validPhone && validUpdate && groupValid) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Save this data!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, save it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            modalSet({
+              active: true,
+              page: "createSales",
+              isLoading: true,
+              data: data,
+            })
+          );
+          axios
+            .put(`${API_URI}sales/${data.item.id}`, valueData)
+            .then((res) => {
+              dispatch(modalSet({ active: false, page: "", isLoading: false }));
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Your data has been saved",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            })
+            .catch((err) => {
+              dispatch(
+                modalSet({
+                  active: true,
+                  page: "createSales",
+                  isLoading: false,
+                  data: data,
+                })
+              );
+              console.log("err");
+              Swal.fire("Error!", "Your data cannot to save.", "error");
+            });
+        } else {
+          dispatch(
+            modalSet({
+              active: true,
+              page: "createSales",
+              isLoading: false,
+              data: data,
+            })
           );
         }
       });
@@ -230,6 +313,7 @@ const FormSales = () => {
           Status
         </label>
         <select
+          value={valueData.status}
           onChange={(e) =>
             setValueData({ ...valueData, status: e.target.value })
           }
@@ -241,14 +325,22 @@ const FormSales = () => {
           }}
         >
           <option value="1">Active</option>
-          <option value="0">Non Active</option>
+          <option value="0">Disabled</option>
         </select>
       </div>
       <Button
-        onClick={saveSales}
-        valid={validName && groupValid && validPhone ? true : false}
+        onClick={data ? updateSales : saveSales}
+        valid={
+          data
+            ? validName && groupValid && validPhone && validUpdate
+              ? true
+              : false
+            : validName && groupValid && validPhone
+            ? true
+            : false
+        }
       >
-        Save
+        {data ? "Update" : "Save"}
       </Button>
     </Wrapper>
   );

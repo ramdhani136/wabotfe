@@ -176,9 +176,7 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
                   >
                     Last Update
                   </th>
-                  <th style={{ border: "solid 1px #e5e7ef", width: "14%" }}>
-                    Action
-                  </th>
+                  <th style={{ border: "solid 1px #e5e7ef" }}>Action</th>
                 </tr>
               </thead>
               <tbody style={{ fontSize: "0.86em", color: "gray" }}>
@@ -268,7 +266,7 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       >
                         Delete
                       </Button>
-                      <Button bg="#343A40">Edit</Button>
+                      {/* <Button bg="#343A40">Edit</Button> */}
                     </td>
                   </tr>
                 ))}

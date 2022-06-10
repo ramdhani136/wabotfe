@@ -51,9 +51,7 @@ const ViewContact = () => {
     <Wrapper>
       <Title>
         <Tleft>Contact list</Tleft>
-        <Tright>
-          <Button onClick={openModal}>Create new</Button>
-        </Tright>
+        <Tright>{/* <Button onClick={openModal}>Create new</Button> */}</Tright>
       </Title>
       <Content>
         {isLoading ? (

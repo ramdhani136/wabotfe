@@ -45,6 +45,7 @@ const FormCreateAr = ({ data }) => {
   const [selectedGroup, setSelectedGroup] = useState([]);
   const [updateData, setUpdateData] = useState([
     { id: 1, name: "interest", active: "0", value: "" },
+    { id: 2, name: "city", active: "0", value: "" },
   ]);
 
   const [keys, setKeys] = useState([]);
@@ -209,6 +210,7 @@ const FormCreateAr = ({ data }) => {
     setValueUpdateData("");
     setIsOpenData(false);
     e.active = "1";
+    console.log(e);
     // const newData = updateData.filter((item) => item.id !== e.id);
     // const fixdata = newData.push(e);
     // console.log(e);
@@ -461,18 +463,18 @@ const FormCreateAr = ({ data }) => {
   };
 
   const removeData = (e) => {
-    // if (!data) {
-    //   const hapusItem = updateData.filter((item) => item.name !== e);
-    //   const dataBaru = updateData.filter((item) => item.name === e);
-    //   dataBaru[0].active = "0";
-    //   dataBaru[0].value = "";
-    //   setUpdateData([...hapusItem, dataBaru[0]]);
-    // }
-    const hapusItem = updateData.filter((item) => item.name !== e);
-    const dataBaru = updateData.filter((item) => item.name === e);
-    dataBaru[0].active = "0";
-    dataBaru[0].value = "";
-    setUpdateData([...hapusItem, dataBaru[0]]);
+    if (e === "interest") {
+      const newState = [...updateData];
+      newState[0].value = "";
+      newState[0].active = "0";
+      setUpdateData(newState);
+    }
+    if (e === "city") {
+      const newState = [...updateData];
+      newState[1].value = "";
+      newState[1].active = "0";
+      setUpdateData(newState);
+    }
   };
 
   const onResetNext = () => {
@@ -513,6 +515,7 @@ const FormCreateAr = ({ data }) => {
             .post(`${API_URI}bots`, {
               ...valueData,
               interest: updateData[0].value,
+              city: updateData[1].value,
             })
             .then((res) => {
               if (uriFiles.length > 0) {
@@ -604,7 +607,14 @@ const FormCreateAr = ({ data }) => {
   };
 
   const updateBot = () => {
-    if (keyValid && menuValid && nextValid && prevKeyValid && prevMenuValid) {
+    if (
+      keyValid &&
+      menuValid &&
+      nextValid &&
+      prevKeyValid &&
+      prevMenuValid &&
+      otherValid
+    ) {
       Swal.fire({
         title: "Are you sure?",
         text: "Save this data!",
@@ -662,17 +672,22 @@ const FormCreateAr = ({ data }) => {
 
           if (
             JSON.stringify(valueEdit) !== JSON.stringify(valueData) ||
-            data.item.interest != updateData[0].value
+            data.item.interest != updateData[0].value ||
+            data.item.city != updateData[1].value
           ) {
-            let setValue = {};
-            if (data.item.interest != updateData[0].value) {
-              setValue = { ...valueData, interest: updateData[0].value };
-            } else {
-              setValue = { ...valueData };
-            }
+            // let setValue = {};
+            // if (data.item.interest != updateData[0].value) {
+            //   setValue = { ...valueData, interest: updateData[0].value };
+            // } else {
+            //   setValue = { ...valueData };
+            // }
 
             axios
-              .put(`${API_URI}bots/${data.item.id}`, setValue)
+              .put(`${API_URI}bots/${data.item.id}`, {
+                ...valueData,
+                interest: updateData[0].value,
+                city: updateData[1].value,
+              })
               .then((res) => {
                 if (
                   JSON.stringify(editContact) !== JSON.stringify(contactData) &&
@@ -985,6 +1000,13 @@ const FormCreateAr = ({ data }) => {
         isChangeIntr = false;
       }
 
+      var isChangeCity = false;
+      if (data.item.city != updateData[1].value) {
+        isChangeCity = true;
+      } else {
+        isChangeCity = false;
+      }
+
       var isChangeUri = false;
       if (JSON.stringify(editUrifiles) !== JSON.stringify(uriFiles)) {
         isChangeUri = true;
@@ -999,13 +1021,25 @@ const FormCreateAr = ({ data }) => {
         isChangeContact = false;
       }
 
-      if (isChangeBot || isChangeIntr || isChangeUri || isChangeContact) {
+      if (
+        isChangeBot ||
+        isChangeIntr ||
+        isChangeUri ||
+        isChangeContact ||
+        isChangeCity
+      ) {
         setOtherValid(true);
       } else {
         setOtherValid(false);
       }
     }
-  }, [valueData, updateData[0].value, uriFiles, contactData]);
+  }, [
+    valueData,
+    updateData[0].value,
+    updateData[1].value,
+    uriFiles,
+    contactData,
+  ]);
 
   useEffect(() => {
     socket.on("salesgroup", (data) => {
@@ -1021,6 +1055,10 @@ const FormCreateAr = ({ data }) => {
       if (data.item.interest) {
         updateData[0].active = "1";
         updateData[0].value = data.item.interest;
+      }
+      if (data.item.city) {
+        updateData[1].active = "1";
+        updateData[1].value = data.item.city;
       }
       if (data.item.urifiles.length > 0) {
         setEditUriFiles(data.item.urifiles);
@@ -1496,10 +1534,9 @@ const FormCreateAr = ({ data }) => {
         <FormInput
           value={updateData[0].value}
           getData={(e) => {
-            const found = updateData.filter((item) => item.name === "interest");
-            const notEq = updateData.filter((item) => item.name !== "interest");
-            found[0].value = e.target.value;
-            setUpdateData([...notEq, found[0]]);
+            const newState = [...updateData];
+            newState[0].value = e.target.value;
+            setUpdateData(newState);
           }}
           label="Interest"
           type="text"
@@ -1507,6 +1544,23 @@ const FormCreateAr = ({ data }) => {
           btnRemove
           actionRemove={removeData}
           refRemov="interest"
+          valid
+        />
+      )}
+      {updateData[1].active === "1" && (
+        <FormInput
+          value={updateData[1].value}
+          getData={(e) => {
+            const newState = [...updateData];
+            newState[1].value = e.target.value;
+            setUpdateData(newState);
+          }}
+          label="City"
+          type="text"
+          placeholder="Input your city value"
+          btnRemove
+          actionRemove={removeData}
+          refRemov="city"
           valid
         />
       )}
