@@ -67,6 +67,7 @@ const FormCreateAr = ({ data }) => {
     id_prevMenu: 23,
     id_prevKey: 20,
     id_afterMenu: "",
+    sales_message: "",
   };
   const [valueEdit, setValueEdit] = useState({});
   const [valueData, setValueData] = useState(defaultValueData);
@@ -428,6 +429,10 @@ const FormCreateAr = ({ data }) => {
 
   const getMesg = (e) => {
     setValueData({ ...valueData, message: e });
+  };
+
+  const getSalesMesg = (e) => {
+    setValueData({ ...valueData, sales_message: e });
   };
 
   useEffect(() => {
@@ -1077,6 +1082,7 @@ const FormCreateAr = ({ data }) => {
 
       setValueEdit({
         message: data.item.message,
+        sales_message: data.item.sales_message,
         status: data.item.status === true ? "1" : "0",
         forward: data.item.forward === true ? "1" : "0",
         id_key: data.item.id_key,
@@ -1087,6 +1093,7 @@ const FormCreateAr = ({ data }) => {
       });
       setValueData({
         message: data.item.message,
+        sales_message: data.item.sales_message,
         status: data.item.status === true ? "1" : "0",
         forward: data.item.forward === true ? "1" : "0",
         id_key: data.item.id_key,
@@ -1487,26 +1494,35 @@ const FormCreateAr = ({ data }) => {
             placeholder="-Select Sales-"
           />
           {contactData.length > 0 && (
-            <ListUri>
-              {contactData.map((item, id) => (
-                <Uri key={id}>
-                  <a
-                    style={{ color: "white", textDecoration: "none" }}
-                    onClick={() => toLink(item.name)}
-                  >
-                    {item.name.substring(0, 55)}
-                  </a>
-                  <CloseIcon
-                    onClick={() => delContact(item.id)}
-                    style={{ fontSize: "18px", marginLeft: "10px" }}
-                  />
-                </Uri>
-              ))}
-            </ListUri>
+            <>
+              <ListUri>
+                {contactData.map((item, id) => (
+                  <Uri key={id}>
+                    <a
+                      style={{ color: "white", textDecoration: "none" }}
+                      onClick={() => toLink(item.name)}
+                    >
+                      {item.name.substring(0, 55)}
+                    </a>
+                    <CloseIcon
+                      onClick={() => delContact(item.id)}
+                      style={{ fontSize: "18px", marginLeft: "10px" }}
+                    />
+                  </Uri>
+                ))}
+              </ListUri>
+              <FormText
+                valid
+                label="Sales Messages"
+                value={valueData.sales_message}
+                getData={getSalesMesg}
+                height="200px"
+                placeholder="Input your sales messages"
+              />
+            </>
           )}
         </>
       )}
-
       <h4
         style={{
           float: "left",

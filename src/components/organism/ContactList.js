@@ -266,7 +266,7 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       >
                         Delete
                       </Button>
-                      {/* <Button bg="#343A40">Edit</Button> */}
+                      <Button bg="#343A40">Log Sales</Button>
                     </td>
                   </tr>
                 ))}
@@ -314,6 +314,7 @@ const Button = styled.div`
   float: left;
   margin-right: 5px;
   border-radius: 3px;
+  margin-bottom: 5px;
   font-size: 0.9em;
   color: #fff;
   cursor: pointer;

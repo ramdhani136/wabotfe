@@ -541,6 +541,7 @@ const Button = styled.div`
   padding: 5px 10px 5px 10px;
   float: left;
   margin-right: 5px;
+  margin-bottom: 5px;
   border-radius: 3px;
   font-size: 0.9em;
   color: #fff;
