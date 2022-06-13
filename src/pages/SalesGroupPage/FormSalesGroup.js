@@ -10,10 +10,10 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 
-const FormSalesGroup = () => {
+const FormSalesGroup = ({ data }) => {
   const defaultValue = { name: "", notes: "", status: 1 };
   const [valueData, setValueData] = useState(defaultValue);
-
+  const [prevValue, setPrevValue] = useState({});
   const [validName, setValidName] = useState(false);
 
   const dispatch = useDispatch();
@@ -82,6 +82,79 @@ const FormSalesGroup = () => {
     }
   };
 
+  const updateGroup = () => {
+    if (validName && JSON.stringify(valueData) !== JSON.stringify(prevValue)) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Save this data!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, save it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            modalSet({
+              active: true,
+              page: "createSalesGroup",
+              isLoading: true,
+              data: data,
+            })
+          );
+          axios
+            .put(`${API_URI}salesgroup/${data.item.id}`, valueData)
+            .then((res) => {
+              dispatch(modalSet({ active: false, page: "", isLoading: true }));
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Your data has been saved",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            })
+            .catch((err) => {
+              dispatch(
+                modalSet({
+                  active: true,
+                  page: "createSalesGroup",
+                  isLoading: false,
+                  data: data,
+                })
+              );
+              console.log("err");
+              Swal.fire("Error!", "Your data cannot to save.", "error");
+            });
+        } else {
+          dispatch(
+            modalSet({
+              active: true,
+              page: "createSalesGroup",
+              isLoading: false,
+              data: data,
+            })
+          );
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      setPrevValue({
+        name: data.item.name,
+        notes: data.item.notes,
+        status: data.item.status ? "1" : "0",
+      });
+      setValueData({
+        name: data.item.name,
+        notes: data.item.notes,
+        status: data.item.status ? "1" : "0",
+      });
+    }
+  }, []);
+
   return (
     <Wrapper>
       <FormInput
@@ -132,8 +205,20 @@ const FormSalesGroup = () => {
           <option value="0">Non Active</option>
         </select>
       </div>
-      <Button onClick={saveSalesGroup} valid={validName ? true : false}>
-        Save
+      <Button
+        onClick={data ? updateGroup : saveSalesGroup}
+        valid={
+          data
+            ? validName &&
+              JSON.stringify(valueData) !== JSON.stringify(prevValue)
+              ? true
+              : false
+            : validName
+            ? true
+            : false
+        }
+      >
+        {data ? "Update" : "Save"}
       </Button>
     </Wrapper>
   );
