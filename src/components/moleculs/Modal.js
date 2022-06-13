@@ -11,6 +11,7 @@ import FormKey from "../../pages/Key&Menu/FormKey";
 import FormMenu from "../../pages/Key&Menu/FormMenu";
 import FormSales from "../../pages/SalesPage/FormSales";
 import FormSalesGroup from "../../pages/SalesGroupPage/FormSalesGroup";
+import LogCs from "../organism/LogCs";
 
 const Modal = () => {
   const dataModal = useSelector(selectModal);
@@ -25,10 +26,10 @@ const Modal = () => {
       <Wrapper onClick={closeModal} active={dataModal.active}></Wrapper>
       <Content
         active={dataModal.active}
-        width="40%"
+        width={dataModal.width ? dataModal.width : "40%"}
         height="auto"
         maxHeight="85%"
-        left="30%"
+        left={dataModal.left ? dataModal.left : "30%"}
       >
         <HeaderContent>
           <CloseIcon
@@ -59,6 +60,9 @@ const Modal = () => {
           )}
           {dataModal.page === "createSalesGroup" && !dataModal.isLoading && (
             <FormSalesGroup data={dataModal.data} />
+          )}
+          {dataModal.page === "logContact" && !dataModal.isLoading && (
+            <LogCs data={dataModal.data} />
           )}
         </MainContent>
       </Content>

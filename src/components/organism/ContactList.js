@@ -4,10 +4,13 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CloseIcon from "@mui/icons-material/Close";
 import { API_URI } from "../../utils";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import { modalSet } from "../../redux/slices/ModalSlice";
 const axios = require("axios");
 const Swal = require("sweetalert2");
 
 const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
+  const dispatch = useDispatch();
   const deleteContact = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -266,7 +269,23 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
                       >
                         Delete
                       </Button>
-                      <Button bg="#343A40">Log Sales</Button>
+                      <Button
+                        bg="#343A40"
+                        onClick={() => {
+                          dispatch(
+                            modalSet({
+                              active: true,
+                              page: "logContact",
+                              data: { item },
+                              width: "70%",
+                              left: "15%",
+                              isLoading: false,
+                            })
+                          );
+                        }}
+                      >
+                        Log Sales
+                      </Button>
                     </td>
                   </tr>
                 ))}
