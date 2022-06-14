@@ -55,6 +55,13 @@ const SettingsPage = () => {
         setUsers(data);
         setIsLoading(false);
       });
+      return () => {
+        socket.off("message");
+        socket.off("qr");
+        socket.off("ready");
+        socket.off("authenticated");
+        socket.off("init");
+      };
     }, []);
 
     const filterUser = (data) => {

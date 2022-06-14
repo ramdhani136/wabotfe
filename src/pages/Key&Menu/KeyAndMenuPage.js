@@ -77,6 +77,11 @@ const ViewKeyMenu = () => {
       setKeys(data);
       setIsLoadingKey(false);
     });
+
+    return () => {
+      socket.off("menus");
+      socket.off("keys");
+    };
   }, []);
 
   const filterKey = (data) => {

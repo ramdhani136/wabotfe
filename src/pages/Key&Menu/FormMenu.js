@@ -66,6 +66,9 @@ const FormMenu = ({ data }) => {
       });
       setValue({ name: data.item.name, status: data.item.status ? "1" : "0" });
     }
+    return () => {
+      socket.off("init");
+    };
   }, []);
 
   // useEffect(() => {

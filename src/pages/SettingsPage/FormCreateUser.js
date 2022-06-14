@@ -67,6 +67,9 @@ const FormCreateUser = () => {
     socket.on("init", (data) => {
       setUsers(data);
     });
+    return () => {
+      socket.off("init");
+    };
   }, []);
 
   // useEffect(() => {

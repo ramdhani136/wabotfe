@@ -1109,6 +1109,11 @@ const FormCreateAr = ({ data }) => {
       setValuePrevMenu(data.item.prevMenu.name);
       setTypeAction("update");
     }
+
+    return () => {
+      socket.off("salesgroup");
+      socket.off("sales");
+    };
   }, []);
   return (
     <Wrapper>

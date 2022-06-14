@@ -61,6 +61,10 @@ const ViewAutoReply = () => {
       setBots(data);
       setIsLoading(false);
     });
+
+    return () => {
+      socket.off("bots");
+    };
   }, []);
 
   return (

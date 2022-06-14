@@ -22,6 +22,10 @@ const LogCs = ({ data }) => {
     });
   }, []);
 
+  const test = () => {
+    console.log(new Date().toLocaleString());
+  };
+
   return (
     <>
       {isLoading ? (
@@ -31,6 +35,7 @@ const LogCs = ({ data }) => {
       ) : (
         <Wrapper>
           <div
+            onClick={test}
             style={{
               textAlign: "center",
               height: "30px",

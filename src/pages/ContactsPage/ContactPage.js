@@ -45,6 +45,10 @@ const ViewContact = () => {
       setContacts(data);
       setIsLoading(false);
     });
+
+    return () => {
+      socket.off("customers");
+    };
   }, []);
 
   return (
