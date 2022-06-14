@@ -277,8 +277,8 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
                               active: true,
                               page: "logContact",
                               data: { item },
-                              width: "70%",
-                              left: "15%",
+                              width: "80%",
+                              left: "10%",
                               isLoading: false,
                             })
                           );

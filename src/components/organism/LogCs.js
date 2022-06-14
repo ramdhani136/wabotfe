@@ -167,6 +167,16 @@ const LogCs = ({ data }) => {
                           border: "solid 1px #e5e7ef",
                           textAlign: "center",
                           marginLeft: "10px",
+                          width: "20%",
+                        }}
+                      >
+                        Catatan
+                      </th>
+                      <th
+                        style={{
+                          border: "solid 1px #e5e7ef",
+                          textAlign: "center",
+                          marginLeft: "10px",
                           width: "12%",
                         }}
                       >
@@ -258,6 +268,16 @@ const LogCs = ({ data }) => {
                           />
 
                           <a>{item.status ? "Close" : "Open"}</a>
+                        </td>
+                        <td
+                          style={{
+                            textAlign: "center",
+                            border: "solid 1px #e5e7ef",
+                          }}
+                        >
+                          {item.keterangan === null || item.keterangan === ""
+                            ? "Not Set"
+                            : item.keterangan}
                         </td>
                         <td
                           style={{
