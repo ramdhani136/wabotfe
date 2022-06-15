@@ -11,6 +11,7 @@ const SeacrhMenu = () => {
   const Menus = [
     { nama: "Dashboard", uri: "/" },
     { nama: "Contacts", uri: "/contact" },
+    { nama: "Log CS", uri: "/logcs" },
     // { nama: "Send Message", uri: "/send_message" },
     { nama: "Auto Reply", uri: "/bot" },
     // { nama: "Broadcast", uri: "/Broadcast" },

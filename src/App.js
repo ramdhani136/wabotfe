@@ -8,6 +8,7 @@ import {
   SalesGroupPage,
   SalesPage,
   SettingsPage,
+  LogCs,
 } from "./pages";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/bot" element={<AutoReply />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/Logcs" element={<LogCs />} />
           <Route path="/key&menu" element={<KeyAndMenuPage />} />
           <Route path="/sales" element={<SalesPage />} />
           <Route path="/salesgroup" element={<SalesGroupPage />} />

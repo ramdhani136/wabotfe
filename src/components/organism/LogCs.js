@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import CloseIcon from "@mui/icons-material/Close";
+// import CloseIcon from "@mui/icons-material/Close";
 import { API_URI } from "../../utils";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import ReactLoading from "react-loading";
-import { modalSet } from "../../redux/slices/ModalSlice";
+// import { modalSet } from "../../redux/slices/ModalSlice";
 const axios = require("axios");
-const Swal = require("sweetalert2");
+// const Swal = require("sweetalert2");
 
 const LogCs = ({ data }) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [logCs, setLogCs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -220,7 +220,6 @@ const LogCs = ({ data }) => {
                           style={{
                             textAlign: "left",
                             border: "solid 1px #e5e7ef",
-                            textAlign: "center",
                           }}
                         >
                           {item.name}
@@ -261,7 +260,6 @@ const LogCs = ({ data }) => {
                           style={{
                             textAlign: "center",
                             border: "solid 1px #e5e7ef",
-                            textAlign: "center",
                           }}
                         >
                           <FiberManualRecordIcon
@@ -299,7 +297,7 @@ const LogCs = ({ data }) => {
                           }}
                         >
                           {item.closeAt !== null
-                            ? moment(item.updatedAt).format("LLL")
+                            ? moment(item.closeAt).format("LLL")
                             : "Not Set"}
                         </td>
                       </tr>
@@ -336,22 +334,22 @@ const Content = styled.div`
   flex: 1;
 `;
 
-const Button = styled.div`
-  padding: 5px 10px 5px 10px;
-  float: left;
-  margin-right: 5px;
-  border-radius: 3px;
-  margin-bottom: 5px;
-  font-size: 0.9em;
-  color: #fff;
-  cursor: pointer;
-  background-color: ${(props) => props.bg};
-  opacity: 0.9;
-  :hover {
-    transform: scale(1.025);
-    opacity: 1;
-  }
-`;
+// const Button = styled.div`
+//   padding: 5px 10px 5px 10px;
+//   float: left;
+//   margin-right: 5px;
+//   border-radius: 3px;
+//   margin-bottom: 5px;
+//   font-size: 0.9em;
+//   color: #fff;
+//   cursor: pointer;
+//   background-color: ${(props) => props.bg};
+//   opacity: 0.9;
+//   :hover {
+//     transform: scale(1.025);
+//     opacity: 1;
+//   }
+// `;
 
 const Loading = styled.div`
   width: 99%;

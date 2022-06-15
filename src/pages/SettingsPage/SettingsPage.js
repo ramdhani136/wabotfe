@@ -6,10 +6,11 @@ import Brightness1Icon from "@mui/icons-material/Brightness1";
 import { UserList } from "../../components/moleculs";
 import ReactLoading from "react-loading";
 import { io } from "socket.io-client";
-import { SOCKET_URI } from "../../utils";
+import { API_URI, SOCKET_URI } from "../../utils";
 import _ from "lodash";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
+import axios from "axios";
 
 const SettingsPage = () => {
   const ViewSettings = () => {
@@ -128,7 +129,12 @@ const SettingsPage = () => {
                   </div>
                 </Status>
                 <WrappButton>
-                  <Button bg="#AB372C">Logout</Button>
+                  <Button
+                    bg="#AB372C"
+                    onClick={() => axios.get(`${API_URI}logout`)}
+                  >
+                    Logout
+                  </Button>
                   <Button bg="#3A55A5">Scan QR code</Button>
                   <Button bg="#159365">Check Status</Button>
                 </WrappButton>

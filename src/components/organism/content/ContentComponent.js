@@ -2,11 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+// import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
-import SendIcon from "@mui/icons-material/Send";
-import GroupIcon from "@mui/icons-material/Group";
-import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
+// import SendIcon from "@mui/icons-material/Send";
+// import GroupIcon from "@mui/icons-material/Group";
+import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
+// import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { useNavigate } from "react-router-dom";
 import KeyIcon from "@mui/icons-material/Key";
@@ -18,6 +19,7 @@ const ContentComponent = ({ Page }) => {
   const Menus = [
     { Icon: DashboardIcon, nama: "Dashboard", uri: "/" },
     { Icon: ContactPageIcon, nama: "Contacts", uri: "/contact" },
+    { Icon: ConnectWithoutContactIcon, nama: "Log CS", uri: "/logcs" },
     // { Icon: WhatsAppIcon, nama: "Send Message", uri: "/send_message" },
     { Icon: KeyIcon, nama: "Keys & Menu", uri: "/key&menu" },
     { Icon: ReplyAllIcon, nama: "Auto Reply", uri: "/bot" },
