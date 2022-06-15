@@ -5,8 +5,8 @@ import styled from "styled-components";
 import ArList from "../../components/organism/ArList";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
-import axios from "axios";
-import { API_URI, SOCKET_URI } from "../../utils/index";
+// import axios from "axios";
+import { SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
 import { io } from "socket.io-client";
@@ -70,7 +70,9 @@ const ViewAutoReply = () => {
   return (
     <Wrapper>
       <Title>
-        <Tleft>Auto reply list</Tleft>
+        <Tleft>
+          Auto reply list ({filterData(bots).length} of {bots.length})
+        </Tleft>
         <Tright>
           <Button onClick={openModal}>Create new</Button>
         </Tright>

@@ -4,8 +4,8 @@ import Layout from "../../components/organism/layout/Layout";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
-import axios from "axios";
-import { API_URI, SOCKET_URI } from "../../utils/index";
+// import axios from "axios";
+import { SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
 import KeyList from "../../components/organism/KeyList";
@@ -108,7 +108,9 @@ const ViewKeyMenu = () => {
     <Wrapper>
       <KeysComponent>
         <Header>
-          <Tleft>Key List</Tleft>
+          <Tleft>
+            Key List ({filterKey(keys).length} of {keys.length})
+          </Tleft>
           <Tright>
             <Button onClick={openModalKey}>Create new</Button>
           </Tright>
@@ -131,7 +133,9 @@ const ViewKeyMenu = () => {
       </KeysComponent>
       <MenuComponent>
         <Header>
-          <Tleft>Menu list</Tleft>
+          <Tleft>
+            Menu list ({filterMenu(menus).length} of {menus.length})
+          </Tleft>
           <Tright>
             <Button onClick={openModalMenu}>Create new</Button>
           </Tright>

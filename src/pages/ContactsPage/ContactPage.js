@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Layout from "../../components/organism/layout/Layout";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { modalSet } from "../../redux/slices/ModalSlice";
-import axios from "axios";
-import { API_URI, SOCKET_URI } from "../../utils/index";
+// import { useDispatch } from "react-redux";
+// import { modalSet } from "../../redux/slices/ModalSlice";
+// import axios from "axios";
+import { SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
 import ContactList from "../../components/organism/ContactList";
@@ -19,11 +19,11 @@ const ViewContact = () => {
     },
   });
   const [contacts, setContacts] = useState([]);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [value, setValue] = useState("");
-  const openModal = () => {
-    dispatch(modalSet({ active: true, page: "createContact" }));
-  };
+  // const openModal = () => {
+  //   dispatch(modalSet({ active: true, page: "createContact" }));
+  // };
   const [isLoading, setIsLoading] = useState(true);
 
   const getValue = (e) => {
@@ -55,7 +55,11 @@ const ViewContact = () => {
     <Wrapper>
       <Title>
         <Tleft>Contact list</Tleft>
-        <Tright>{/* <Button onClick={openModal}>Create new</Button> */}</Tright>
+        <Tright>
+          <b>
+            {filterData(contacts).length} of {contacts.length}
+          </b>
+        </Tright>
       </Title>
       <Content>
         {isLoading ? (
@@ -130,25 +134,25 @@ const Tright = styled.div`
   display: flex;
 `;
 
-const Button = styled.div`
-  padding: 5px;
-  padding-left: 7px;
-  padding-right: 7px;
-  width: auto;
-  border: solid 1px red;
-  font-size: 0.9em;
-  text-align: center;
-  border-radius: 3px;
-  background-color: #00a884;
-  border: solid 1px #107550;
-  color: #fff;
-  opacity: 0.8;
-  :hover {
-    cursor: pointer;
-    opacity: 1;
-    transform: scale(1.005);
-  }
-`;
+// const Button = styled.div`
+//   padding: 5px;
+//   padding-left: 7px;
+//   padding-right: 7px;
+//   width: auto;
+//   border: solid 1px red;
+//   font-size: 0.9em;
+//   text-align: center;
+//   border-radius: 3px;
+//   background-color: #00a884;
+//   border: solid 1px #107550;
+//   color: #fff;
+//   opacity: 0.8;
+//   :hover {
+//     cursor: pointer;
+//     opacity: 1;
+//     transform: scale(1.005);
+//   }
+// `;
 
 const Loading = styled.div`
   width: 100%;

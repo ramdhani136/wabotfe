@@ -52,7 +52,9 @@ const ViewContact = () => {
   return (
     <Wrapper>
       <Title>
-        <Tleft>Sales list</Tleft>
+        <Tleft>
+          Sales list ({filterData(sales).length} of {sales.length})
+        </Tleft>
         <Tright>
           <Button onClick={openModal}>Create new</Button>
         </Tright>

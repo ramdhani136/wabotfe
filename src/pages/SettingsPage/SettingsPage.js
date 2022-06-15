@@ -48,7 +48,7 @@ const SettingsPage = () => {
       });
 
       socket.on("init", (data) => {
-        const isUser = data.filter((dt) => dt.id === 1);
+        // const isUser = data.filter((dt) => dt.id === 1);
         // if (qr === "") {
         //   setStatus("Whatsapp is ready ...");
         // }
@@ -85,7 +85,9 @@ const SettingsPage = () => {
             <BtnAddUser onClick={openModal}>Add User</BtnAddUser>
 
             <WrapUser>
-              <Title>User Data</Title>
+              <Title>
+                User Data ({filterUser(users).length} of {users.length})
+              </Title>
               {isLoading ? (
                 <Loading>
                   <ReactLoading type="spin" color="#e5e7ef" />
