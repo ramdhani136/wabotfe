@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Layout from "../../components/organism/layout/Layout";
 import { Helmet } from "react-helmet";
-
 const HomePage = () => {
   const ViewHome = () => {
     return <Wrapper>Halaman Home</Wrapper>;

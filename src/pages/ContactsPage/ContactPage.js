@@ -5,11 +5,12 @@ import styled from "styled-components";
 // import { useDispatch } from "react-redux";
 // import { modalSet } from "../../redux/slices/ModalSlice";
 // import axios from "axios";
-import { SOCKET_URI } from "../../utils/index";
+import { API_URI, SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
 import ContactList from "../../components/organism/ContactList";
 import { io } from "socket.io-client";
+import axios from "axios";
 
 const ViewContact = () => {
   const socket = io(SOCKET_URI, {
@@ -41,11 +42,16 @@ const ViewContact = () => {
   };
 
   useEffect(() => {
-    socket.on("customers", (data) => {
-      setContacts(data);
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${localStorage.getItem("token")}`;
+    axios.get(`${API_URI}customer`).then((response) => {
+      setContacts(response.data);
       setIsLoading(false);
+      socket.on("customers", (data) => {
+        setContacts(data);
+      });
     });
-
     return () => {
       socket.off("customers");
     };

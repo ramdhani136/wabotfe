@@ -10,3 +10,4 @@ export { default as SalesGroupPage } from "./SalesGroupPage/SalesGroupPage";
 export { default as FormSales } from "./SalesPage/FormSales";
 export { default as FormSalesGroup } from "./SalesGroupPage/FormSalesGroup";
 export { default as LogCs } from "./LogCS/LogCs";
+export { default as Login } from "./Login";

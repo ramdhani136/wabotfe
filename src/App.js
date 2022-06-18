@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import {
   AutoReply,
@@ -9,6 +9,7 @@ import {
   SalesPage,
   SettingsPage,
   LogCs,
+  Login,
 } from "./pages";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
@@ -19,6 +20,7 @@ const App = () => {
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
+          <Route path="/login" element={<Login />} />
           <Route path="/" element={<HomePage />} exact={true} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/bot" element={<AutoReply />} />

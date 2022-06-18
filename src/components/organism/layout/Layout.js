@@ -4,8 +4,35 @@ import HeaderComponent from "../header/HeaderComponent";
 // import FooterComponent from "../footer/FooterComponent";
 import ContentComponent from "../content/ContentComponent";
 import { Modal } from "../../moleculs";
+import { useEffect } from "react";
+import { refreshToken } from "../../../utils/refreshToken";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 const Layout = ({ Component }) => {
+  const history = useNavigate();
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      //redirect page dashboard
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please login !!",
+      });
+      history("/login");
+    }
+    axios
+      .get(`http://localhost:5000/users/token`)
+      .then((response) => {
+        localStorage.setItem("token", response.data.accessToken);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+  });
+
   return (
     <>
       <Modal />

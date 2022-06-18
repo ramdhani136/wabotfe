@@ -6,10 +6,11 @@ import ArList from "../../components/organism/ArList";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 // import axios from "axios";
-import { SOCKET_URI } from "../../utils/index";
+import { API_URI, SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
 import { io } from "socket.io-client";
+import axios from "axios";
 
 const ViewAutoReply = () => {
   const [bots, setBots] = useState([]);
@@ -57,10 +58,21 @@ const ViewAutoReply = () => {
   };
 
   useEffect(() => {
-    socket.on("bots", (data) => {
-      setBots(data);
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${localStorage.getItem("token")}`;
+    axios.get(`${API_URI}bots`).then((response) => {
+      setBots(response.data);
       setIsLoading(false);
+      socket.on("bots", (data) => {
+        setBots(data);
+      });
     });
+
+    // socket.on("bots", (data) => {
+    //   setBots(data);
+    //   setIsLoading(false);
+    // });
 
     return () => {
       socket.off("bots");

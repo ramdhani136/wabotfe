@@ -4,11 +4,12 @@ import Layout from "../../components/organism/layout/Layout";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
-import { SOCKET_URI } from "../../utils/index";
+import { API_URI, SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
 import { io } from "socket.io-client";
 import SalesGroupList from "../../components/organism/SalesGroupList";
+import axios from "axios";
 
 const ViewContact = () => {
   const socket = io(SOCKET_URI, {
@@ -40,10 +41,20 @@ const ViewContact = () => {
   };
 
   useEffect(() => {
-    socket.on("salesgroup", (data) => {
-      setSalesGroup(data);
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${localStorage.getItem("token")}`;
+    axios.get(`${API_URI}salesgroup`).then((response) => {
+      setSalesGroup(response.data);
       setIsLoading(false);
+      socket.on("salesgroup", (data) => {
+        setSalesGroup(data);
+      });
     });
+    // socket.on("salesgroup", (data) => {
+    //   setSalesGroup(data);
+    //   setIsLoading(false);
+    // });
     return () => {
       socket.off("salesgroup");
     };

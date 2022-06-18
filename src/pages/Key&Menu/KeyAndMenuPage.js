@@ -5,12 +5,13 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 // import axios from "axios";
-import { SOCKET_URI } from "../../utils/index";
+import { API_URI, SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
 import KeyList from "../../components/organism/KeyList";
 import MenuList from "../../components/organism/MenuList";
 import { io } from "socket.io-client";
+import axios from "axios";
 
 const ViewKeyMenu = () => {
   const socket = io(SOCKET_URI, {
@@ -19,6 +20,9 @@ const ViewKeyMenu = () => {
       "react-client": "react-client",
     },
   });
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${localStorage.getItem("token")}`;
   const [keys, setKeys] = useState([]);
   const [menus, setMenu] = useState([]);
   const dispatch = useDispatch();
@@ -66,17 +70,32 @@ const ViewKeyMenu = () => {
   };
 
   useEffect(() => {
-    // getKeys();
-    // getMenu();
-    socket.on("menus", (data) => {
-      setMenu(data);
+    axios.get(`${API_URI}menu`).then((response) => {
+      setMenu(response.data);
       setIsLoadingMenu(false);
+      socket.on("menus", (data) => {
+        setMenu(data);
+      });
     });
 
-    socket.on("keys", (data) => {
-      setKeys(data);
+    axios.get(`${API_URI}key`).then((response) => {
+      setKeys(response.data);
       setIsLoadingKey(false);
+      socket.on("keys", (data) => {
+        setKeys(data);
+      });
     });
+    // getKeys();
+    // getMenu();
+    // socket.on("menus", (data) => {
+    //   setMenu(data);
+    //   setIsLoadingMenu(false);
+    // });
+
+    // socket.on("keys", (data) => {
+    //   setKeys(data);
+    //   setIsLoadingKey(false);
+    // });
 
     return () => {
       socket.off("menus");

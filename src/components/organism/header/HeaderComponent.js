@@ -1,9 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { SeacrhMenu } from "../../moleculs";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import axios from "axios";
+import { API_URI } from "../../../utils";
+import { useNavigate } from "react-router-dom";
+import { refreshToken } from "../../../utils/refreshToken";
+import Swal from "sweetalert2";
 
 const HeaderComponent = () => {
+  const [users, setUsers] = useState({});
+  const navigate = useNavigate();
+  const logout = () => {
+    axios.delete(`${API_URI}users/logout`).then((res) => {
+      localStorage.removeItem("token");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Logout successfully!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate("/login");
+    });
+  };
+
+  useEffect(() => {
+    // const getUsers = async () => {
+    //   const isData = await refreshToken();
+    //   isData && setUsers(isData);
+    // };
+    // getUsers();
+  }, []);
+
   return (
     <Wrapper>
       <Logo>WAblast</Logo>
@@ -16,7 +45,9 @@ const HeaderComponent = () => {
           color: "gray",
         }}
       >
-        <a style={{ fontSize: "0.9em" }}>Administrator</a>
+        <a onClick={logout} style={{ fontSize: "0.9em" }}>
+          {/* {users && users.name} */} Administrator
+        </a>
         <ArrowDropDownIcon style={{ fontSize: "20px", marginTop: "5px" }} />
       </div>
     </Wrapper>

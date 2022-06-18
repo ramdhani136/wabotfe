@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Layout from "../../components/organism/layout/Layout";
 import styled from "styled-components";
-import { SOCKET_URI } from "../../utils/index";
+import { API_URI, SOCKET_URI } from "../../utils/index";
 import _ from "lodash";
 import ReactLoading from "react-loading";
 import { io } from "socket.io-client";
 import { LogCsList } from "../../components/organism";
+import axios from "axios";
 
 const ViewLog = () => {
   const socket = io(SOCKET_URI, {
@@ -38,12 +39,16 @@ const ViewLog = () => {
   };
 
   useEffect(() => {
-    socket.on("logcs", (data) => {
-      setLogCs(data);
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${localStorage.getItem("token")}`;
+    axios.get(`${API_URI}logcs`).then((response) => {
+      setLogCs(response.data);
       setIsLoading(false);
-      console.log(data);
+      socket.on("logcs", (data) => {
+        setLogCs(data);
+      });
     });
-
     return () => {
       socket.off("logcs");
     };
