@@ -5,7 +5,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import axios from "axios";
 import { API_URI } from "../../../utils";
 import { useNavigate } from "react-router-dom";
-import { refreshToken } from "../../../utils/refreshToken";
+
 import Swal from "sweetalert2";
 
 const HeaderComponent = () => {

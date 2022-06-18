@@ -11,7 +11,7 @@ import ReactLoading from "react-loading";
 import KeyList from "../../components/organism/KeyList";
 import MenuList from "../../components/organism/MenuList";
 import { io } from "socket.io-client";
-import axios from "axios";
+import { FetchApi } from "../../utils/FetchApi";
 
 const ViewKeyMenu = () => {
   const socket = io(SOCKET_URI, {
@@ -20,9 +20,6 @@ const ViewKeyMenu = () => {
       "react-client": "react-client",
     },
   });
-  axios.defaults.headers.common[
-    "Authorization"
-  ] = `Bearer ${localStorage.getItem("token")}`;
   const [keys, setKeys] = useState([]);
   const [menus, setMenu] = useState([]);
   const dispatch = useDispatch();
@@ -37,29 +34,6 @@ const ViewKeyMenu = () => {
   };
   const [isLoadingKey, setIsLoadingKey] = useState(true);
   const [isLoadingMenu, setIsLoadingMenu] = useState(true);
-  // const getKeys = () => {
-  //   axios
-  //     .get(`${API_URI}key`)
-  //     .then((res) => {
-  //       setKeys(res.data);
-  //       setIsLoadingKey(false);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // };
-
-  // const getMenu = () => {
-  //   axios
-  //     .get(`${API_URI}menu`)
-  //     .then((res) => {
-  //       setMenu(res.data);
-  //       setIsLoadingMenu(false);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // };
 
   const getValueKey = (e) => {
     setValueKey(e);
@@ -70,7 +44,9 @@ const ViewKeyMenu = () => {
   };
 
   useEffect(() => {
-    axios.get(`${API_URI}menu`).then((response) => {
+    FetchApi.get(`${API_URI}menu`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }).then((response) => {
       setMenu(response.data);
       setIsLoadingMenu(false);
       socket.on("menus", (data) => {
@@ -78,24 +54,15 @@ const ViewKeyMenu = () => {
       });
     });
 
-    axios.get(`${API_URI}key`).then((response) => {
+    FetchApi.get(`${API_URI}key`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }).then((response) => {
       setKeys(response.data);
       setIsLoadingKey(false);
       socket.on("keys", (data) => {
         setKeys(data);
       });
     });
-    // getKeys();
-    // getMenu();
-    // socket.on("menus", (data) => {
-    //   setMenu(data);
-    //   setIsLoadingMenu(false);
-    // });
-
-    // socket.on("keys", (data) => {
-    //   setKeys(data);
-    //   setIsLoadingKey(false);
-    // });
 
     return () => {
       socket.off("menus");

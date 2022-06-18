@@ -7,7 +7,7 @@ import _ from "lodash";
 import ReactLoading from "react-loading";
 import { io } from "socket.io-client";
 import { LogCsList } from "../../components/organism";
-import axios from "axios";
+import { FetchApi } from "../../utils/FetchApi";
 
 const ViewLog = () => {
   const socket = io(SOCKET_URI, {
@@ -39,10 +39,9 @@ const ViewLog = () => {
   };
 
   useEffect(() => {
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${localStorage.getItem("token")}`;
-    axios.get(`${API_URI}logcs`).then((response) => {
+    FetchApi.get(`${API_URI}logcs`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }).then((response) => {
       setLogCs(response.data);
       setIsLoading(false);
       socket.on("logcs", (data) => {

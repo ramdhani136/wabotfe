@@ -11,6 +11,7 @@ import ReactLoading from "react-loading";
 import ContactList from "../../components/organism/ContactList";
 import { io } from "socket.io-client";
 import axios from "axios";
+import { FetchApi } from "../../utils/FetchApi";
 
 const ViewContact = () => {
   const socket = io(SOCKET_URI, {
@@ -42,10 +43,9 @@ const ViewContact = () => {
   };
 
   useEffect(() => {
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${localStorage.getItem("token")}`;
-    axios.get(`${API_URI}customer`).then((response) => {
+    FetchApi.get(`${API_URI}customer`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }).then((response) => {
       setContacts(response.data);
       setIsLoading(false);
       socket.on("customers", (data) => {

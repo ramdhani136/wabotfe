@@ -11,6 +11,7 @@ import _ from "lodash";
 import ReactLoading from "react-loading";
 import { io } from "socket.io-client";
 import axios from "axios";
+import { FetchApi } from "../../utils/FetchApi";
 
 const ViewAutoReply = () => {
   const [bots, setBots] = useState([]);
@@ -58,10 +59,9 @@ const ViewAutoReply = () => {
   };
 
   useEffect(() => {
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${localStorage.getItem("token")}`;
-    axios.get(`${API_URI}bots`).then((response) => {
+    FetchApi.get(`${API_URI}bots`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }).then((response) => {
       setBots(response.data);
       setIsLoading(false);
       socket.on("bots", (data) => {

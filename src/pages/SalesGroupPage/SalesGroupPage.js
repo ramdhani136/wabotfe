@@ -9,7 +9,7 @@ import _ from "lodash";
 import ReactLoading from "react-loading";
 import { io } from "socket.io-client";
 import SalesGroupList from "../../components/organism/SalesGroupList";
-import axios from "axios";
+import { FetchApi } from "../../utils/FetchApi";
 
 const ViewContact = () => {
   const socket = io(SOCKET_URI, {
@@ -41,10 +41,9 @@ const ViewContact = () => {
   };
 
   useEffect(() => {
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${localStorage.getItem("token")}`;
-    axios.get(`${API_URI}salesgroup`).then((response) => {
+    FetchApi.get(`${API_URI}salesgroup`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }).then((response) => {
       setSalesGroup(response.data);
       setIsLoading(false);
       socket.on("salesgroup", (data) => {

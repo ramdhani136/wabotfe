@@ -5,11 +5,11 @@ import HeaderComponent from "../header/HeaderComponent";
 import ContentComponent from "../content/ContentComponent";
 import { Modal } from "../../moleculs";
 import { useEffect } from "react";
-import { refreshToken } from "../../../utils/refreshToken";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { API_URI } from "../../../utils";
 
 const Layout = ({ Component }) => {
   const history = useNavigate();
@@ -23,15 +23,32 @@ const Layout = ({ Component }) => {
       });
       history("/login");
     }
+    const fetchAPI = axios.create({});
+
+    fetchAPI.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem("token");
+        return {
+          ...config,
+          headers: {
+            ...config.headers,
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+      (error) => {
+        Promise.reject(error);
+      }
+    );
     axios
-      .get(`http://localhost:5000/users/token`)
+      .get(`${API_URI}users/token`)
       .then((response) => {
         localStorage.setItem("token", response.data.accessToken);
       })
       .catch((error) => {
         console.log(error.response.data);
       });
-  });
+  }, []);
 
   return (
     <>
