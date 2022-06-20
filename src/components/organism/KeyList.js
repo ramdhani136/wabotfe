@@ -5,7 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { API_URI } from "../../utils";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
-const axios = require("axios");
+import { FetchApi } from "../../utils/FetchApi";
 const Swal = require("sweetalert2");
 
 const KeyList = ({ data, getValue, setValue, value, setIsLoading }) => {
@@ -22,8 +22,7 @@ const KeyList = ({ data, getValue, setValue, value, setIsLoading }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         setIsLoading(true);
-        axios
-          .delete(`${API_URI}key/${id}`)
+        FetchApi.delete(`${API_URI}key/${id}`)
           .then((res) => {
             console.log("delete");
 

@@ -41,13 +41,6 @@ const LoginPage = () => {
       //redirect page dashboard
       history("/");
     }
-    // const getUsers = async () => {
-    //   const login = await refreshToken();
-    //   if (login) {
-    //     history("/");
-    //   }
-    // };
-    // getUsers();
   }, []);
 
   return (

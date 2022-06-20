@@ -9,10 +9,10 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import AddIcon from "@mui/icons-material/Add";
 import Swal from "sweetalert2";
 import { API_URI, SOCKET_URI } from "../../utils/";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 import { io } from "socket.io-client";
+import { FetchApi } from "../../utils/FetchApi";
 
 const FormCreateAr = ({ data }) => {
   const socket = io(SOCKET_URI, {
@@ -83,8 +83,7 @@ const FormCreateAr = ({ data }) => {
   const [otherValid, setOtherValid] = useState(false);
 
   const setAllKeys = () => {
-    axios
-      .get(`${API_URI}key`)
+    FetchApi.get(`${API_URI}key`)
       .then((res) => {
         setKeys(res.data);
       })
@@ -94,8 +93,7 @@ const FormCreateAr = ({ data }) => {
   };
 
   const setAllMenu = () => {
-    axios
-      .get(`${API_URI}menu`)
+    FetchApi.get(`${API_URI}menu`)
       .then((res) => {
         setMenus(res.data);
       })
@@ -326,8 +324,7 @@ const FormCreateAr = ({ data }) => {
         (key) => key.name.toLowerCase() === valueCreateKey.toLocaleLowerCase()
       );
       if (isDupl.length < 1) {
-        axios
-          .post(`${API_URI}key`, { name: valueCreateKey })
+        FetchApi.post(`${API_URI}key`, { name: valueCreateKey })
           .then((result) => {
             setValueCreateKey("");
             setAllKeys();
@@ -362,8 +359,7 @@ const FormCreateAr = ({ data }) => {
           menu.name.toLowerCase() === valueCreateMenu.toLocaleLowerCase()
       );
       if (isDupl.length < 1) {
-        axios
-          .post(`${API_URI}menu`, { name: valueCreateMenu })
+        FetchApi.post(`${API_URI}menu`, { name: valueCreateMenu })
           .then((result) => {
             setValueCreateMenu("");
             setAllMenu();
@@ -398,8 +394,7 @@ const FormCreateAr = ({ data }) => {
           menu.name.toLowerCase() === valueCreateNext.toLocaleLowerCase()
       );
       if (isDupl.length < 1) {
-        axios
-          .post(`${API_URI}menu`, { name: valueCreateNext })
+        FetchApi.post(`${API_URI}menu`, { name: valueCreateNext })
           .then((result) => {
             setValueCreateNext("");
             setAllMenu();
@@ -516,16 +511,15 @@ const FormCreateAr = ({ data }) => {
               isLoading: true,
             })
           );
-          axios
-            .post(`${API_URI}bots`, {
-              ...valueData,
-              interest: updateData[0].value,
-              city: updateData[1].value,
-            })
+          FetchApi.post(`${API_URI}bots`, {
+            ...valueData,
+            interest: updateData[0].value,
+            city: updateData[1].value,
+          })
             .then((res) => {
               if (uriFiles.length > 0) {
                 for (let i = 0; i < uriFiles.length; i++) {
-                  axios.post(`${API_URI}urifiles`, {
+                  FetchApi.post(`${API_URI}urifiles`, {
                     id_bot: res.data.id,
                     name: uriFiles[i].name,
                   });
@@ -563,7 +557,7 @@ const FormCreateAr = ({ data }) => {
               // Upload kontak sales
               if (contactData.length > 0) {
                 for (let i = 0; i < contactData.length; i++) {
-                  axios.post(`${API_URI}botcontact`, {
+                  FetchApi.post(`${API_URI}botcontact`, {
                     id_bot: res.data.id,
                     id_sales: contactData[i].id,
                   });
@@ -639,13 +633,12 @@ const FormCreateAr = ({ data }) => {
             })
           );
           let newContact = () => {
-            return axios
-              .delete(`${API_URI}botcontact/bot/${data.item.id}`)
+            return FetchApi.delete(`${API_URI}botcontact/bot/${data.item.id}`)
               .then((res) => {
                 // Upload kontak sales
                 if (contactData.length > 0) {
                   for (let i = 0; i < contactData.length; i++) {
-                    axios.post(`${API_URI}botcontact`, {
+                    FetchApi.post(`${API_URI}botcontact`, {
                       id_bot: data.item.id,
                       id_sales: contactData[i].id,
                     });
@@ -658,12 +651,11 @@ const FormCreateAr = ({ data }) => {
           };
 
           let newUri = () => {
-            return axios
-              .delete(`${API_URI}urifiles/bot/${data.item.id}`)
+            return FetchApi.delete(`${API_URI}urifiles/bot/${data.item.id}`)
               .then((res) => {
                 if (uriFiles.length > 0) {
                   for (let i = 0; i < uriFiles.length; i++) {
-                    axios.post(`${API_URI}urifiles`, {
+                    FetchApi.post(`${API_URI}urifiles`, {
                       id_bot: data.item.id,
                       name: uriFiles[i].name,
                     });
@@ -687,12 +679,11 @@ const FormCreateAr = ({ data }) => {
             //   setValue = { ...valueData };
             // }
 
-            axios
-              .put(`${API_URI}bots/${data.item.id}`, {
-                ...valueData,
-                interest: updateData[0].value,
-                city: updateData[1].value,
-              })
+            FetchApi.put(`${API_URI}bots/${data.item.id}`, {
+              ...valueData,
+              interest: updateData[0].value,
+              city: updateData[1].value,
+            })
               .then((res) => {
                 if (
                   JSON.stringify(editContact) !== JSON.stringify(contactData) &&

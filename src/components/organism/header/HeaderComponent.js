@@ -5,6 +5,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import axios from "axios";
 import { API_URI } from "../../../utils";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 import Swal from "sweetalert2";
 
@@ -26,11 +27,8 @@ const HeaderComponent = () => {
   };
 
   useEffect(() => {
-    // const getUsers = async () => {
-    //   const isData = await refreshToken();
-    //   isData && setUsers(isData);
-    // };
-    // getUsers();
+    const user = jwt_decode(localStorage.getItem("token"));
+    setUsers(user);
   }, []);
 
   return (
@@ -46,7 +44,7 @@ const HeaderComponent = () => {
         }}
       >
         <a onClick={logout} style={{ fontSize: "0.9em" }}>
-          {/* {users && users.name} */} Administrator
+          {users && users.name}
         </a>
         <ArrowDropDownIcon style={{ fontSize: "20px", marginTop: "5px" }} />
       </div>

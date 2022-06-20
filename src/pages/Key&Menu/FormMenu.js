@@ -5,8 +5,8 @@ import { API_URI, SOCKET_URI } from "../../utils";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 import { io } from "socket.io-client";
+import { FetchApi } from "../../utils/FetchApi";
 const Swal = require("sweetalert2");
-const axios = require("axios");
 
 const FormMenu = ({ data }) => {
   const defaultValue = { name: "", status: 1 };
@@ -95,8 +95,7 @@ const FormMenu = ({ data }) => {
           dispatch(
             modalSet({ active: true, page: "createKey", isLoading: true })
           );
-          axios
-            .post(`${API_URI}menu`, value)
+          FetchApi.post(`${API_URI}menu`, value)
             .then((res) => {
               dispatch(modalSet({ active: false, page: "", isLoading: false }));
               Swal.fire({
@@ -145,8 +144,7 @@ const FormMenu = ({ data }) => {
           dispatch(
             modalSet({ active: true, page: "createKey", isLoading: true })
           );
-          axios
-            .put(`${API_URI}menu/${data.item.id}`, value)
+          FetchApi.put(`${API_URI}menu/${data.item.id}`, value)
             .then((res) => {
               dispatch(modalSet({ active: false, page: "", isLoading: false }));
               Swal.fire({

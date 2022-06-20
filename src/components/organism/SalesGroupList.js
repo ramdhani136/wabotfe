@@ -6,7 +6,7 @@ import { API_URI } from "../../utils";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 import moment from "moment";
-const axios = require("axios");
+import { FetchApi } from "../../utils/FetchApi";
 const Swal = require("sweetalert2");
 
 const SalesGroupList = ({ data, getValue, setValue, value, setIsLoading }) => {
@@ -23,8 +23,7 @@ const SalesGroupList = ({ data, getValue, setValue, value, setIsLoading }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         setIsLoading(true);
-        axios
-          .delete(`${API_URI}salesgroup/${id}`)
+        FetchApi.delete(`${API_URI}salesgroup/${id}`)
           .then((res) => {
             console.log("delete");
 

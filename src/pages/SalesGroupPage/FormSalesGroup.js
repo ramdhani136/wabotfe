@@ -6,9 +6,9 @@ import _ from "lodash";
 import AddIcon from "@mui/icons-material/Add";
 import Swal from "sweetalert2";
 import { API_URI } from "../../utils/";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
+import { FetchApi } from "../../utils/FetchApi";
 
 const FormSalesGroup = ({ data }) => {
   const defaultValue = { name: "", notes: "", status: 1 };
@@ -46,8 +46,7 @@ const FormSalesGroup = ({ data }) => {
         confirmButtonText: "Yes, save it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          axios
-            .post(`${API_URI}salesgroup`, valueData)
+          FetchApi.post(`${API_URI}salesgroup`, valueData)
             .then((res) => {
               dispatch(modalSet({ active: false, page: "", isLoading: false }));
               Swal.fire({
@@ -102,8 +101,7 @@ const FormSalesGroup = ({ data }) => {
               data: data,
             })
           );
-          axios
-            .put(`${API_URI}salesgroup/${data.item.id}`, valueData)
+          FetchApi.put(`${API_URI}salesgroup/${data.item.id}`, valueData)
             .then((res) => {
               dispatch(modalSet({ active: false, page: "", isLoading: true }));
               Swal.fire({

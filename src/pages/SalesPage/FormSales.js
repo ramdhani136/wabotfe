@@ -6,9 +6,9 @@ import _ from "lodash";
 import AddIcon from "@mui/icons-material/Add";
 import Swal from "sweetalert2";
 import { API_URI } from "../../utils/";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
+import { FetchApi } from "../../utils/FetchApi";
 
 const FormSales = ({ data }) => {
   const defaultValue = { name: "", id_group: "", phone: "", status: 1 };
@@ -44,8 +44,7 @@ const FormSales = ({ data }) => {
   }, []);
 
   const setAllGroup = () => {
-    axios
-      .get(`${API_URI}salesgroup`)
+    FetchApi.get(`${API_URI}salesgroup`)
       .then((res) => {
         setGroup(res.data);
       })
@@ -83,8 +82,7 @@ const FormSales = ({ data }) => {
         (group) => group.name.toLowerCase() === valueGroup.toLocaleLowerCase()
       );
       if (isDupl.length < 1) {
-        axios
-          .post(`${API_URI}salesgroup`, { name: valueCreateGroup })
+        FetchApi.post(`${API_URI}salesgroup`, { name: valueCreateGroup })
           .then((result) => {
             setValueCreateGroup("");
             setAllGroup();
@@ -169,8 +167,7 @@ const FormSales = ({ data }) => {
               isLoading: true,
             })
           );
-          axios
-            .post(`${API_URI}sales`, valueData)
+          FetchApi.post(`${API_URI}sales`, valueData)
             .then((res) => {
               dispatch(modalSet({ active: false, page: "", isLoading: false }));
               Swal.fire({
@@ -221,8 +218,7 @@ const FormSales = ({ data }) => {
               data: data,
             })
           );
-          axios
-            .put(`${API_URI}sales/${data.item.id}`, valueData)
+          FetchApi.put(`${API_URI}sales/${data.item.id}`, valueData)
             .then((res) => {
               dispatch(modalSet({ active: false, page: "", isLoading: false }));
               Swal.fire({

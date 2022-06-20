@@ -7,8 +7,8 @@ import moment from "moment";
 // import { useDispatch } from "react-redux";
 import ReactLoading from "react-loading";
 // import { modalSet } from "../../redux/slices/ModalSlice";
-const axios = require("axios");
 // const Swal = require("sweetalert2");
+import { FetchApi } from "../../utils/FetchApi";
 
 const LogCs = ({ data }) => {
   // const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const LogCs = ({ data }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`${API_URI}logcs/cust/${data.item.id}`).then((res) => {
+    FetchApi.get(`${API_URI}logcs/cust/${data.item.id}`).then((res) => {
       setLogCs(res.data);
       setIsLoading(false);
     });
