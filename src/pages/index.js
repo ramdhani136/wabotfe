@@ -11,3 +11,5 @@ export { default as FormSales } from "./SalesPage/FormSales";
 export { default as FormSalesGroup } from "./SalesGroupPage/FormSalesGroup";
 export { default as LogCs } from "./LogCS/LogCs";
 export { default as Login } from "./Login";
+export { default as UserPage } from "./UserPage/UserPage";
+export { default as FormUser } from "./UserPage/FormUser";

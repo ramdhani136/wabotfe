@@ -20,6 +20,7 @@ const SeacrhMenu = () => {
     // { nama: "Report", uri: "/report" },
     { nama: "Sales", uri: "/sales" },
     { nama: "Sales Group", uri: "/salesgroup" },
+    { nama: "Users", uri: "/users" },
     { nama: "Settings", uri: "/settings" },
   ];
 

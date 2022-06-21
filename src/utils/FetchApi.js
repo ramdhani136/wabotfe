@@ -1,6 +1,5 @@
 import axios from "axios";
 import { API_URI } from ".";
-import jwt_decode from "jwt-decode";
 
 const FetchApi = axios.create({});
 

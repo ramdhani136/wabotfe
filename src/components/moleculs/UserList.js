@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { API_URI } from "../../utils";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 const axios = require("axios");
 const Swal = require("sweetalert2");
 
@@ -37,7 +38,9 @@ const UserList = ({ data, setValue, setIsLoading }) => {
   return (
     <Wrapper>
       <Head>
-        <a style={{ fontSize: "0.9em", color: "gray" }}>Search :</a>
+        <a style={{ marginLeft: "20px", fontSize: "0.9em", color: "gray" }}>
+          Search :
+        </a>
         <Input onChange={(e) => setValue(e.target.value)} />
       </Head>
       <div
@@ -64,12 +67,13 @@ const UserList = ({ data, setValue, setIsLoading }) => {
                   border: "solid 1px #e5e7ef",
                   textAlign: "left",
                   marginLeft: "10px",
+                  width: "40%",
                 }}
               >
                 Name
               </th>
               <th style={{ border: "solid 1px #e5e7ef", textAlign: "left" }}>
-                Username
+                Status
               </th>
               <th style={{ border: "solid 1px #e5e7ef" }}>Action</th>
             </tr>
@@ -110,7 +114,15 @@ const UserList = ({ data, setValue, setIsLoading }) => {
                     <td
                       style={{ textAlign: "left", border: "solid 1px #e5e7ef" }}
                     >
-                      {user.username}
+                      <FiberManualRecordIcon
+                        style={{
+                          fontSize: "10px",
+                          marginRight: "3px",
+                          color: user.status ? "#98D85B" : "#F85B5B",
+                        }}
+                      />
+
+                      <a>{user.status ? "Active" : "Disabled"}</a>
                     </td>
                     <td
                       style={{
@@ -135,7 +147,7 @@ const UserList = ({ data, setValue, setIsLoading }) => {
 
 const Wrapper = styled.div`
   width: 96%;
-  margin-left: 2%;
+  margin-left: 1%;
   margin-top: 10px;
 `;
 

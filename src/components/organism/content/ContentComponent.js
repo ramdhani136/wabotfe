@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import KeyIcon from "@mui/icons-material/Key";
 import PeopleIcon from "@mui/icons-material/People";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 
 const ContentComponent = ({ Page }) => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const ContentComponent = ({ Page }) => {
     // { Icon: ReportGmailerrorredIcon, nama: "Report", uri: "/report" },
     { Icon: PeopleIcon, nama: "Sales", uri: "/sales" },
     { Icon: FolderSharedIcon, nama: "Sales Group", uri: "/salesgroup" },
+    { Icon: GroupAddIcon, nama: "Users", uri: "/users" },
     { Icon: AdminPanelSettingsIcon, nama: "Settings", uri: "/settings" },
   ];
 

@@ -12,6 +12,7 @@ import FormMenu from "../../pages/Key&Menu/FormMenu";
 import FormSales from "../../pages/SalesPage/FormSales";
 import FormSalesGroup from "../../pages/SalesGroupPage/FormSalesGroup";
 import LogCs from "../organism/LogCs";
+import { FormUser } from "../../pages";
 
 const Modal = () => {
   const dataModal = useSelector(selectModal);
@@ -63,6 +64,9 @@ const Modal = () => {
           )}
           {dataModal.page === "logContact" && !dataModal.isLoading && (
             <LogCs data={dataModal.data} />
+          )}
+          {dataModal.page === "createUserLogin" && !dataModal.isLoading && (
+            <FormUser data={dataModal.data} />
           )}
         </MainContent>
       </Content>

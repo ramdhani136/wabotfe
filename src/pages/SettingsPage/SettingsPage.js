@@ -83,11 +83,11 @@ const SettingsPage = () => {
       <>
         <Wrapper>
           <ContentLeft>
-            <BtnAddUser onClick={openModal}>Add User</BtnAddUser>
+            <BtnAddUser onClick={openModal}>Add Device</BtnAddUser>
 
             <WrapUser>
               <Title>
-                User Data ({filterUser(users).length} of {users.length})
+                Devices ({filterUser(users).length} of {users.length})
               </Title>
               {isLoading ? (
                 <Loading>
