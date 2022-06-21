@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 
 const HeaderComponent = () => {
   const [users, setUsers] = useState({});
+  const [isActive, setIsActive] = useState(false);
   const navigate = useNavigate();
   const logout = () => {
     axios.delete(`${API_URI}users/logout`).then((res) => {
@@ -32,21 +33,51 @@ const HeaderComponent = () => {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper onMouseLeave={() => setIsActive(false)}>
       <Logo>WAblast</Logo>
       <SeacrhMenu />
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          cursor: "pointer",
-          color: "gray",
-        }}
-      >
-        <a onClick={logout} style={{ fontSize: "0.9em" }}>
-          {users && users.name}
-        </a>
-        <ArrowDropDownIcon style={{ fontSize: "20px", marginTop: "5px" }} />
+      <div style={{ position: "relative" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+            color: "gray",
+          }}
+          onClick={() => setIsActive(!isActive)}
+        >
+          <a style={{ fontSize: "0.9em" }}>{users && users.name}</a>
+          <ArrowDropDownIcon style={{ fontSize: "20px", marginTop: "5px" }} />
+        </div>
+        <div
+          style={{
+            backgroundColor: "white",
+            width: "100%",
+            height: "auto",
+            position: "absolute",
+            border: "solid 1px #e5e7ef",
+            zIndex: 800,
+            left: "-15%",
+            padding: "8px",
+            borderRadius: "2px",
+            display: isActive ? "block" : "none",
+          }}
+        >
+          <a
+            style={{
+              width: "100%",
+              float: "left",
+              fontSize: "0.85em",
+              color: "gray",
+              cursor: "pointer",
+              textAlign: "center",
+              fontWeight: "bold",
+            }}
+            onClick={logout}
+          >
+            Logout
+          </a>
+        </div>
       </div>
     </Wrapper>
   );

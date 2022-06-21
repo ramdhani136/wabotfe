@@ -7,9 +7,14 @@ import moment from "moment";
 import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 import { FetchApi } from "../../utils/FetchApi";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 const Swal = require("sweetalert2");
 
 const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
+  const datadata = [
+    { id: 1, name: "Ilham Radmdhani", jabatan: "IT" },
+    { id: 2, name: "Ryan", jabatan: "Kang Kebun" },
+  ];
   const dispatch = useDispatch();
   const deleteContact = (id) => {
     Swal.fire({
@@ -41,28 +46,43 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
   return (
     <Wrapper>
       <Title>
-        <a
+        <div style={{ flex: 1 }}>
+          <a
+            style={{
+              marginRight: "5px",
+              color: "gray",
+              fontSize: "0.9em",
+              paddingRight: "20px",
+            }}
+          >
+            Search :{" "}
+          </a>
+          <Search onChange={(e) => getValue(e.target.value)} value={value} />
+          <CloseIcon
+            onClick={() => setValue("")}
+            style={{
+              marginLeft: "-25px",
+              fontSize: "19px",
+              marginTop: "3px",
+              color: "#eee",
+              cursor: "pointer",
+            }}
+          />
+        </div>
+        <div
           style={{
-            marginRight: "5px",
-            color: "gray",
-            fontSize: "0.9em",
-            paddingRight: "20px",
+            flex: 1,
+            display: "flex",
+            justifyContent: "flex-end",
           }}
         >
-          Search :{" "}
-        </a>
-        <Search onChange={(e) => getValue(e.target.value)} value={value} />
-        <CloseIcon
-          onClick={() => setValue("")}
-          style={{
-            marginLeft: "-25px",
-            fontSize: "19px",
-            marginTop: "3px",
-            color: "#eee",
-            cursor: "pointer",
-          }}
-        />
+          <Export>
+            <a>Export</a>
+            <FileDownloadIcon style={{ fontSize: "16px", marginLeft: "8px" }} />
+          </Export>
+        </div>
       </Title>
+
       <Content>
         <div
           style={{
@@ -312,6 +332,7 @@ const Title = styled.div`
   height: 55px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const Content = styled.div`
@@ -341,5 +362,22 @@ const Button = styled.div`
   :hover {
     transform: scale(1.025);
     opacity: 1;
+  }
+`;
+
+const Export = styled.button`
+  padding: 5px;
+  padding-left: 10px;
+  paddin-right: 10px;
+  fontsize: 0.85em;
+  cursor: pointer;
+  display: flex;
+  alignitems: center;
+  background-color: #198754;
+  color: white;
+  border: solid 1px #146c43;
+  border-radius: 2px;
+  :hover {
+    transform: scale(1.04);
   }
 `;

@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
 import { API_URI } from "../../../utils";
 
 const Layout = ({ Component }) => {
@@ -16,12 +15,13 @@ const Layout = ({ Component }) => {
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       //redirect page dashboard
+      history("/login");
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Please login !!",
       });
-      history("/login");
+      history(0);
     }
     const fetchAPI = axios.create({});
 

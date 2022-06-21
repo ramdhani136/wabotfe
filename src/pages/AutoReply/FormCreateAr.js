@@ -1041,9 +1041,18 @@ const FormCreateAr = ({ data }) => {
     socket.on("salesgroup", (data) => {
       setGroupSales(data);
     });
-    socket.on("sales", (data) => {
-      setSales(data);
+
+    FetchApi.get(`${API_URI}sales`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }).then((response) => {
+      setSales(response.data);
+      socket.on("sales", (data) => {
+        setSales(data);
+      });
     });
+    // socket.on("sales", (data) => {
+    //   setSales(data);
+    // });
     setAllKeys();
     setAllMenu();
 
