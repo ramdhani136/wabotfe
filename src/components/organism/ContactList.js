@@ -8,13 +8,10 @@ import { useDispatch } from "react-redux";
 import { modalSet } from "../../redux/slices/ModalSlice";
 import { FetchApi } from "../../utils/FetchApi";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 const Swal = require("sweetalert2");
 
 const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
-  const datadata = [
-    { id: 1, name: "Ilham Radmdhani", jabatan: "IT" },
-    { id: 2, name: "Ryan", jabatan: "Kang Kebun" },
-  ];
   const dispatch = useDispatch();
   const deleteContact = (id) => {
     Swal.fire({
@@ -76,10 +73,17 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
             justifyContent: "flex-end",
           }}
         >
-          <Export>
+          {/* <Export>
             <a>Export</a>
             <FileDownloadIcon style={{ fontSize: "16px", marginLeft: "8px" }} />
-          </Export>
+          </Export> */}
+          <ReactHTMLTableToExcel
+            className="download-table-xls-button"
+            table="table-to-xls"
+            filename="customers"
+            sheet="customers"
+            buttonText="Export To Excel"
+          />
         </div>
       </Title>
 
@@ -106,7 +110,12 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
               No data result
             </div>
           ) : (
-            <table style={{ width: "100%" }} cellSpacing="0" cellPadding="5">
+            <table
+              id="table-to-xls"
+              style={{ width: "100%" }}
+              cellSpacing="0"
+              cellPadding="5"
+            >
               <thead
                 style={{
                   fontSize: "0.87em",

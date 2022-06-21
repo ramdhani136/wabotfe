@@ -3,32 +3,54 @@ import styled from "styled-components";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CloseIcon from "@mui/icons-material/Close";
 import moment from "moment";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
   return (
     <Wrapper>
       <Title>
-        <a
+        <div style={{ flex: 1 }}>
+          <a
+            style={{
+              marginRight: "5px",
+              color: "gray",
+              fontSize: "0.9em",
+              paddingRight: "20px",
+            }}
+          >
+            Search :{" "}
+          </a>
+          <Search onChange={(e) => getValue(e.target.value)} value={value} />
+          <CloseIcon
+            onClick={() => setValue("")}
+            style={{
+              marginLeft: "-25px",
+              fontSize: "19px",
+              marginTop: "3px",
+              color: "#eee",
+              cursor: "pointer",
+            }}
+          />
+        </div>
+        <div
           style={{
-            marginRight: "5px",
-            color: "gray",
-            fontSize: "0.9em",
-            paddingRight: "20px",
+            flex: 1,
+            display: "flex",
+            justifyContent: "flex-end",
           }}
         >
-          Search :{" "}
-        </a>
-        <Search onChange={(e) => getValue(e.target.value)} value={value} />
-        <CloseIcon
-          onClick={() => setValue("")}
-          style={{
-            marginLeft: "-25px",
-            fontSize: "19px",
-            marginTop: "3px",
-            color: "#eee",
-            cursor: "pointer",
-          }}
-        />
+          {/* <Export>
+            <a>Export</a>
+            <FileDownloadIcon style={{ fontSize: "16px", marginLeft: "8px" }} />
+          </Export> */}
+          <ReactHTMLTableToExcel
+            className="download-table-xls-button"
+            table="table-to-xls"
+            filename="Log CS"
+            sheet="Log CS"
+            buttonText="Export To Excel"
+          />
+        </div>
       </Title>
       <Content>
         <div
@@ -53,7 +75,12 @@ const ContactList = ({ data, getValue, setValue, value, setIsLoading }) => {
               No data result
             </div>
           ) : (
-            <table style={{ width: "130%" }} cellSpacing="0" cellPadding="5">
+            <table
+              id="table-to-xls"
+              style={{ width: "130%" }}
+              cellSpacing="0"
+              cellPadding="5"
+            >
               <thead
                 style={{
                   fontSize: "0.87em",
